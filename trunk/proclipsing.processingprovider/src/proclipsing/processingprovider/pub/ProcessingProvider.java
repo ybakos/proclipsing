@@ -6,7 +6,7 @@ public class ProcessingProvider {
     private static final String[] ALL_LIBRARIES = {"core", "serial", "pdf", "net"};
 
     /**
-     * Static method gets all libraries names in the ALL_LIBRARIES string
+     * Static method gets all libraries in String[] passed to it
      * 
      * @param libNames
      * @return
