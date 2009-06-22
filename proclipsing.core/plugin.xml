@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="processingplugin.core.wizardCategory"
+            class="proclipsing.core.createproject.NewProcessingProjectWizard"
+            finalPerspective="org.eclipse.jdt.ui.JavaPerspective"
+            icon="icons/processing_icon.jpg"
+            id="processingplugin.createproject.NewProcessingProjectWizard"
+            name="Processing Project"
+            project="true">
+      </wizard>
+      <category
+            id="processingplugin.core.wizardCategory"
+            name="Processing">
+      </category>
+   </extension>
+
+
+</plugin>
