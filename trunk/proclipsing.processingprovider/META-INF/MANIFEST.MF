@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Processingprovider Plug-in
+Bundle-SymbolicName: proclipsing.processingprovider
+Bundle-Version: 1.0.0
+Bundle-Activator: proclipsing.processingprovider.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: proclipsing.processingprovider.pub
