@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.management.monitor.Monitor;
@@ -46,10 +47,12 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 	private Vector<IClasspathEntry> classpath_entries;
 	private String project_name;
 	private String package_name;
+	private ArrayList<String> selected_libraries;
 	
-	public CreateProcessingProjectJob(String projectName) {
+	public CreateProcessingProjectJob(ProjectConfiguration configuration) {
 		classpath_entries = new Vector<IClasspathEntry>();
-		project_name = projectName;
+		project_name = configuration.getProjectName();
+		selected_libraries = configuration.getSelectedLibraries();
 	}
 	
 	@Override
@@ -106,10 +109,8 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
      * @param monitor
      */
     private void addProcessing(IFolder lib, IProgressMonitor monitor) {
-    	// default constructor provides all available processing libraries
-        ProcessingLibrary[] libraries = ProcessingProvider.getLibraries();
-    	// for specific libs pass in array of library identifiers:
-    	// ProcessingProvider.getLibraries(new String[] {"core", "serial"});
+        ProcessingLibrary[] libraries = ProcessingProvider.getLibraries(
+    	        selected_libraries.toArray(new String[selected_libraries.size()]));
         
         for(ProcessingLibrary library : libraries) {
             // create folder containing lib based on identifier

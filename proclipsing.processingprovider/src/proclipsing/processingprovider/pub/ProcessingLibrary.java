@@ -95,7 +95,7 @@ public class ProcessingLibrary {
                 e.printStackTrace();
             }
         }
-        return urls.toArray(new URL[0]);
+        return urls.toArray(new URL[urls.size()]);
     }
         
     /**
@@ -144,7 +144,7 @@ public class ProcessingLibrary {
                 e.printStackTrace();
             }
         }
-        return urls.toArray(new URL[0]);
+        return urls.toArray(new URL[urls.size()]);
     }
 
    
