@@ -2,6 +2,13 @@ package proclipsing.core.createproject;
 
 import java.util.ArrayList;
 
+/**
+ * Simple class to keep track of the project configuration
+ * as you go through the wizard
+ * 
+ * @author brian
+ *
+ */
 public class ProjectConfiguration {
     private ArrayList<String> selected_libraries;
     private String project_name;
@@ -24,6 +31,10 @@ public class ProjectConfiguration {
         selected_libraries = selectedLibraries;
     }
 
+    public void setProjectName(String projectName) {
+    	project_name = projectName;
+    }
+    
     public String getProjectName() {
         return project_name;
     }
