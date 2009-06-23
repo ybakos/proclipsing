@@ -1,6 +1,7 @@
 package proclipsing.core.createproject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,6 +9,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+
+import proclipsing.processingprovider.pub.ProcessingProvider;
 
 
 public class NewProcessingProjectWizard extends Wizard implements INewWizard {
@@ -17,7 +20,6 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
     
 	@Override
 	public boolean performFinish() {
-	    configuration = new ProjectConfiguration(getProjectName(), getSelectedLibraries());
 		IRunnableWithProgress job = new CreateProcessingProjectJob(configuration);
 		try {
 			getContainer().run(false, false, job);
@@ -29,6 +31,8 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		// configuration values are set in the pages
+	    configuration = new ProjectConfiguration();	
 	}
 
 	@Override
@@ -38,11 +42,8 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 		super.addPages();
 	}
 	
-	private String getProjectName() {
-	    return page1.getProjectName();
+	public ProjectConfiguration getProjectConfiguration() {
+		return configuration;
 	}
 
-	private ArrayList<String> getSelectedLibraries() {
-	    return page1.getSelectedLibraries();
-	}
 }
