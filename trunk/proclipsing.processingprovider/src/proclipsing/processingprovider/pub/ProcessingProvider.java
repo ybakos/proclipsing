@@ -3,7 +3,9 @@ package proclipsing.processingprovider.pub;
 import java.util.ArrayList;
 
 public class ProcessingProvider {
-    private static final String[] ALL_LIBRARIES = {"core", "serial", "pdf", "net"};
+    // This is all the libraries the framework currently supports
+    // currently these haven't all been tested
+    private static final String[] ALL_LIBRARIES = {"core", "dxf", "javascript", "minim", "net", "serial", "video"};
 
     /**
      * Static method gets all libraries in String[] passed to it
@@ -16,7 +18,7 @@ public class ProcessingProvider {
         for(String libStr : libNames) {
             libs.add(new ProcessingLibrary(libStr));
         }
-        return libs.toArray(new ProcessingLibrary[0]);        
+        return libs.toArray(new ProcessingLibrary[libs.size()]);        
     }
     
     /**
@@ -26,5 +28,14 @@ public class ProcessingProvider {
      */
     public static ProcessingLibrary[] getLibraries() {
         return getLibraries(ALL_LIBRARIES);
+    }
+    
+    /**
+     * Get an array of all the library identifiers
+     * 
+     * @return
+     */
+    public static String[] getAllLibraryIdentifiers() {
+        return ALL_LIBRARIES;
     }
 }

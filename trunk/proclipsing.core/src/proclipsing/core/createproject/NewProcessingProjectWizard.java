@@ -1,5 +1,7 @@
 package proclipsing.core.createproject;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -11,10 +13,12 @@ import org.eclipse.ui.IWorkbench;
 public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 
     private NewProcessingProjectPage1 page1;
+    private ProjectConfiguration configuration;
     
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress job = new CreateProcessingProjectJob(getProjectName());
+	    configuration = new ProjectConfiguration(getProjectName(), getSelectedLibraries());
+		IRunnableWithProgress job = new CreateProcessingProjectJob(configuration);
 		try {
 			getContainer().run(false, false, job);
 		} catch (Exception e) {
@@ -25,8 +29,6 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -40,4 +42,7 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 	    return page1.getProjectName();
 	}
 
+	private ArrayList<String> getSelectedLibraries() {
+	    return page1.getSelectedLibraries();
+	}
 }
