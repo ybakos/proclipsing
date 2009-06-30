@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class ProjectConfiguration {
     private ArrayList<String> selected_libraries;
     private String project_name;
-    
+    private boolean isApp = false;
     
     public ProjectConfiguration() {}
     
@@ -38,4 +38,12 @@ public class ProjectConfiguration {
     public String getProjectName() {
         return project_name;
     }
+
+	public boolean isApp() {
+		return isApp;
+	}
+
+	public void setApp(boolean isApp) {
+		this.isApp = isApp;
+	}
 }
