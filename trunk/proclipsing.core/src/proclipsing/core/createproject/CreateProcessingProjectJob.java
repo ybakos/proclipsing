@@ -11,6 +11,8 @@ import java.util.Vector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IAccessRule;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -44,11 +46,13 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 	private String project_name;
 	private String package_name;
 	private ArrayList<String> selected_libraries;
+	private boolean is_app;
 	
 	public CreateProcessingProjectJob(ProjectConfiguration configuration) {
 		classpath_entries = new Vector<IClasspathEntry>();
 		project_name = configuration.getProjectName();
 		selected_libraries = configuration.getSelectedLibraries();
+		is_app = configuration.isApp();
 	}
 	
 	@Override
@@ -70,17 +74,22 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		createProjFolder(project, monitor);
 		
 		addProcessing(createLibFolder(project, monitor), monitor);
-		addMyAppletSkelton(project, monitor);
+		addMyAppletSkeleton(project, monitor);
 		setProjectClassPath(project, monitor);
 		
 	}
 
-    private void addMyAppletSkelton(IProject project, IProgressMonitor monitor) throws CoreException {
+    private void addMyAppletSkeleton(IProject project, IProgressMonitor monitor) throws CoreException {
 		IFolder srcDir = project.getFolder(SRC_DIR + "/" + package_name);
 		IFile defaultApplet = srcDir.getFile(Util.strToCamelCase(project_name) + ".java");
 		
 		URL url = Activator.getDefault().getBundle().getResource(
 				"template/PAppletTemplate.java");
+		
+		if(is_app){
+			url = Activator.getDefault().getBundle().getResource(
+				"template/PAppTemplate.java");
+		}
 		
 		try{
 			String templateStr = Util.convertStreamToString(url.openStream());
@@ -148,9 +157,14 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
                 // extra check to prevent error
                 if (!libFile.exists())
                 	libFile.create(url.openStream(), true, monitor);
-                if (filename.endsWith(".jar") || filename.endsWith(".zip"))
+                if (filename.endsWith(".jar") || filename.endsWith(".zip")){
                     classpath_entries.add(
-                            JavaCore.newLibraryEntry(libFile.getFullPath(), null, null));
+                            JavaCore.newLibraryEntry(libFile.getFullPath(), null, null, new IAccessRule[0], 
+                            		new IClasspathAttribute[]{
+                                			JavaCore.newClasspathAttribute(
+                                					JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, 
+                                					libFolder.getFullPath().toPortableString().substring(1))}, false));
+                }
             } catch (CoreException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

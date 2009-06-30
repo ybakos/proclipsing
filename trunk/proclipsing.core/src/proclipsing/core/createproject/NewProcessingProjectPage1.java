@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -14,9 +15,12 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -35,6 +39,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	
 	private Text project_name_text;
 	private CheckboxTableViewer libraries_viewer;
+	private Button appButton;
 	
 	protected NewProcessingProjectPage1() {
 	    super(PAGE_NAME, PAGE_TITLE, null);
@@ -57,8 +62,29 @@ public class NewProcessingProjectPage1 extends WizardPage {
             }
 		});
 		
+		drawAppOption(composite);
         drawLibrarySelector(composite);
 		setControl(composite);
+	}
+	
+	public void drawAppOption(Composite parent){
+
+		Button appletButton = new Button(parent, SWT.RADIO);
+		appButton = new Button(parent, SWT.RADIO);
+
+		appButton.setText("Application");
+		appletButton.setText("Applet");
+		
+		appButton.addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+
+			public void widgetSelected(SelectionEvent arg0) {
+	            saveConfiguration();
+			}			
+		});
+		
+		appletButton.setSelection(true);
 	}
 	
 	public void drawLibrarySelector(Composite parent) {
@@ -139,6 +165,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
     	ProjectConfiguration config = ((NewProcessingProjectWizard)getWizard()).getProjectConfiguration();
     	config.setSelectedLibraries(getSelectedLibraries());
     	config.setProjectName(project_name_text.getText());
+    	config.setApp(appButton.getSelection());
     }
     
     
