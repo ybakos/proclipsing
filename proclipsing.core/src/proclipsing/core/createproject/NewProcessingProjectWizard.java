@@ -1,16 +1,10 @@
 package proclipsing.core.createproject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-
-import proclipsing.processingprovider.pub.ProcessingProvider;
 
 
 public class NewProcessingProjectWizard extends Wizard implements INewWizard {
