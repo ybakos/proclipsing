@@ -1,4 +1,5 @@
 package proclipsing.core.createproject;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -90,7 +91,12 @@ public class NewProcessingProjectPage1 extends WizardPage {
         gd.widthHint = PATH_TEXT_WIDTH_HINT;
         processing_path_text.setLayoutData(gd);
         processing_path_text.setText(getProjectConfiguration().getProcessingPath());
-        
+        processing_path_text.addModifyListener(new ModifyListener() {
+		    public void modifyText(ModifyEvent e) {
+		        // calling this forces isPageComplete() to get called
+		        setPageComplete(true);
+            }
+		});
         Button button = new Button(composite, SWT.PUSH);
         button.setText(DIR_SEARCH_BUTTON_LABEL);
         button.addListener(SWT.Selection, new Listener() {
@@ -169,36 +175,59 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	    return libs;
 	}
 	
+	/**
+	 * invoked any time setPageComplete(true) is called
+	 * This then calls saveConfiguration()
+	 * So the best thing to do is after any changes by the user,
+	 * call setPageComplete(true) to have this run and check the changes
+	 * and then save the changes if everything looks ok
+	 * 
+	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
+	 */
     public boolean isPageComplete() {
         setErrorMessage(null);
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
+        
+        // no project name
         if (cs.length < 1) return false;
-        else {
-            if (cs.length > PROJECT_NAME_MAXSIZE) {
-                setErrorMessage("Project name limit reached!");
-                return false;
-            }
-            for (int i = 0; i < cs.length; i++) {
-                if (cs[i] == ' ' || cs[i] == '_') {
-                    continue;
-                }
-                if (!Character.isLetterOrDigit(cs[i])) {
-                    setErrorMessage("Invalid project name.");
-                    return false;
-                }
-            }
-
-            IProject proj = 
-            	ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
-            if (proj.exists()) {
-                setErrorMessage("Project with name " + projName + " already exists.");
-                return false;
-            }
-            
-            saveConfiguration();
-            return true;
+        
+        // project name too long!
+        if (cs.length > PROJECT_NAME_MAXSIZE) {
+            setErrorMessage("Project name limit reached!");
+            return false;
         }
+        
+        // invalid project name
+        for (int i = 0; i < cs.length; i++) {
+            if (cs[i] == ' ' || cs[i] == '_') {
+                continue;
+            }
+            if (!Character.isLetterOrDigit(cs[i])) {
+                setErrorMessage("Invalid project name.");
+                return false;
+            }
+        }
+
+        // project already exists
+        IProject proj = 
+        	ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
+        if (proj.exists()) {
+            setErrorMessage("Project with name " + projName + " already exists.");
+            return false;
+        }
+        
+        // project name is ok, what about processing path?
+        File processingPath = new File(processing_path_text.getText());
+        if (!processingPath.exists()) {
+        	setErrorMessage("Processing path (" + 
+        			processing_path_text.getText() + ") does not exist.");
+        	return false;
+        }
+        
+        saveConfiguration();
+        return true;
+        
     }	
 	
     private void saveConfiguration() {
