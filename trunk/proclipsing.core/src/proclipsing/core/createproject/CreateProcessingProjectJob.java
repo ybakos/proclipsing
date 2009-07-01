@@ -26,8 +26,8 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import proclipsing.core.Activator;
-import proclipsing.processingprovider.pub.ProcessingLibrary;
-import proclipsing.processingprovider.pub.ProcessingProvider;
+import proclipsing.processingprovider.ProcessingLibrary;
+import proclipsing.processingprovider.ProcessingProvider;
 import proclipsing.util.Util;
 
 
@@ -36,22 +36,20 @@ import proclipsing.util.Util;
  */
 public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 
-	private static final String BIN_DIR = "bin";
-	private static final String SRC_DIR = "src";
-	private static final String LIB_DIR = "lib";
+	private static final String BIN_DIR                  = "bin";
+	private static final String SRC_DIR                  = "src";
+	private static final String LIB_DIR                  = "lib";
 	private static final String PROJECT_NAME_PLACEHOLDER = "%project_name%";
 	private static final String PACKAGE_NAME_PLACEHOLDER = "%package_name%";
 	
 	private Vector<IClasspathEntry> classpath_entries;
-	private String project_name;
 	private String package_name;
-	private ArrayList<String> selected_libraries;
+	private ProjectConfiguration configuration;
 	private boolean is_app;
 	
 	public CreateProcessingProjectJob(ProjectConfiguration configuration) {
-		classpath_entries = new Vector<IClasspathEntry>();
-		project_name = configuration.getProjectName();
-		selected_libraries = configuration.getSelectedLibraries();
+	    this.configuration = configuration;
+	    classpath_entries = new Vector<IClasspathEntry>();
 		is_app = configuration.isApp();
 	}
 	
@@ -60,9 +58,9 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 			InvocationTargetException, InterruptedException {
 		
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
-		IProject project = wsroot.getProject(project_name);
+		IProject project = wsroot.getProject(configuration.getProjectName());
 		
-		package_name = Util.projNametoPackage(project_name);
+		package_name = Util.projNametoPackage(configuration.getProjectName());
 		
 		project.create(monitor);
 		project.open(monitor);
@@ -81,7 +79,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 
     private void addMyAppletSkeleton(IProject project, IProgressMonitor monitor) throws CoreException {
 		IFolder srcDir = project.getFolder(SRC_DIR + "/" + package_name);
-		IFile defaultApplet = srcDir.getFile(Util.strToCamelCase(project_name) + ".java");
+		IFile defaultApplet = srcDir.getFile(Util.strToCamelCase(configuration.getProjectName()) + ".java");
 		
 		URL url = Activator.getDefault().getBundle().getResource(
 				"template/PAppletTemplate.java");
@@ -95,7 +93,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 			String templateStr = Util.convertStreamToString(url.openStream());
 
 			String newApplet = Util.replaceAllSubString(templateStr, PACKAGE_NAME_PLACEHOLDER, package_name);
-			newApplet = Util.replaceAllSubString(newApplet, PROJECT_NAME_PLACEHOLDER, Util.strToCamelCase(project_name));
+			newApplet = Util.replaceAllSubString(newApplet, PROJECT_NAME_PLACEHOLDER, Util.strToCamelCase(configuration.getProjectName()));
 			
 			byte[] bArray = newApplet.getBytes();
 			InputStream bais = new ByteArrayInputStream(bArray);
@@ -115,7 +113,9 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
      */
     private void addProcessing(IFolder lib, IProgressMonitor monitor) {
         ProcessingLibrary[] libraries = ProcessingProvider.getLibraries(
-    	        selected_libraries.toArray(new String[selected_libraries.size()]));
+                configuration.getProcessingPath(),
+    	        configuration.getSelectedLibraries().toArray(
+    	                new String[configuration.getSelectedLibraries().size()]));
         
         for(ProcessingLibrary library : libraries) {
             // create folder containing lib based on identifier
@@ -151,7 +151,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         String filename; IFile libFile;            
         // go through urls, moving files into project and adding jars and zips to classpath
         for (URL url : libUrls) {
-            filename = url.getPath().substring(url.getPath().lastIndexOf('/') + 1);
+            filename = url.getPath().substring(url.getPath().lastIndexOf(Util.getFileSeparator()) + 1);
             try {
                 libFile = libFolder.getFile(filename);
                 // extra check to prevent error

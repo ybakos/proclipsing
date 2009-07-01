@@ -106,5 +106,23 @@ public class Util {
 
 		return sb.toString();
 	}
-
+	
+	public static boolean isPC() {
+	    return System.getProperty("os.name").toLowerCase().indexOf("windows") > -1;
+	}
+	
+	public static boolean isMac() {
+	    return System.getProperty("os.name").toLowerCase().indexOf("mac") > -1;
+	}
+	
+	public static boolean isLinux () {
+	    return System.getProperty("os.name").toLowerCase().indexOf("linux") > -1;
+	}
+	
+	public static String getFileSeparator() {
+	    String separator =  System.getProperty("file.separator");
+	    // extra special precautionary tactics
+	    if (separator == null || separator.length() == 0) separator = "/";
+	    return separator;
+	}
 }

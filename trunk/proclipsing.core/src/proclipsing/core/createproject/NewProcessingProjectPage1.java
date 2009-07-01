@@ -20,24 +20,32 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import proclipsing.processingprovider.pub.ProcessingProvider;
+import proclipsing.processingprovider.ProcessingProvider;
 
 public class NewProcessingProjectPage1 extends WizardPage {
 
-	public static String 	PAGE_NAME 			= "New Processing Project";
-	public static String 	PAGE_TITLE 			= "Processing";
-	public static String 	PROJECT_NAME_LABEL 	= "Project Name";
-	public static int 		PROJECT_NAME_MAXSIZE= 150;
+	public static String PAGE_NAME                 = "New Processing Project";
+	public static String PAGE_TITLE                = "Processing";
+	public static String PROJECT_NAME_LABEL        = "Project Name";
+	public static String PROCESSING_PATH_LABEL     = "Processing Path";
+	public static String DIR_SEARCH_BUTTON_LABEL   = "Browse...";
+	public static int    PROJECT_NAME_MAXSIZE      = 150;
+	public static int    PATH_TEXT_WIDTH_HINT      = 350;
 	
 	private Text project_name_text;
+	private Text processing_path_text;
 	private CheckboxTableViewer libraries_viewer;
 	private Button appButton;
 	
@@ -62,15 +70,47 @@ public class NewProcessingProjectPage1 extends WizardPage {
             }
 		});
 		
+		drawProcessingFinder(composite);
 		drawAppOption(composite);
         drawLibrarySelector(composite);
 		setControl(composite);
 	}
 	
-	public void drawAppOption(Composite parent){
+	private void drawProcessingFinder(Composite parent) {
+        
+        Label processingPathLabel = new Label(parent, SWT.NONE);
+        processingPathLabel.setText(PROCESSING_PATH_LABEL);
+        
+        final Composite composite = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout(2, false);
+        composite.setLayout(layout);
+        
+        processing_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        gd.widthHint = PATH_TEXT_WIDTH_HINT;
+        processing_path_text.setLayoutData(gd);
+        processing_path_text.setText(getProjectConfiguration().getProcessingPath());
+        
+        Button button = new Button(composite, SWT.PUSH);
+        button.setText(DIR_SEARCH_BUTTON_LABEL);
+        button.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event) {
+                DirectoryDialog dialog = 
+                    new DirectoryDialog(composite.getShell());
+                processing_path_text.setText(dialog.open());
+            }
+        });
+    }
 
-		Button appletButton = new Button(parent, SWT.RADIO);
-		appButton = new Button(parent, SWT.RADIO);
+    public void drawAppOption(Composite parent){
+	    Composite appOption = new Composite(parent, SWT.NONE);
+	    RowLayout rowLayout = new RowLayout(SWT.VERTICAL);
+	    appOption.setLayout(rowLayout);
+	    appOption.setLayoutData(
+	            new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+	    
+		Button appletButton = new Button(appOption, SWT.RADIO);
+		appButton = new Button(appOption, SWT.RADIO);
 
 		appButton.setText("Application");
 		appletButton.setText("Applet");
@@ -80,7 +120,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
 
 			public void widgetSelected(SelectionEvent arg0) {
-	            saveConfiguration();
+	            setPageComplete(true);
 			}			
 		});
 		
@@ -92,7 +132,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 		Group projectsGroup = new Group(parent, SWT.NONE);
         projectsGroup.setText("Select Libraries to Import");
         GridData gdProjects = new GridData(GridData.FILL_BOTH);
-        gdProjects.horizontalSpan = 2;
+        //gdProjects.horizontalSpan = 2;
         projectsGroup.setLayoutData(gdProjects);
         projectsGroup.setLayout(new GridLayout(1, false));
         
@@ -162,10 +202,14 @@ public class NewProcessingProjectPage1 extends WizardPage {
     }	
 	
     private void saveConfiguration() {
-    	ProjectConfiguration config = ((NewProcessingProjectWizard)getWizard()).getProjectConfiguration();
-    	config.setSelectedLibraries(getSelectedLibraries());
-    	config.setProjectName(project_name_text.getText());
-    	config.setApp(appButton.getSelection());
+    	getProjectConfiguration().setSelectedLibraries(getSelectedLibraries());
+    	getProjectConfiguration().setProjectName(project_name_text.getText());
+    	getProjectConfiguration().setApp(appButton.getSelection());
+    	getProjectConfiguration().setProcessingPath(processing_path_text.getText());
+    }
+    
+    private ProjectConfiguration getProjectConfiguration() {
+        return ((NewProcessingProjectWizard) getWizard()).getProjectConfiguration();
     }
     
     
