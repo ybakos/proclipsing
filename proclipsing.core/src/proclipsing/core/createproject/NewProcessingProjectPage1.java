@@ -185,6 +185,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
     public boolean isPageComplete() {
+    	
         setErrorMessage(null);
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
@@ -208,7 +209,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
                 return false;
             }
         }
-
+        
         // project already exists
         IProject proj = 
         	ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
@@ -226,6 +227,8 @@ public class NewProcessingProjectPage1 extends WizardPage {
         }
         
         saveConfiguration();
+        System.out.println("foobar ");
+        
         return true;
         
     }	

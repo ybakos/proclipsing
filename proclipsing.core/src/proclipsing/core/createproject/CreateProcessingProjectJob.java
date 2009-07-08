@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import proclipsing.core.Activator;
+import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingLibrary;
 import proclipsing.processingprovider.ProcessingProvider;
 import proclipsing.util.Util;
@@ -151,7 +152,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         String filename; IFile libFile;            
         // go through urls, moving files into project and adding jars and zips to classpath
         for (URL url : libUrls) {
-            filename = url.getPath().substring(url.getPath().lastIndexOf(Util.getFileSeparator()) + 1);
+            filename = url.getPath().substring(url.getPath().lastIndexOf(OSHelperManager.getHelper().getFileSeparator()) + 1);
             try {
                 libFile = libFolder.getFile(filename);
                 // extra check to prevent error
