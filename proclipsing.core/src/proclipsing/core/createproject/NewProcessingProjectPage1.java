@@ -227,8 +227,6 @@ public class NewProcessingProjectPage1 extends WizardPage {
         }
         
         saveConfiguration();
-        System.out.println("foobar ");
-        
         return true;
         
     }	
