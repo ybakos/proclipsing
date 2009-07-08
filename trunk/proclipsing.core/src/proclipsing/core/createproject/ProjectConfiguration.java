@@ -7,6 +7,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import proclipsing.core.Activator;
+import proclipsing.os.OSHelperManager;
 import proclipsing.util.Util;
 
 /**
@@ -55,7 +56,8 @@ public class ProjectConfiguration {
     
     public void setProcessingPath(String path) {
         path = path.trim();
-        if (!path.endsWith(Util.getFileSeparator())) path +=  Util.getFileSeparator();
+        if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
+        	path +=  OSHelperManager.getHelper().getFileSeparator();
         Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
 
         preferences.put(PROCESSING_PATH_KEY, path);

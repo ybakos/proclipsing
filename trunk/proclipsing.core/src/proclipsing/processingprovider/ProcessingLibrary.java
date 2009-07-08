@@ -18,24 +18,13 @@ import javax.imageio.stream.FileImageInputStream;
 
 import org.eclipse.core.runtime.FileLocator;
 
+import proclipsing.os.OSHelperManager;
 import proclipsing.util.Util;
 
 
 public class ProcessingLibrary {
     private static final String[] ALL_LIBRARIES = {"core", "dxf", "javascript", "minim", "net", "serial", "video"};
-    
-    private static final String CORE_PATH 		= "lib" + Util.getFileSeparator();
-    private static final String LIB_MATCH_STRING= "%LIBRARY_IDENTIFIER%";
-    // LIBRARY_PATH looks like libraries/%LIBRARY_IDENTIFIER%/library/
-    private static final String LIBRARY_PATH 	= "libraries" + Util.getFileSeparator() + 
-                                                    LIB_MATCH_STRING + Util.getFileSeparator() + 
-                                                    "library" + Util.getFileSeparator();
-    private static final String EXPORT_FILE 	= "export.txt";
-    private static final String CORE 			= "core";
-    private static final String LINUX_PLATFORM_STRING 	= "application.linux";
-    private static final String WINDOWS_PLATFORM_STRING = "application.windows";
-    private static final String MAC_PLATFORM_STRING 	= "application.macosx";
-    
+    private static final String CORE = "core";
     private String identifier;
     private String processing_path;
     
@@ -57,17 +46,8 @@ public class ProcessingLibrary {
 
         File realPath = new File(getResourcePath());
         if (!realPath.exists()) return null;
-        
-        // Try to read out export file.  Export file tells us which files to load
-        // they don't seem to be using the export file anymore... need to check on it
-        File exportFile = null; //new File(getResourcePath() + EXPORT_FILE);
-        URL[] urls = null;
-        if (exportFile != null && exportFile.exists()) {
-        	urls = getUrls(realPath, exportFile);
-        } else {
-            urls = getUrls(realPath.listFiles()); 
-        }
-        
+
+        URL[] urls = getUrls(realPath.listFiles());        
         return urls;
     }
 
@@ -79,6 +59,7 @@ public class ProcessingLibrary {
      * @param line
      * @return
      */
+    /*
     private URL[] getUrls(File realPath, String line) {
         String[] keyval = line.split("=");
         if (keyval.length < 2) return null;
@@ -96,6 +77,7 @@ public class ProcessingLibrary {
         }
         return urls.toArray(new URL[urls.size()]);
     }
+    */
         
     /**
      * Given a root path to the files and an export file,
@@ -105,6 +87,7 @@ public class ProcessingLibrary {
      * @param exportFile
      * @return
      */
+    /*
     private URL[] getUrls(File realPath, File exportFile) {
     	//exportFile.get
     	URL[] urls = null;
@@ -124,6 +107,7 @@ public class ProcessingLibrary {
         }
         return urls;
     }
+    */
     
     /**
      * given a set of files in the filesystem, 
@@ -146,8 +130,9 @@ public class ProcessingLibrary {
         return urls.toArray(new URL[urls.size()]);
     }
 
-   
+   /*
     private String getPlatformString() {
+   
         if (Util.isPC()) {
           return WINDOWS_PLATFORM_STRING;
         } else if (Util.isLinux()) {
@@ -155,15 +140,17 @@ public class ProcessingLibrary {
         } else if (Util.isMac()) {
           return MAC_PLATFORM_STRING;
         }
+   
         // default to linux?
         return LINUX_PLATFORM_STRING;
     }
+    */
     
     private String getResourcePath() {
         if (identifier == CORE)
-            return processing_path + CORE_PATH;
+            return processing_path + OSHelperManager.getHelper().getCorePath();
         else 
-            return processing_path + LIBRARY_PATH.replaceAll(LIB_MATCH_STRING, identifier);
+            return processing_path + OSHelperManager.getHelper().getLibraryPath(identifier);
     }
     
     
