@@ -12,7 +12,7 @@ public class OSHelperManager {
 	 */
 	public static synchronized OSHelper getHelper() {
 		if (helper == null) {
-			synchronized (helper) {
+			synchronized (OSHelper.class) {
 				if (helper == null)
 					helper = createHelper();
 			}
