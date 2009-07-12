@@ -83,11 +83,11 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		IFile defaultApplet = srcDir.getFile(Util.strToCamelCase(configuration.getProjectName()) + ".java");
 		
 		URL url = Activator.getDefault().getBundle().getResource(
-				"template/PAppletTemplate.java");
+				"template/PAppletTemplate.tmpl");
 		
 		if(is_app){
 			url = Activator.getDefault().getBundle().getResource(
-				"template/PAppTemplate.java");
+				"template/PAppTemplate.tmpl");
 		}
 		
 		try{
