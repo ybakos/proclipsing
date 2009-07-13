@@ -10,8 +10,8 @@ public class MacOSHelper extends OSHelper {
 	}
 
 	@Override
-	public String getLibraryPath(String library) {
-		return PATH_TO_JAVA + super.getLibraryPath(library);
+	public String getPathToLibrary(String library) {
+		return PATH_TO_JAVA + super.getPathToLibrary(library);
 	}
 
 }

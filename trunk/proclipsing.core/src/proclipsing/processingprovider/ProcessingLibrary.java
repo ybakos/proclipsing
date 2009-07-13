@@ -150,7 +150,7 @@ public class ProcessingLibrary {
         if (identifier == CORE)
             return processing_path + OSHelperManager.getHelper().getCorePath();
         else 
-            return processing_path + OSHelperManager.getHelper().getLibraryPath(identifier);
+            return processing_path + OSHelperManager.getHelper().getPathToLibrary(identifier);
     }
     
     
