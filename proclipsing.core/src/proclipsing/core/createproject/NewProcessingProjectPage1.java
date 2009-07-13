@@ -1,12 +1,16 @@
 package proclipsing.core.createproject;
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -33,6 +37,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingProvider;
 
 public class NewProcessingProjectPage1 extends WizardPage {
@@ -42,6 +47,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	public static String PROJECT_NAME_LABEL        = "Project Name";
 	public static String PROCESSING_PATH_LABEL     = "Processing Path";
 	public static String DIR_SEARCH_BUTTON_LABEL   = "Browse...";
+	public static String IMPORT_LIBRARIES_LABEL    = "Select Libraries to Import";
 	public static int    PROJECT_NAME_MAXSIZE      = 150;
 	public static int    PATH_TEXT_WIDTH_HINT      = 350;
 	
@@ -136,7 +142,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	public void drawLibrarySelector(Composite parent) {
         // group surrounds the box w/ a thin line
 		Group projectsGroup = new Group(parent, SWT.NONE);
-        projectsGroup.setText("Select Libraries to Import");
+        projectsGroup.setText(IMPORT_LIBRARIES_LABEL);
         GridData gdProjects = new GridData(GridData.FILL_BOTH);
         //gdProjects.horizontalSpan = 2;
         projectsGroup.setLayoutData(gdProjects);
@@ -148,7 +154,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 
         TableColumn col1 = new TableColumn(librariesTable, SWT.NONE);
         col1.setWidth(200);
-        col1.setText("Processing Library");
+        //col1.setText("Processing Library");
 
         TableLayout tableLayout = new TableLayout();
         librariesTable.setLayout(tableLayout);
@@ -162,12 +168,20 @@ public class NewProcessingProjectPage1 extends WizardPage {
         libraries_viewer.getControl().setLayoutData(viewerData);
         libraries_viewer.setContentProvider(new SelectedLibrariesContentProvider());
         libraries_viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
-        libraries_viewer.setInput(ProcessingProvider.getAllLibraryIdentifiers());
-        libraries_viewer.setAllChecked(true);
+        showDiscoveredLibraries(new File(getProjectConfiguration().getProcessingPath()));
+        libraries_viewer.addCheckStateListener(new ICheckStateListener() {
+            public void checkStateChanged(CheckStateChangedEvent event) {
+                saveConfiguration();
+            }
+        });
 	}
 	
 	
-	public ArrayList<String> getSelectedLibraries() {
+	private void setLibriesViewerInput(String[] allLibraryIdentifiers) {
+	    libraries_viewer.setInput(allLibraryIdentifiers);
+    }
+
+    public ArrayList<String> getSelectedLibraries() {
 	    ArrayList<String> libs = new ArrayList<String>();
 	    for (Object element : libraries_viewer.getCheckedElements()) {
 	       libs.add((String) element);
@@ -187,6 +201,12 @@ public class NewProcessingProjectPage1 extends WizardPage {
     public boolean isPageComplete() {
     	
         setErrorMessage(null);
+        
+        // project name is ok, what about processing path?
+        File processingPath = new File(processing_path_text.getText());
+        showDiscoveredLibraries(processingPath);
+        setSelectedLibraries();         
+        
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
         
@@ -208,7 +228,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
                 setErrorMessage("Invalid project name.");
                 return false;
             }
-        }
+        }       
         
         // project already exists
         IProject proj = 
@@ -216,21 +236,49 @@ public class NewProcessingProjectPage1 extends WizardPage {
         if (proj.exists()) {
             setErrorMessage("Project with name " + projName + " already exists.");
             return false;
-        }
+        }     
         
-        // project name is ok, what about processing path?
-        File processingPath = new File(processing_path_text.getText());
         if (!processingPath.exists()) {
         	setErrorMessage("Processing path (" + 
         			processing_path_text.getText() + ") does not exist.");
         	return false;
         }
         
+        // final check for core.jar
+        File core = new File(processingPath, 
+                OSHelperManager.getHelper().getCorePath() + "core.jar");
+        if (!core.exists()) {
+            setErrorMessage(core.getAbsolutePath() + " does not contain the processing libs.");
+            return false;
+        }
+           
         saveConfiguration();
         return true;
         
-    }	
-	
+    }
+    
+    private void showDiscoveredLibraries(File processingPath) {
+        File librariesDir = new File(processingPath,
+                OSHelperManager.getHelper().getLibraryPath());
+        List<String> libraries = new ArrayList<String>();
+        if (librariesDir.exists()) { 
+            String[] files = librariesDir.list();
+            for (String file : files) {
+                if ((new File(librariesDir, file)).isDirectory())
+                    libraries.add(file);
+            }
+        }
+        setLibriesViewerInput(
+                libraries.toArray(new String[libraries.size()]));
+    }
+    
+    private void setSelectedLibraries() {
+        List<String> selectedLibs = getProjectConfiguration().getSelectedLibraries();
+        if (selectedLibs != null)
+            libraries_viewer.setCheckedElements(selectedLibs.toArray());
+        libraries_viewer.refresh();
+    }
+
     private void saveConfiguration() {
     	getProjectConfiguration().setSelectedLibraries(getSelectedLibraries());
     	getProjectConfiguration().setProjectName(project_name_text.getText());
