@@ -6,6 +6,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import proclipsing.util.LogHelper;
+
 
 public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 
@@ -18,7 +20,7 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(false, false, job);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogHelper.LogError(e);
 			return false;
 		}
 		return true;

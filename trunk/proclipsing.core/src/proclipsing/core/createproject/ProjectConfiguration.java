@@ -8,6 +8,7 @@ import org.osgi.service.prefs.Preferences;
 
 import proclipsing.core.Activator;
 import proclipsing.os.OSHelperManager;
+import proclipsing.util.LogHelper;
 import proclipsing.util.Util;
 
 /**
@@ -65,8 +66,7 @@ public class ProjectConfiguration {
         try {
             preferences.flush();
         } catch (BackingStoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           LogHelper.LogError(e);
         }
     }
     
