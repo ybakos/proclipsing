@@ -29,6 +29,7 @@ import proclipsing.core.Activator;
 import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingLibrary;
 import proclipsing.processingprovider.ProcessingProvider;
+import proclipsing.util.LogHelper;
 import proclipsing.util.Util;
 
 
@@ -101,7 +102,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 			
 			defaultApplet.create(bais, true, monitor);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogHelper.LogError(e);
 		}
 	}
 	
@@ -126,7 +127,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
             	if (!libFolder.exists())
 					libFolder.create(true, true, monitor);
 			} catch (CoreException e1) {
-				e1.printStackTrace();
+				LogHelper.LogError(e1);
 				continue;
 			}
 
@@ -167,11 +168,9 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
                                 					libFolder.getFullPath().toPortableString().substring(1))}, false));
                 }
             } catch (CoreException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LogHelper.LogError(e);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LogHelper.LogError(e);
             }
         }    	
     }

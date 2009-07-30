@@ -1,30 +1,15 @@
 package proclipsing.processingprovider;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.logging.Filter;
-
-import javax.imageio.stream.FileImageInputStream;
-
-import org.eclipse.core.runtime.FileLocator;
 
 import proclipsing.os.OSHelperManager;
-import proclipsing.util.Util;
-
+import proclipsing.util.LogHelper;
 
 public class ProcessingLibrary {
-    private static final String[] ALL_LIBRARIES = {"core", "dxf", "javascript", "minim", "net", "serial", "video"};
-    private static final String CORE = "core";
+    
     private String identifier;
     private String processing_path;
     
@@ -52,64 +37,6 @@ public class ProcessingLibrary {
     }
 
     /**
-     * Given a root path to the files and a line from the export file
-     * get urls for all the files listed in that line
-     * 
-     * @param realPath
-     * @param line
-     * @return
-     */
-    /*
-    private URL[] getUrls(File realPath, String line) {
-        String[] keyval = line.split("=");
-        if (keyval.length < 2) return null;
-        String[] filenames = keyval[1].split(",");
-        File file = null;
-        ArrayList<URL> urls = new ArrayList<URL>();
-        for (String filename : filenames) {
-            file = new File(realPath, filename.trim());
-            try {
-                if (file != null) urls.add(file.toURI().toURL());
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return urls.toArray(new URL[urls.size()]);
-    }
-    */
-        
-    /**
-     * Given a root path to the files and an export file,
-     * get the urls for the stuff the export file says to get
-     * 
-     * @param realPath
-     * @param exportFile
-     * @return
-     */
-    /*
-    private URL[] getUrls(File realPath, File exportFile) {
-    	//exportFile.get
-    	URL[] urls = null;
-        try {
-            BufferedReader reader = 
-                new BufferedReader(new FileReader(exportFile));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith(getPlatformString()))
-                    urls = getUrls(realPath, line);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return urls;
-    }
-    */
-    
-    /**
      * given a set of files in the filesystem, 
      * return an array with urls for all the files
      * 
@@ -123,35 +50,32 @@ public class ProcessingLibrary {
             try {
                 urls.add(file.toURI().toURL());
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LogHelper.LogError(e);
             }
         }
         return urls.toArray(new URL[urls.size()]);
     }
-
-   /*
-    private String getPlatformString() {
-   
-        if (Util.isPC()) {
-          return WINDOWS_PLATFORM_STRING;
-        } else if (Util.isLinux()) {
-          return LINUX_PLATFORM_STRING;
-        } else if (Util.isMac()) {
-          return MAC_PLATFORM_STRING;
-        }
-   
-        // default to linux?
-        return LINUX_PLATFORM_STRING;
-    }
-    */
     
+    /**
+     * Gets the 
+     * 
+     * @return
+     *  the path to the current library.
+     */
     private String getResourcePath() {
-        if (identifier == CORE)
+        if (isCore())
             return processing_path + OSHelperManager.getHelper().getCorePath();
         else 
             return processing_path + OSHelperManager.getHelper().getPathToLibrary(identifier);
     }
     
+    /**
+     * Are we the processing core?
+     * 
+     * @return
+     */
+    private boolean isCore() {
+        return identifier == ProcessingProvider.CORE;
+    }
     
 }

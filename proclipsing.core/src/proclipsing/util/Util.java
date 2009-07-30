@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 public class Util {
 
 
@@ -73,7 +74,7 @@ public class Util {
 	    	
 	    	return convertStreamToString(fis);
 	    } catch (Exception e) {
-	    	e.printStackTrace();
+	    	LogHelper.LogError(e);
 		}
 	    
 	    return null;
@@ -95,12 +96,12 @@ public class Util {
 				sb.append(line + "\n");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LogHelper.LogError(e);
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				LogHelper.LogError(e);
 			}
 		}
 

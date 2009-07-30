@@ -99,7 +99,12 @@ public class NewProcessingProjectPage1 extends WizardPage {
         processing_path_text.setText(getProjectConfiguration().getProcessingPath());
         processing_path_text.addModifyListener(new ModifyListener() {
 		    public void modifyText(ModifyEvent e) {
-		        // calling this forces isPageComplete() to get called
+		        // get & show the discovered libraries based on what's been typed in
+		        File processingPath = new File(processing_path_text.getText());
+		        showDiscoveredLibraries(processingPath);
+		        setSelectedLibraries();         
+		        
+		        //  calling this forces isPageComplete() to get called
 		        setPageComplete(true);
             }
 		});
@@ -203,9 +208,9 @@ public class NewProcessingProjectPage1 extends WizardPage {
         setErrorMessage(null);
         
         // project name is ok, what about processing path?
-        File processingPath = new File(processing_path_text.getText());
-        showDiscoveredLibraries(processingPath);
-        setSelectedLibraries();         
+        //File processingPath = new File(processing_path_text.getText());
+        //showDiscoveredLibraries(processingPath);
+        //setSelectedLibraries();         
         
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
@@ -238,6 +243,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
             return false;
         }     
         
+        File processingPath = new File(processing_path_text.getText());
         if (!processingPath.exists()) {
         	setErrorMessage("Processing path (" + 
         			processing_path_text.getText() + ") does not exist.");
@@ -289,6 +295,10 @@ public class NewProcessingProjectPage1 extends WizardPage {
     private ProjectConfiguration getProjectConfiguration() {
         return ((NewProcessingProjectWizard) getWizard()).getProjectConfiguration();
     }
+    
+    
+    
+    /* INNER CLASSES */
     
     
     class SelectedLibrariesContentProvider implements IStructuredContentProvider {

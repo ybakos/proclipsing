@@ -15,7 +15,7 @@ public class ProcessingProvider {
      */
     public static ProcessingLibrary[] getLibraries(String processingPath, String[] libNames) {
         ArrayList<ProcessingLibrary> libs = new ArrayList<ProcessingLibrary>();
-        // first add core
+        // always add core
         libs.add(new ProcessingLibrary(processingPath, CORE));
         for(String libStr : libNames) {
             libs.add(new ProcessingLibrary(processingPath, libStr));
@@ -23,22 +23,4 @@ public class ProcessingProvider {
         return libs.toArray(new ProcessingLibrary[libs.size()]);        
     }
     
-    
-    /**
-     * Static method to get all processing libraries
-     * 
-     * @return
-     */
-    //public static ProcessingLibrary[] getLibraries(String processingPath) {
-    //    return getLibraries(processingPath, ALL_LIBRARIES);
-    //}
-    
-    /**
-     * Get an array of all the library identifiers
-     * 
-     * @return
-     */
-    //public static String[] getAllLibraryIdentifiers() {
-    //    return ALL_LIBRARIES;
-    //}
 }
