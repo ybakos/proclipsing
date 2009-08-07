@@ -9,7 +9,6 @@ import org.osgi.service.prefs.Preferences;
 import proclipsing.core.Activator;
 import proclipsing.os.OSHelperManager;
 import proclipsing.util.LogHelper;
-import proclipsing.util.Util;
 
 /**
  * Simple class to keep track of the project configuration
