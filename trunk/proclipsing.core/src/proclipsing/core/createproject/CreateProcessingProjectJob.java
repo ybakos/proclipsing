@@ -152,7 +152,9 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         String filename; IFile libFile;            
         // go through urls, moving files into project and adding jars and zips to classpath
         for (URL url : libUrls) {
-            filename = url.getPath().substring(url.getPath().lastIndexOf(OSHelperManager.getHelper().getFileSeparator()) + 1);
+//            filename = url.getPath().substring(url.getPath().lastIndexOf(OSHelperManager.getHelper().getFileSeparator()) + 1);
+//        	apprently, Java uses "/" instead of the OS file seperator, even on windows.
+            filename = url.getPath().substring(url.getPath().lastIndexOf('/') + 1);
             try {
                 libFile = libFolder.getFile(filename);
                 // extra check to prevent error
