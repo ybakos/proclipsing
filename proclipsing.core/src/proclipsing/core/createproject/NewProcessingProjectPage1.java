@@ -26,6 +26,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -109,9 +111,13 @@ public class NewProcessingProjectPage1 extends WizardPage {
         button.setText(DIR_SEARCH_BUTTON_LABEL);
         button.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
-            	FileDialog dialog = 
-                    new FileDialog(composite.getShell());
-                processing_path_text.setText(dialog.open());
+            Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
+            
+            if(dialog instanceof FileDialog)
+                processing_path_text.setText(((FileDialog)dialog).open());
+            else if(dialog instanceof DirectoryDialog)
+                processing_path_text.setText(((DirectoryDialog)dialog).open());
+            	
             }
         });
     }
