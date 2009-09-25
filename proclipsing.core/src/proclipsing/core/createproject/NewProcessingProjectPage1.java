@@ -1,4 +1,5 @@
 package proclipsing.core.createproject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -108,8 +109,8 @@ public class NewProcessingProjectPage1 extends WizardPage {
         button.setText(DIR_SEARCH_BUTTON_LABEL);
         button.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
-                DirectoryDialog dialog = 
-                    new DirectoryDialog(composite.getShell());
+            	FileDialog dialog = 
+                    new FileDialog(composite.getShell());
                 processing_path_text.setText(dialog.open());
             }
         });
