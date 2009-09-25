@@ -1,5 +1,9 @@
 package proclipsing.os;
 
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Shell;
+
 public abstract class OSHelper {
     private final String CORE_PATH 		    = "lib" + getFileSeparator();
     protected final String LIBRARY_PATH     = "libraries" + getFileSeparator();
@@ -23,6 +27,10 @@ public abstract class OSHelper {
 
     public String getLibraryPath() {
         return LIBRARY_PATH;
+    }
+
+    public Dialog getDialog(Shell shell) {
+        return new DirectoryDialog(shell);
     }
 	
 }

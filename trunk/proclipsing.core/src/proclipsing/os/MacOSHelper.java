@@ -1,5 +1,9 @@
 package proclipsing.os;
 
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
+
 public class MacOSHelper extends OSHelper {
 	
 	private static final String PATH_TO_JAVA = "Contents/Resources/Java/";
@@ -18,5 +22,9 @@ public class MacOSHelper extends OSHelper {
 	public String getLibraryPath() {
 		return PATH_TO_JAVA + super.getLibraryPath();
 	}
+
+    public Dialog getDialog(Shell shell) {
+        return new FileDialog(shell);
+    }
 
 }
