@@ -17,4 +17,14 @@ You will see a folder on the left window of your screen with the name of project
   * open the the package with a similar name to your project.
   * double click the Java file (in this case "MyProcessingProject.java").
 
-Notice that the file is opened in the center window of Eclipse.  This is called the "Java Editor" window.  Proclipsing 
+Notice that the file is opened in the center window of Eclipse.  This is called the "Java Editor" window.  Proclipsing has prepopulated this class with a "setup" and "draw" functions.  You can write standard Processing functions in these.
+
+To run your code:
+
+  * *Right-click* (or cntrl-click on an Apple), on the class you want to run.
+  * Scroll down in the menu to where it says "*Run as...*"
+  * Select "*Java Applet*" or "*Java Application*," depending on whether your project type
+
+You will see a window open up with your project running in it.
+
+To run this project again, click the green *play* button at the top.
