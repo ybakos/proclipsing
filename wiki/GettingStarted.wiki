@@ -5,16 +5,7 @@
 
 = Introduction =
 
-Brian Ballantine and I have developed a Processing Plugin for Eclipse
-called "proclipsing."  The purpose of proclipsing is to lower the
-difficulty of using Processing in Eclipse.  We'd like to ask for your
-assistance for the pre-Alpha testing.
-
-
-Thank you in advance for taking the time to test for us and we hope
-you enjoy Proclipsing,
-Brian + Matt
-
+This Tutorial will show you how to install Proclipsing and Create a Project with it.  It will walk you through adding the Proclipsing Plugin to Eclipse and creating your first Proclipsing project.
 
 = Details =
 
