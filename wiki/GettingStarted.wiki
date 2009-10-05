@@ -44,19 +44,3 @@ To create your first Proclipsing Project:
   * Select whether you want the project to be an *Application* or an *Applet* (Applet for the web, Application for local).
   * Select the libraries you want to use in this project with in the libraries window.
   * Select *Finish*
-
-
-To open your first Proclipsing Project and see your Processing Code:
-
-You will see a folder on the left window of your screen with the name of project.  This window is called the "*Package Explorer*."  It will contain list all of your eclipse projects in your current _workspace_ (for more detailed explaination of "workspaces" and packages see advanced documentation: TODO).  Proclipsing has created an Eclipse project for you, with Processing _jar_ files, _Native Libraries_, a _package_ for containing your code, and skeleton _Java Object_ for writing Processing Code in. 
-
-<img src="http://12.media.tumblr.com/tumblr_kr234uMeGp1qzqc80o1_500.png"/>
-
-  * open the folder with your project name
-  * open the folder with name "*src*."  This folder will contain all of the packages for your project.
-  * open the the package with a similar name to your project.
-  * double click the Java file (in this case "MyProcessingProject.java").
-
-Notice that the file is opened in the center window of Eclipse.  This is called the "Java Editor" window.  Proclipsing 
-
-
