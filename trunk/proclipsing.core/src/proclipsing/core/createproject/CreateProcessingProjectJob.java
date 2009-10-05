@@ -25,6 +25,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import proclipsing.core.Activator;
+import proclipsing.core.ProcessingProjectNature;
 import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingLibrary;
 import proclipsing.processingprovider.ProcessingProvider;
@@ -66,7 +67,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		project.create(monitor);
 		project.open(monitor);
 		
-		addJavaNature(project, monitor);
+		addNatures(project, monitor);
 		
 		createBinFolder(project, monitor);
 		createSrcFolder(project, monitor);
@@ -78,7 +79,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		
 	}
 
-    private void addMyAppletSkeleton(IProject project, IProgressMonitor monitor) throws CoreException {
+	private void addMyAppletSkeleton(IProject project, IProgressMonitor monitor) throws CoreException {
 		IFolder srcDir = project.getFolder(SRC_DIR + "/" + package_name);
 		IFile defaultApplet = srcDir.getFile(Util.strToCamelCase(configuration.getProjectName()) + ".java");
 		
@@ -176,9 +177,12 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         }    	
     }
 	
-	private void addJavaNature(IProject project, IProgressMonitor monitor) throws CoreException {
+	private void addNatures(IProject project, IProgressMonitor monitor) throws CoreException {
 		IProjectDescription desc = project.getDescription();
-		desc.setNatureIds(new String[]{JavaCore.NATURE_ID});
+		desc.setNatureIds(new String[]{
+				JavaCore.NATURE_ID, 					// add java nature
+				ProcessingProjectNature.class.getName() // add processing project nature
+			});
 		project.setDescription(desc, monitor);		
 	}
 	
