@@ -1,4 +1,6 @@
+#summary This Tutorial will show you how to install Proclipsing and Create a Project with it.
 #labels Processing,Eclipse,ITP,Featured,Phase-Deploy
+
 = Getting Started : Installing Proclipsing & Creating a Project=
 
 = Introduction =
