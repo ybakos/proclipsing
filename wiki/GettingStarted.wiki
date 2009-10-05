@@ -1,0 +1,43 @@
+#labels Processing,Eclipse,ITP,Featured,Phase-Deploy
+#Getting Started
+
+= Introduction =
+
+Brian Ballantine and I have developed a Processing Plugin for Eclipse
+called "proclipsing."  The purpose of proclipsing is to lower the
+difficulty of using Processing in Eclipse.  We'd like to ask for your
+assistance for the pre-Alpha testing.
+
+
+Thank you in advance for taking the time to test for us and we hope
+you enjoy Proclipsing,
+Brian + Matt
+
+
+= Details =
+
+Initially, we are focusing on project creation.  To this end, the
+plugin allows you to select the location of your processing app, which
+libraries you want, and then creates a project with the desired libs
+(with native libraries), and skeleton package structure and PApplet.
+
+Add your content here.  Format your content with:
+  * Place this jar in the "*dropins*" folder of your eclipse
+project (if your  version of eclipse doesn't
+have a "dropins" folder", use the "*plugins*" folder)
+  * Select "*New Project*"
+  * Select the "*Processing*" folder
+  * Select "*Processing Project*" and click next
+
+<img src="http://8.media.tumblr.com/tumblr_kr226cVmMe1qzqc80o1_500.png"/>
+
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+
+Simply place the attached jar to the "dropins" folder of your eclipse
+project (or "plugins" folder,  if your  version of eclipse doesn't
+have a "dropins" folder) and select "New Project."  You should see a
+"Processing" folder in your New Project wizard.  After that, the
+process should be obvious (but please let us know if it is not).
