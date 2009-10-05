@@ -1,4 +1,5 @@
 #summary This Tutorial will walk you through the basics of editing and running a Processing Project in Eclipse.
+#labels Featured,Processing,Phase-Implementation,Eclipse,ITP
 
 = Introduction =
 
