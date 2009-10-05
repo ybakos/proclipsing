@@ -18,7 +18,7 @@ To add Proclipsing to Eclipse:
 
 <img src="http://19.media.tumblr.com/tumblr_kr22ria7Zm1qzqc80o1_500.png"/>
 
-  * Place this <a href="http://proclipsing.googlecode.com/svn/trunk/proclipsing.core/release/proclipsing.core_1.0.0.jar" jar>jar</a> in the "*dropins*" folder of your eclipse project (if your  version of eclipse doesn't have a "dropins" folder, use the "*plugins*" folder)
+  * Place this <a href="http://proclipsing.googlecode.com/svn/trunk/proclipsing.core/release/proclipsing.core_1.0.0.jar">jar</a> in the "*dropins*" folder of your eclipse project (if your  version of eclipse doesn't have a "dropins" folder, use the "*plugins*" folder)
   * If Eclipse is already open it, close it and reopen it.
 
 
