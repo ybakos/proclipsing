@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/proclipsingFeature_1.0.0.jar" id="proclipsingFeature" version="1.0.0" os="linux,macosx,win32">
+      <category name="core"/>
+   </feature>
+   <category-def name="core" label="core"/>
+</site>
