@@ -26,7 +26,6 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import proclipsing.core.Activator;
 import proclipsing.core.ProcessingProjectNature;
-import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingLibrary;
 import proclipsing.processingprovider.ProcessingProvider;
 import proclipsing.util.LogHelper;
