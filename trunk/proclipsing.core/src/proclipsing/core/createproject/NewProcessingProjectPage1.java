@@ -315,7 +315,6 @@ public class NewProcessingProjectPage1 extends WizardPage {
             for (String file : files) {
                 if ((new File(librariesDir, file)).isDirectory()){
                     libraries.add(file);
-                    System.out.println(file);
                 }
             }
         }
@@ -326,7 +325,6 @@ public class NewProcessingProjectPage1 extends WizardPage {
             for (String file : files) {
                 if ((new File(librariesDir, file)).isDirectory()){
                     libraries.add(file);
-                    System.out.println(file);
                 }
             }
         }
