@@ -114,7 +114,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
      */
     private void addProcessing(IFolder lib, IProgressMonitor monitor) {
         ProcessingLibrary[] libraries = ProcessingProvider.getLibraries(
-                configuration.getProcessingPath(),
+                configuration.getProcessingAppPath(),
     	        configuration.getSelectedLibraries().toArray(
     	                new String[configuration.getSelectedLibraries().size()]));
         

@@ -44,14 +44,16 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	public static String PAGE_NAME                 = "New Processing Project";
 	public static String PAGE_TITLE                = "Processing";
 	public static String PROJECT_NAME_LABEL        = "Project Name";
-	public static String PROCESSING_PATH_LABEL     = "Processing Path";
+	public static String PROCESSING_APP_PATH_LABEL     = "Processing App Path";
+	public static String PROCESSING_SKETCH_PATH_LABEL     = "Processing Sketch Path";
 	public static String DIR_SEARCH_BUTTON_LABEL   = "Browse...";
 	public static String IMPORT_LIBRARIES_LABEL    = "Select Libraries to Import";
 	public static int    PROJECT_NAME_MAXSIZE      = 150;
 	public static int    PATH_TEXT_WIDTH_HINT      = 350;
 	
 	private Text project_name_text;
-	private Text processing_path_text;
+	private Text processing_app_path_text;
+	private Text processing_sketch_path_text;
 	private CheckboxTableViewer libraries_viewer;
 	private Button appButton;
 	
@@ -75,31 +77,32 @@ public class NewProcessingProjectPage1 extends WizardPage {
 		        setPageComplete(true);
             }
 		});
-		
-		drawProcessingFinder(composite);
+
+		drawProcessingAppFinder(composite);
+		drawProcessingSketchFinder(composite);
 		drawAppOption(composite);
         drawLibrarySelector(composite);
 		setControl(composite);
 	}
 	
-	private void drawProcessingFinder(Composite parent) {
+	private void drawProcessingAppFinder(Composite parent) {
         
         Label processingPathLabel = new Label(parent, SWT.NONE);
-        processingPathLabel.setText(PROCESSING_PATH_LABEL);
+        processingPathLabel.setText(PROCESSING_APP_PATH_LABEL);
         
         final Composite composite = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout(2, false);
         composite.setLayout(layout);
         
-        processing_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
+        processing_app_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.widthHint = PATH_TEXT_WIDTH_HINT;
-        processing_path_text.setLayoutData(gd);
-        processing_path_text.setText(getProjectConfiguration().getProcessingPath());
-        processing_path_text.addModifyListener(new ModifyListener() {
+        processing_app_path_text.setLayoutData(gd);
+        processing_app_path_text.setText(getProjectConfiguration().getProcessingAppPath());
+        processing_app_path_text.addModifyListener(new ModifyListener() {
 		    public void modifyText(ModifyEvent e) {
 		        // get & show the discovered libraries based on what's been typed in
-		        File processingPath = new File(processing_path_text.getText());
+		        File processingPath = new File(processing_app_path_text.getText());
 		        showDiscoveredLibraries(processingPath);
 		        setSelectedLibraries();         
 		        
@@ -114,9 +117,46 @@ public class NewProcessingProjectPage1 extends WizardPage {
             Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
             
             if(dialog instanceof FileDialog)
-                processing_path_text.setText(((FileDialog)dialog).open());
+                processing_app_path_text.setText(((FileDialog)dialog).open());
             else if(dialog instanceof DirectoryDialog)
-                processing_path_text.setText(((DirectoryDialog)dialog).open());
+                processing_app_path_text.setText(((DirectoryDialog)dialog).open());
+            	
+            }
+        });
+    }
+	
+	private void drawProcessingSketchFinder(Composite parent) {
+        
+        Label processingPathLabel = new Label(parent, SWT.NONE);
+        processingPathLabel.setText(PROCESSING_SKETCH_PATH_LABEL);
+        
+        final Composite composite = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout(2, false);
+        composite.setLayout(layout);
+        
+        processing_sketch_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        gd.widthHint = PATH_TEXT_WIDTH_HINT;
+        processing_sketch_path_text.setLayoutData(gd);
+        processing_sketch_path_text.setText(getProjectConfiguration().getProcessingSketchPath());
+        processing_sketch_path_text.addModifyListener(new ModifyListener() {
+		    public void modifyText(ModifyEvent e) {
+		        // get & show the discovered libraries based on what's been typed in
+		        File processingPath = new File(processing_sketch_path_text.getText());
+		        showDiscoveredLibraries(processingPath);
+		        setSelectedLibraries();         
+		        
+		        //  calling this forces isPageComplete() to get called
+		        setPageComplete(true);
+            }
+		});
+        Button button = new Button(composite, SWT.PUSH);
+        button.setText(DIR_SEARCH_BUTTON_LABEL);
+        button.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event) {
+            	DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
+            	
+            	processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
             	
             }
         });
@@ -176,7 +216,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
         libraries_viewer.getControl().setLayoutData(viewerData);
         libraries_viewer.setContentProvider(new SelectedLibrariesContentProvider());
         libraries_viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
-        showDiscoveredLibraries(new File(getProjectConfiguration().getProcessingPath()));
+        showDiscoveredLibraries(new File(getProjectConfiguration().getProcessingAppPath()));
         libraries_viewer.addCheckStateListener(new ICheckStateListener() {
             public void checkStateChanged(CheckStateChangedEvent event) {
                 saveConfiguration();
@@ -246,10 +286,10 @@ public class NewProcessingProjectPage1 extends WizardPage {
             return false;
         }     
         
-        File processingPath = new File(processing_path_text.getText());
+        File processingPath = new File(processing_app_path_text.getText());
         if (!processingPath.exists()) {
         	setErrorMessage("Processing path (" + 
-        			processing_path_text.getText() + ") does not exist.");
+        			processing_app_path_text.getText() + ") does not exist.");
         	return false;
         }
         
@@ -273,10 +313,24 @@ public class NewProcessingProjectPage1 extends WizardPage {
         if (librariesDir.exists()) { 
             String[] files = librariesDir.list();
             for (String file : files) {
-                if ((new File(librariesDir, file)).isDirectory())
+                if ((new File(librariesDir, file)).isDirectory()){
                     libraries.add(file);
+                    System.out.println(file);
+                }
             }
         }
+        
+        librariesDir = new File(getProjectConfiguration().getProcessingSketchPath());
+        if (librariesDir.exists()) { 
+            String[] files = librariesDir.list();
+            for (String file : files) {
+                if ((new File(librariesDir, file)).isDirectory()){
+                    libraries.add(file);
+                    System.out.println(file);
+                }
+            }
+        }
+        
         setLibriesViewerInput(
                 libraries.toArray(new String[libraries.size()]));
     }
@@ -292,7 +346,8 @@ public class NewProcessingProjectPage1 extends WizardPage {
     	getProjectConfiguration().setSelectedLibraries(getSelectedLibraries());
     	getProjectConfiguration().setProjectName(project_name_text.getText());
     	getProjectConfiguration().setApp(appButton.getSelection());
-    	getProjectConfiguration().setProcessingPath(processing_path_text.getText());
+    	getProjectConfiguration().setProcessingAppPath(processing_app_path_text.getText());
+    	getProjectConfiguration().setProcessingSketchPath(processing_sketch_path_text.getText());
     }
     
     private ProjectConfiguration getProjectConfiguration() {

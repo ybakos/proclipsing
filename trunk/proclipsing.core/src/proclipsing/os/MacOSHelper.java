@@ -26,5 +26,13 @@ public class MacOSHelper extends OSHelper {
     public Dialog getDialog(Shell shell) {
         return new FileDialog(shell);
     }
+    
+    public String getDefaultAppPath(){
+    	return "/Applications/Processing.app";
+    }
+    
+    public String getDefaultSketchPath(){
+    	return System.getProperty("user.home") + "/Documents/Processing/libraries/";
+    }
 
 }

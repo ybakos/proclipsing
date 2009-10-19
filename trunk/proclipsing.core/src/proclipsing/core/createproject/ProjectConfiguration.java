@@ -18,8 +18,9 @@ import proclipsing.util.LogHelper;
  *
  */
 public class ProjectConfiguration {
-    
-    private static final String PROCESSING_PATH_KEY = "PROCESSING_PATH";
+
+    private static final String PROCESSING_APP_PATH_KEY = "PROCESSING_APP_PATH";
+    private static final String PROCESSING_SKETCH_PATH_KEY = "PROCESSING_SKETCH_PATH";
     private ArrayList<String> selected_libraries;
     private String project_name;
     private boolean isApp = false;
@@ -49,18 +50,38 @@ public class ProjectConfiguration {
         return project_name;
     }
     
-    public String getProcessingPath() {
+    public String getProcessingAppPath() {
         Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-        return preferences.get(PROCESSING_PATH_KEY, getDefaultProcessingPath());
+        return preferences.get(PROCESSING_APP_PATH_KEY, getDefaultProcessingAppPath());
     }
     
-    public void setProcessingPath(String path) {
+    public void setProcessingAppPath(String path) {
         path = path.trim();
         if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
         	path +=  OSHelperManager.getHelper().getFileSeparator();
         Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
 
-        preferences.put(PROCESSING_PATH_KEY, path);
+        preferences.put(PROCESSING_APP_PATH_KEY, path);
+
+        try {
+            preferences.flush();
+        } catch (BackingStoreException e) {
+           LogHelper.LogError(e);
+        }
+    }
+    
+    public String getProcessingSketchPath() {
+        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
+        return preferences.get(PROCESSING_SKETCH_PATH_KEY, getDefaultProcessingSketchPath());
+    }
+    
+    public void setProcessingSketchPath(String path) {
+        path = path.trim();
+        if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
+        	path +=  OSHelperManager.getHelper().getFileSeparator();
+        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
+
+        preferences.put(PROCESSING_SKETCH_PATH_KEY, path);
 
         try {
             preferences.flush();
@@ -77,7 +98,11 @@ public class ProjectConfiguration {
 		this.isApp = isApp;
 	}
 	
-	private String getDefaultProcessingPath() {
-	    return System.getProperty("user.home") + "/processing-1.0.5/";
+	private String getDefaultProcessingAppPath() {
+		return OSHelperManager.getHelper().getDefaultAppPath();
+	}
+	
+	private String getDefaultProcessingSketchPath() {
+		return OSHelperManager.getHelper().getDefaultSketchPath();
 	}
 }
