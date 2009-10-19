@@ -1,61 +1,34 @@
 package proclipsing.core.createproject;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import proclipsing.os.OSHelperManager;
+import proclipsing.core.ui.PathAndLibrariesSelectionDrawer;
+import proclipsing.core.ui.IValidateListener;
 
-public class NewProcessingProjectPage1 extends WizardPage {
+public class NewProcessingProjectPage1 extends WizardPage implements IValidateListener {
 
-	public static String PAGE_NAME                 = "New Processing Project";
-	public static String PAGE_TITLE                = "Processing";
-	public static String PROJECT_NAME_LABEL        = "Project Name";
-	public static String PROCESSING_APP_PATH_LABEL     = "Processing App Path";
-	public static String PROCESSING_SKETCH_PATH_LABEL     = "Processing Sketch Path";
-	public static String DIR_SEARCH_BUTTON_LABEL   = "Browse...";
-	public static String IMPORT_LIBRARIES_LABEL    = "Select Libraries to Import";
-	public static int    PROJECT_NAME_MAXSIZE      = 150;
-	public static int    PATH_TEXT_WIDTH_HINT      = 350;
+	private static String PAGE_NAME                 = "New Processing Project";
+	private static String PAGE_TITLE                = "Processing";
+	private static String PROJECT_NAME_LABEL        = "Project Name";
+	private static int    PROJECT_NAME_MAXSIZE      = 150;
 	
 	private Text project_name_text;
-	private Text processing_app_path_text;
-	private Text processing_sketch_path_text;
-	private CheckboxTableViewer libraries_viewer;
 	private Button appButton;
+	private PathAndLibrariesSelectionDrawer path_and_libraries_drawer;
 	
 	protected NewProcessingProjectPage1() {
 	    super(PAGE_NAME, PAGE_TITLE, null);
@@ -78,91 +51,16 @@ public class NewProcessingProjectPage1 extends WizardPage {
             }
 		});
 
-		drawProcessingAppFinder(composite);
-		drawProcessingSketchFinder(composite);
+        path_and_libraries_drawer = 
+            new PathAndLibrariesSelectionDrawer(getProjectConfiguration(), this);		
+		path_and_libraries_drawer.drawProcessingAppFinder(composite);		
+		path_and_libraries_drawer.drawProcessingSketchFinder(composite);
 		drawAppOption(composite);
-        drawLibrarySelector(composite);
+		path_and_libraries_drawer.drawLibrarySelector(composite);
 		setControl(composite);
 	}
 	
-	private void drawProcessingAppFinder(Composite parent) {
-        
-        Label processingPathLabel = new Label(parent, SWT.NONE);
-        processingPathLabel.setText(PROCESSING_APP_PATH_LABEL);
-        
-        final Composite composite = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        composite.setLayout(layout);
-        
-        processing_app_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.widthHint = PATH_TEXT_WIDTH_HINT;
-        processing_app_path_text.setLayoutData(gd);
-        processing_app_path_text.setText(getProjectConfiguration().getProcessingAppPath());
-        processing_app_path_text.addModifyListener(new ModifyListener() {
-		    public void modifyText(ModifyEvent e) {
-		        // get & show the discovered libraries based on what's been typed in
-		        File processingPath = new File(processing_app_path_text.getText());
-		        showDiscoveredLibraries(processingPath);
-		        setSelectedLibraries();         
-		        
-		        //  calling this forces isPageComplete() to get called
-		        setPageComplete(true);
-            }
-		});
-        Button button = new Button(composite, SWT.PUSH);
-        button.setText(DIR_SEARCH_BUTTON_LABEL);
-        button.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event) {
-            Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
-            
-            if(dialog instanceof FileDialog)
-                processing_app_path_text.setText(((FileDialog)dialog).open());
-            else if(dialog instanceof DirectoryDialog)
-                processing_app_path_text.setText(((DirectoryDialog)dialog).open());
-            	
-            }
-        });
-    }
-	
-	private void drawProcessingSketchFinder(Composite parent) {
-        
-        Label processingPathLabel = new Label(parent, SWT.NONE);
-        processingPathLabel.setText(PROCESSING_SKETCH_PATH_LABEL);
-        
-        final Composite composite = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        composite.setLayout(layout);
-        
-        processing_sketch_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.widthHint = PATH_TEXT_WIDTH_HINT;
-        processing_sketch_path_text.setLayoutData(gd);
-        processing_sketch_path_text.setText(getProjectConfiguration().getProcessingSketchPath());
-        processing_sketch_path_text.addModifyListener(new ModifyListener() {
-		    public void modifyText(ModifyEvent e) {
-		        // get & show the discovered libraries based on what's been typed in
-		        File processingPath = new File(processing_sketch_path_text.getText());
-		        showDiscoveredLibraries(processingPath);
-		        setSelectedLibraries();         
-		        
-		        //  calling this forces isPageComplete() to get called
-		        setPageComplete(true);
-            }
-		});
-        Button button = new Button(composite, SWT.PUSH);
-        button.setText(DIR_SEARCH_BUTTON_LABEL);
-        button.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event) {
-            	DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
-            	
-            	processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
-            	
-            }
-        });
-    }
-
-    public void drawAppOption(Composite parent){
+    private void drawAppOption(Composite parent){
 	    Composite appOption = new Composite(parent, SWT.NONE);
 	    RowLayout rowLayout = new RowLayout(SWT.VERTICAL);
 	    appOption.setLayout(rowLayout);
@@ -187,56 +85,14 @@ public class NewProcessingProjectPage1 extends WizardPage {
 		appletButton.setSelection(true);
 	}
 	
-	public void drawLibrarySelector(Composite parent) {
-        // group surrounds the box w/ a thin line
-		Group projectsGroup = new Group(parent, SWT.NONE);
-        projectsGroup.setText(IMPORT_LIBRARIES_LABEL);
-        GridData gdProjects = new GridData(GridData.FILL_BOTH);
-        //gdProjects.horizontalSpan = 2;
-        projectsGroup.setLayoutData(gdProjects);
-        projectsGroup.setLayout(new GridLayout(1, false));
-        
-        // main table to hold the library entries
-        Table librariesTable = new Table(projectsGroup ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
-        librariesTable.setHeaderVisible(false);
-
-        TableColumn col1 = new TableColumn(librariesTable, SWT.NONE);
-        col1.setWidth(200);
-        //col1.setText("Processing Library");
-
-        TableLayout tableLayout = new TableLayout();
-        librariesTable.setLayout(tableLayout);
-
-        GridData viewerData = new GridData(GridData.FILL_BOTH);
-        viewerData.horizontalSpan = 2;
-        viewerData.heightHint = 200;
-
-        // jface component to deal w/ data in table and checkboxes
-        libraries_viewer = new CheckboxTableViewer(librariesTable);
-        libraries_viewer.getControl().setLayoutData(viewerData);
-        libraries_viewer.setContentProvider(new SelectedLibrariesContentProvider());
-        libraries_viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
-        showDiscoveredLibraries(new File(getProjectConfiguration().getProcessingAppPath()));
-        libraries_viewer.addCheckStateListener(new ICheckStateListener() {
-            public void checkStateChanged(CheckStateChangedEvent event) {
-                saveConfiguration();
-            }
-        });
-	}
-	
-	
-	private void setLibriesViewerInput(String[] allLibraryIdentifiers) {
-	    libraries_viewer.setInput(allLibraryIdentifiers);
-    }
-
-    public ArrayList<String> getSelectedLibraries() {
-	    ArrayList<String> libs = new ArrayList<String>();
-	    for (Object element : libraries_viewer.getCheckedElements()) {
-	       libs.add((String) element);
-	    }
-	    return libs;
-	}
-	
+    /**
+     * 
+     * Call this when you want to force validate
+     */
+    public void validate() {
+        setPageComplete(true);
+    }     
+    
 	/**
 	 * invoked any time setPageComplete(true) is called
 	 * This then calls saveConfiguration()
@@ -248,12 +104,7 @@ public class NewProcessingProjectPage1 extends WizardPage {
 	 */
     public boolean isPageComplete() {
     	
-        setErrorMessage(null);
-        
-        // project name is ok, what about processing path?
-        //File processingPath = new File(processing_path_text.getText());
-        //showDiscoveredLibraries(processingPath);
-        //setSelectedLibraries();         
+        setErrorMessage(null);     
         
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
@@ -286,99 +137,32 @@ public class NewProcessingProjectPage1 extends WizardPage {
             return false;
         }     
         
-        File processingPath = new File(processing_app_path_text.getText());
-        if (!processingPath.exists()) {
-        	setErrorMessage("Processing path (" + 
-        			processing_app_path_text.getText() + ") does not exist.");
-        	return false;
+        if (!path_and_libraries_drawer.validatePathExists()) {
+            setErrorMessage("Processing path (" + 
+                    path_and_libraries_drawer.getProcessingPathText() + ") does not exist.");
+            return false;           
         }
         
-        // final check for core.jar
-        File core = new File(processingPath, 
-                OSHelperManager.getHelper().getCorePath() + "core.jar");
-        if (!core.exists()) {
-            setErrorMessage(core.getAbsolutePath() + " does not contain the processing libs.");
-            return false;
+        if (!path_and_libraries_drawer.validatePathIsProcessing()) {
+            setErrorMessage(
+                    path_and_libraries_drawer.getProcessingPathText() 
+                    + " does not contain the processing libs.");
+            return false;           
         }
-           
-        saveConfiguration();
+        
+        saveConfiguration();        
         return true;
         
     }
-    
-    private void showDiscoveredLibraries(File processingPath) {
-        File librariesDir = new File(processingPath,
-                OSHelperManager.getHelper().getLibraryPath());
-        List<String> libraries = new ArrayList<String>();
-        if (librariesDir.exists()) { 
-            String[] files = librariesDir.list();
-            for (String file : files) {
-                if ((new File(librariesDir, file)).isDirectory()){
-                    libraries.add(file);
-                }
-            }
-        }
-        
-        librariesDir = new File(getProjectConfiguration().getProcessingSketchPath());
-        if (librariesDir.exists()) { 
-            String[] files = librariesDir.list();
-            for (String file : files) {
-                if ((new File(librariesDir, file)).isDirectory()){
-                    libraries.add(file);
-                }
-            }
-        }
-        
-        setLibriesViewerInput(
-                libraries.toArray(new String[libraries.size()]));
-    }
-    
-    private void setSelectedLibraries() {
-        List<String> selectedLibs = getProjectConfiguration().getSelectedLibraries();
-        if (selectedLibs != null)
-            libraries_viewer.setCheckedElements(selectedLibs.toArray());
-        libraries_viewer.refresh();
-    }
 
     private void saveConfiguration() {
-    	getProjectConfiguration().setSelectedLibraries(getSelectedLibraries());
+        path_and_libraries_drawer.saveConfiguration();
     	getProjectConfiguration().setProjectName(project_name_text.getText());
     	getProjectConfiguration().setApp(appButton.getSelection());
-    	getProjectConfiguration().setProcessingAppPath(processing_app_path_text.getText());
-    	getProjectConfiguration().setProcessingSketchPath(processing_sketch_path_text.getText());
     }
     
     private ProjectConfiguration getProjectConfiguration() {
         return ((NewProcessingProjectWizard) getWizard()).getProjectConfiguration();
-    }
-    
-    
-    
-    /* INNER CLASSES */
-    
-    
-    class SelectedLibrariesContentProvider implements IStructuredContentProvider {
-        public Object[] getElements(Object input) {
-            if (input instanceof String[]) {
-                return (String[]) input;
-            }
-            return null;
-        }
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        }
-        public void dispose() {
-        }
-    }
-
-    class SelectedLibrariesLabelProvider extends LabelProvider implements ITableLabelProvider {
-        public String getColumnText(Object element, int columnIndex) {
-            String selectedLib = (String) element;
-            if (columnIndex == 0) return selectedLib;
-            else return "";
-        }
-        public Image getColumnImage(Object element, int columnIndex) {
-            return null;
-        }
-    }   	
+    }	
 
 }
