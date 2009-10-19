@@ -32,5 +32,13 @@ public abstract class OSHelper {
     public Dialog getDialog(Shell shell) {
         return new DirectoryDialog(shell);
     }
+    
+    public String getDefaultAppPath(){
+    	return System.getProperty("user.home") + "/processing-1.0.5/";
+    }
+    
+    public String getDefaultSketchPath(){
+    	return System.getProperty("user.home") + "/processing-1.0.5/";
+    }
 	
 }
