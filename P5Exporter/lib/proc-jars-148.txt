@@ -1,0 +1,4 @@
+core.jar
+pde.jar
+oro.jar
+antlr.jar

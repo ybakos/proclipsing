@@ -1,0 +1,7 @@
+# proc
+core.jar
+pde.jar
+antlr.jar
+
+#external
+jakarta-oro-2.0.1.jar
