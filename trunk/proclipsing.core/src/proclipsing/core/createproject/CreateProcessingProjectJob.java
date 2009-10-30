@@ -26,6 +26,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import proclipsing.core.Activator;
 import proclipsing.core.ProcessingProjectNature;
+import proclipsing.os.OSHelperManager;
 import proclipsing.processingprovider.ProcessingLibrary;
 import proclipsing.processingprovider.ProcessingProvider;
 import proclipsing.util.LogHelper;
@@ -158,9 +159,9 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
             try {
                 libFile = libFolder.getFile(filename);
                 // extra check to prevent error
-                if (!libFile.exists())
+                if (!libFile.exists() && !OSHelperManager.getHelper().isExlcuded(filename))
                 	libFile.create(url.openStream(), true, monitor);
-                if (filename.endsWith(".jar") || filename.endsWith(".zip")){
+                if ((filename.endsWith(".jar") || filename.endsWith(".zip")) && !OSHelperManager.getHelper().isExlcuded(filename)){
                     classpath_entries.add(
                             JavaCore.newLibraryEntry(libFile.getFullPath(), null, null, new IAccessRule[0], 
                             		new IClasspathAttribute[]{
