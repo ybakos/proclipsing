@@ -9,6 +9,8 @@ public abstract class OSHelper {
     protected final String LIBRARY_PATH     = "libraries" + getFileSeparator();
     protected final String LIB_MATCH_STRING	= "%LIBRARY_IDENTIFIER%";
     protected final String END_PATH_TO_LIB  =  LIBRARY_PATH + LIB_MATCH_STRING + getFileSeparator() + "library" + getFileSeparator();
+    
+    protected static String[] ignoreJars = {"antlr.jar","ecj.jar","jna.jar", "pde.jar", "quaqua.jar"};
 	
 	public String getFileSeparator() {
 	    String separator =  System.getProperty("file.separator");
@@ -39,6 +41,19 @@ public abstract class OSHelper {
     
     public String getDefaultSketchPath(){
     	return System.getProperty("user.home") + "/processing-1.0.5/";
+    }
+    
+    public boolean isExlcuded(String jarName){
+    	boolean result = false;
+    	
+    	for(int i = 0; i < ignoreJars.length; i++){
+    		if(ignoreJars[i].equals(jarName)){
+    			result = true;
+    			break;
+    		}
+    	}
+    	
+    	return result;
     }
 	
 }
