@@ -7,4 +7,5 @@
       <category name="core"/>
    </feature>
    <category-def name="core" label="core"/>
+   <category-def name="export" label="export"/>
 </site>
