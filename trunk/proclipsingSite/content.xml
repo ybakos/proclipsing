@@ -3,7 +3,7 @@
 <repository name='file:/Users/matthewparker/Documents/proclipsing/proclipsingSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1257278257044'/>
+    <property name='p2.timestamp' value='1257360193352'/>
   </properties>
   <units size='14'>
     <unit id='proclipsingFeature.feature.group' version='1.0.0' singleton='false'>
