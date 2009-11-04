@@ -23,7 +23,7 @@ Go to <a href="http://www.eclipse.org/downloads/">The Eclipse Download Page</a>.
 Go to <a href="http://processing.org/download/">The Processing Download Page</a>.  Download the most recent version of Processing for your Operating System.
 
 
-To add Proclipsing to Eclipse:
+===To add Proclipsing to Eclipse:===
 
 <img src="http://19.media.tumblr.com/tumblr_kr22ria7Zm1qzqc80o1_500.png"/>
 
@@ -31,7 +31,7 @@ To add Proclipsing to Eclipse:
   * If Eclipse is already open it, close it and reopen it.
 
 
-To create your first Proclipsing Project:
+===To create your first Proclipsing Project:===
 
 <img src="http://8.media.tumblr.com/tumblr_kr226cVmMe1qzqc80o1_500.png"/>
 
