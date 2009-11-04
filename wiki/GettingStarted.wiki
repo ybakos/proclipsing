@@ -35,7 +35,7 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
 
   * click on the "Add" button on the top right 
   * enter "Proclipsing" in the "Name" field
-  * enter "http://proclipsing.googlecode.com/svn/tags/current_releases/proclipsingSite/" in the "location" field
+  * enter "'http://proclipsing.googlecode.com/svn/tags/current_releases/proclipsingSite/'" in the "location" field
 
 
 <img src="http://farm3.static.flickr.com/2737/4075620487_d8e5135ef6_o.jpg" width="1023" height="792" alt="pro2" />
