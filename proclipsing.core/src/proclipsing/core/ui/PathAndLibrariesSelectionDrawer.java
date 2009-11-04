@@ -72,14 +72,9 @@ public class PathAndLibrariesSelectionDrawer {
         processing_app_path_text.setText(project_configuration.getProcessingAppPath());
         processing_app_path_text.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
-                // get & show the discovered libraries based on what's been typed in
-                File processingPath = new File(processing_app_path_text.getText());
-                showDiscoveredLibraries(processingPath);
+            	validate_listener.validate();
+                showDiscoveredLibraries();
                 setSelectedLibraries();     
-                
-                //  calling this forces isPageComplete() to get called
-                //setPageComplete(true);
-                validate_listener.validate();
             }
         });
         Button button = new Button(composite, SWT.PUSH);
@@ -113,12 +108,9 @@ public class PathAndLibrariesSelectionDrawer {
         processing_sketch_path_text.setText(project_configuration.getProcessingSketchPath());
         processing_sketch_path_text.addModifyListener(new ModifyListener() {
 		    public void modifyText(ModifyEvent e) {
-		        // get & show the discovered libraries based on what's been typed in
-		        File processingPath = new File(processing_sketch_path_text.getText());
-		        showDiscoveredLibraries(processingPath);
-		        setSelectedLibraries();         
-		        
-		        validate_listener.validate();
+		    	validate_listener.validate();
+		        showDiscoveredLibraries();
+		        setSelectedLibraries();
             }
 		});
         Button button = new Button(composite, SWT.PUSH);
@@ -162,7 +154,7 @@ public class PathAndLibrariesSelectionDrawer {
         libraries_viewer.getControl().setLayoutData(viewerData);
         libraries_viewer.setContentProvider(new SelectedLibrariesContentProvider());
         libraries_viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
-        showDiscoveredLibraries(new File(project_configuration.getProcessingAppPath()));
+        showDiscoveredLibraries();
         libraries_viewer.addCheckStateListener(new ICheckStateListener() {
             public void checkStateChanged(CheckStateChangedEvent event) {
                 saveConfiguration();
@@ -192,8 +184,9 @@ public class PathAndLibrariesSelectionDrawer {
     }    
     
     
-    private void showDiscoveredLibraries(File processingPath) {
-        File librariesDir = new File(processingPath,
+    private void showDiscoveredLibraries() {
+    	
+        File librariesDir = new File(project_configuration.getProcessingAppPath(),
                 OSHelperManager.getHelper().getLibraryPath());
         List<String> libraries = new ArrayList<String>();
         if (librariesDir.exists()) { 
