@@ -1,81 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?metadataRepository class='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'?>
-<repository name='file:/Users/matthewparker/Documents/proclipsing/proclipsingSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
+<repository name='file:/Users/matthewparker/Documents/proclipsing/proclipsingSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1257360193352'/>
+    <property name='p2.timestamp' value='1257360818341'/>
   </properties>
-  <units size='14'>
-    <unit id='proclipsingFeature.feature.group' version='1.0.0' singleton='false'>
-      <update id='proclipsingFeature.feature.group' range='[0.0.0,1.0.0)' severity='0'/>
-      <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='Proclipsing Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
-        <property name='org.eclipse.equinox.p2.description.url' value='http://www.madparker.com/proclipsing/'/>
-        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+  <units size='13'>
+    <unit id='dch.eclipse.EclipseP5Exporter' version='0.2.2'>
+      <update id='dch.eclipse.EclipseP5Exporter' range='[0.0.0,0.2.2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='%Bundle-Name.0'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Daniel C. Howe'/>
       </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.group' version='1.0.0'/>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
+        <provided namespace='osgi.bundle' name='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
-      <requires size='9'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.runtime' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.ide' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.resources' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.core' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.swt' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsing.core' range='[0.1.0,0.1.0]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.jar' range='[1.0.0,1.0.0]'>
-          <filter>
-            (org.eclipse.update.install.features=true)
-          </filter>
-        </required>
+      <requires size='8'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='java.package' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='java.package' name='org.eclipse.jdt.launching' range='0.0.0'/>
+        <required namespace='java.package' name='org.eclipse.ui' range='0.0.0'/>
       </requires>
-      <touchpoint id='null' version='0.0.0'/>
-      <licenses size='1'>
-        <license url='http://www.example.com/license'>
-          [Enter License Description here.]
-        </license>
-      </licenses>
-      <copyright url='http://www.example.com/copyright'>
-        [Enter Copyright Description here.]
-      </copyright>
-    </unit>
-    <unit id='config.a.jre' version='1.6.0' singleton='false'>
-      <hostRequirements size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
-      </hostRequirements>
-      <properties size='1'>
-        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
-      </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='config.a.jre' version='1.6.0'/>
-      </provides>
-      <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
-      </requires>
-      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='install'>
-
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Eclipse-AutoStart: true&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui.console&#xA;Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.2.2&#xA;Bundle-Vendor: Daniel C. Howe&#xA;Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.launching,org.eclipse.ui&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/core.jar,lib/pde.jar,lib/antlr.jar,.&#xA;
           </instruction>
         </instructions>
       </touchpointData>
-    </unit>
-    <unit id='core' version='0.0.0'>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='core'/>
-        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
-      </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='core' version='0.0.0'/>
-      </provides>
-      <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.group' range='[1.0.0,1.0.0]'/>
-      </requires>
-      <touchpoint id='null' version='0.0.0'/>
     </unit>
     <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
       <hostRequirements size='1'>
@@ -109,6 +71,19 @@
         </instructions>
       </touchpointData>
     </unit>
+    <unit id='core' version='0.0.0'>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='core'/>
+        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='core' version='0.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.group' range='[1.0.0,1.0.0]'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+    </unit>
     <unit id='proclipsing.core' version='0.1.0'>
       <update id='proclipsing.core' range='[0.0.0,0.1.0)' severity='0'/>
       <properties size='1'>
@@ -135,69 +110,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui.ide&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: proclipsing.core.Activator&#xA;Bundle-Version: 0.1&#xA;Bundle-SymbolicName: proclipsing.core;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.jdt.core,org.eclipse.jdt.launching,org.eclipse.swt&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Proclipsing Plug-in
-          </instruction>
-        </instructions>
-      </touchpointData>
-    </unit>
-    <unit id='proclipsingFeature.feature.jar' version='1.0.0'>
-      <update id='proclipsingFeature.feature.jar' range='[0.0.0,1.0.0)' severity='0'/>
-      <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='Proclipsing Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
-        <property name='org.eclipse.equinox.p2.description.url' value='http://www.madparker.com/proclipsing/'/>
-        <property name='org.eclipse.update.feature.plugin' value='proclipsing.core'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.jar' version='1.0.0'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='proclipsingFeature' version='1.0.0'/>
-      </provides>
-      <filter>
-        (org.eclipse.update.install.features=true)
-      </filter>
-      <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='proclipsingFeature' version='1.0.0'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='zipped'>
-            true
-          </instruction>
-        </instructions>
-      </touchpointData>
-      <licenses size='1'>
-        <license url='http://www.example.com/license'>
-          [Enter License Description here.]
-        </license>
-      </licenses>
-      <copyright url='http://www.example.com/copyright'>
-        [Enter Copyright Description here.]
-      </copyright>
-    </unit>
-    <unit id='tooling.source.default' version='1.0.0' singleton='false'>
-      <hostRequirements size='1'>
-        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
-      </hostRequirements>
-      <properties size='1'>
-        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
-      </properties>
-      <provides size='2'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.source.default' version='1.0.0'/>
-        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
-      </provides>
-      <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
-      </requires>
-      <touchpoint id='null' version='0.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='2'>
-          <instruction key='uninstall'>
-            removeSourceBundle(bundle:${artifact})
-          </instruction>
-          <instruction key='install'>
-            addSourceBundle(bundle:${artifact})
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui.ide&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: proclipsing.core.Activator&#xA;Bundle-Version: 0.1&#xA;Bundle-SymbolicName: proclipsing.core;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.jdt.core,org.eclipse.jdt.launching,org.eclipse.swt&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Proclipsing Plug-in&#xA;
           </instruction>
         </instructions>
       </touchpointData>
@@ -353,43 +266,104 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='dch.eclipse.EclipseP5Exporter' version='0.2.1'>
-      <update id='dch.eclipse.EclipseP5Exporter' range='[0.0.0,0.2.1)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='%Bundle-Name.0'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Daniel C. Howe'/>
+    <unit id='proclipsingFeature.feature.group' version='1.0.0' singleton='false'>
+      <update id='proclipsingFeature.feature.group' range='[0.0.0,1.0.0)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Proclipsing Feature'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.madparker.com/proclipsing/'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='dch.eclipse.EclipseP5Exporter' version='0.2.1'/>
-        <provided namespace='osgi.bundle' name='dch.eclipse.EclipseP5Exporter' version='0.2.1'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.group' version='1.0.0'/>
       </provides>
-      <requires size='8'>
-        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.jdt.core' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.debug.core' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.jdt.launching' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.ui' range='0.0.0'/>
+      <requires size='9'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.core' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.swt' range='0.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsing.core' range='[0.1.0,0.1.0]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.jar' range='[1.0.0,1.0.0]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
       </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='dch.eclipse.EclipseP5Exporter' version='0.2.1'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='config.a.jre' version='1.6.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='config.a.jre' version='1.6.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </requires>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Eclipse-AutoStart: true&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui.console&#xA;Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.2.1&#xA;Bundle-Vendor: Daniel C. Howe&#xA;Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.launching,org.eclipse.ui&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/core.jar,lib/pde.jar,lib/antlr.jar,.
+          <instruction key='install'>
+
           </instruction>
         </instructions>
       </touchpointData>
     </unit>
+    <unit id='proclipsingFeature.feature.jar' version='1.0.0'>
+      <update id='proclipsingFeature.feature.jar' range='[0.0.0,1.0.0)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Proclipsing Feature'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.madparker.com/proclipsing/'/>
+        <property name='org.eclipse.update.feature.plugin' value='proclipsing.core'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='proclipsingFeature.feature.jar' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='proclipsingFeature' version='1.0.0'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='proclipsingFeature' version='1.0.0'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
     <unit id='P5ExporterFeature.feature.group' version='1.0.0' singleton='false'>
       <update id='P5ExporterFeature.feature.group' range='[0.0.0,1.0.0)' severity='0'/>
       <properties size='5'>
-        <property name='org.eclipse.equinox.p2.name' value='P5ExporterFeature Feature'/>
+        <property name='org.eclipse.equinox.p2.name' value='P5Exporter Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
         <property name='org.eclipse.equinox.p2.provider' value='Daniel C. Howe'/>
@@ -407,7 +381,7 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.core' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.ide' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='dch.eclipse.EclipseP5Exporter' range='[0.2.1,0.2.1]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='dch.eclipse.EclipseP5Exporter' range='[0.2.2,0.2.2]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='P5ExporterFeature.feature.jar' range='[1.0.0,1.0.0]'>
           <filter>
             (org.eclipse.update.install.features=true)
@@ -424,10 +398,36 @@
         [Enter Copyright Description here.]
       </copyright>
     </unit>
+    <unit id='tooling.source.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.source.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='uninstall'>
+            removeSourceBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='install'>
+            addSourceBundle(bundle:${artifact})
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
     <unit id='P5ExporterFeature.feature.jar' version='1.0.0'>
       <update id='P5ExporterFeature.feature.jar' range='[0.0.0,1.0.0)' severity='0'/>
       <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='P5ExporterFeature Feature'/>
+        <property name='org.eclipse.equinox.p2.name' value='P5Exporter Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
         <property name='org.eclipse.equinox.p2.provider' value='Daniel C. Howe'/>
@@ -472,39 +472,6 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='P5ExporterFeature.feature.group' range='[1.0.0,1.0.0]'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
-    </unit>
-    <unit id='dch.eclipse.EclipseP5Exporter' version='0.2.2'>
-      <update id='dch.eclipse.EclipseP5Exporter' range='[0.0.0,0.2.2)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='%Bundle-Name.0'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Daniel C. Howe'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
-        <provided namespace='osgi.bundle' name='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      </provides>
-      <requires size='8'>
-        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.jdt.core' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.debug.core' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.jdt.launching' range='0.0.0'/>
-        <required namespace='java.package' name='org.eclipse.ui' range='0.0.0'/>
-      </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='dch.eclipse.EclipseP5Exporter' version='0.2.2'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Eclipse-AutoStart: true&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui.console&#xA;Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.2.2&#xA;Bundle-Vendor: Daniel C. Howe&#xA;Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.launching,org.eclipse.ui&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/core.jar,lib/pde.jar,lib/antlr.jar,.
-          </instruction>
-        </instructions>
-      </touchpointData>
     </unit>
   </units>
 </repository>
