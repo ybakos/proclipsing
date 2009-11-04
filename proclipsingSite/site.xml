@@ -6,5 +6,9 @@
    <feature url="features/proclipsingFeature_1.0.0.jar" id="proclipsingFeature" version="1.0.0" os="linux,macosx,win32">
       <category name="core"/>
    </feature>
+   <feature url="features/P5ExporterFeature_1.0.0.jar" id="P5ExporterFeature" version="1.0.0">
+      <category name="export"/>
+   </feature>
    <category-def name="core" label="core"/>
+   <category-def name="export" label="export"/>
 </site>
