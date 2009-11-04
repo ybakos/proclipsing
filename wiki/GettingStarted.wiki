@@ -25,14 +25,20 @@ Go to <a href="http://processing.org/download/">The Processing Download Page</a>
 
 ===To add Proclipsing to Eclipse:===
 
-<img src="http://farm3.static.flickr.com/2642/4076374014_9c2e0f8ba7_o.jpg"/>
+These steps might vary slightly based on what version of Eclipse you have.  The wording might be slightly different, but the process is pretty much the same.
 
   * open the eclipse folder, then open eclipse
   * select a workspace (at the beginning the default should be fine)
   * select help>Install New Software
 
+<img src="http://farm3.static.flickr.com/2642/4076374014_9c2e0f8ba7_o.jpg" width="1022" height="791" alt="pro1" />
+
+  * click on the "Add" button on the top right 
+  * enter "Proclipsing" in the "Name" field
+  * enter "http://proclipsing.googlecode.com/svn/tags/current_releases/proclipsingSite/" in the "location" field
 
 
+<img src="http://farm3.static.flickr.com/2737/4075620487_d8e5135ef6_o.jpg" width="1023" height="792" alt="pro2" />
 
 ===To create your first Proclipsing Project:===
 
