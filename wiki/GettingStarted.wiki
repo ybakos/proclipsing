@@ -14,11 +14,11 @@ plugin allows you to select the location of your processing app, which
 libraries you want, and then creates a project with the desired libs
 (with native libraries), and skeleton package structure and PApplet.
 
-Download Eclipse:
+===Download Eclipse:===
 
 Go to <a href="http://www.eclipse.org/downloads/">The Eclipse Download Page</a>.  Download the "Eclipse IDE for Java Developers" for your Operating System.
 
-Download Processing:
+===Download Processing:===
 
 Go to <a href="http://processing.org/download/">The Processing Download Page</a>.  Download the most recent version of Processing for your Operating System.
 
