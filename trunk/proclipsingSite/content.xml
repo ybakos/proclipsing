@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?metadataRepository class='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'?>
-<repository name='file:/Users/matthewparker/Documents/proclipsing/proclipsingSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
+<repository name='file:/Users/matthewparker/Documents/proclipsing/proclipsingSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1257365090827'/>
+    <property name='p2.timestamp' value='1257365865968'/>
   </properties>
   <units size='13'>
     <unit id='dch.eclipse.EclipseP5Exporter' version='0.2.2'>
@@ -34,7 +34,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Eclipse-AutoStart: true&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui.console&#xA;Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.2.2&#xA;Bundle-Vendor: Daniel C. Howe&#xA;Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.launching,org.eclipse.ui&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/core.jar,lib/pde.jar,lib/antlr.jar,.&#xA;
+            Bundle-ManifestVersion: 2&#xA;Eclipse-AutoStart: true&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui.console&#xA;Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.2.2&#xA;Bundle-Vendor: Daniel C. Howe&#xA;Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.launching,org.eclipse.ui&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/core.jar,lib/pde.jar,lib/antlr.jar,.
           </instruction>
         </instructions>
       </touchpointData>
@@ -110,7 +110,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui.ide&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: proclipsing.core.Activator&#xA;Bundle-Version: 0.1&#xA;Bundle-SymbolicName: proclipsing.core;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.jdt.core,org.eclipse.jdt.launching,org.eclipse.swt&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Proclipsing Plug-in&#xA;
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui.ide&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: proclipsing.core.Activator&#xA;Bundle-Version: 0.1&#xA;Bundle-SymbolicName: proclipsing.core;singleton:=true&#xA;Import-Package: org.eclipse.core.resources,org.eclipse.jdt.core,org.eclipse.jdt.launching,org.eclipse.swt&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Proclipsing Plug-in
           </instruction>
         </instructions>
       </touchpointData>
