@@ -12,6 +12,6 @@ public class %project_name% extends PApplet {
 	}
 	
 	public static void main(String _args[]) {
-		PApplet.main(new String[] { "%package_name%.%project_name%" });
+		PApplet.main(new String[] { %package_name%.%project_name%.class.getName() });
 	}
 }
