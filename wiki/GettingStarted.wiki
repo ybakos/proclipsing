@@ -36,8 +36,20 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
   * click on the "Add" button on the top right 
   * enter "Proclipsing" in the "Name" field
   * enter "{{{http://proclipsing.googlecode.com/svn/tags/current_releases/proclipsingSite/}}}" in the "location" field
+  * click "ok"
 
 <img src="http://farm3.static.flickr.com/2737/4075620487_d8e5135ef6_o.jpg" width="1023" height="792" alt="pro2" />
+
+  * select both "core" and "export"
+  * click "next"
+
+<img src="http://farm3.static.flickr.com/2542/4075620685_c762168546_o.jpg" width="1023" height="792" alt="pro3" />
+
+  * click next (and agree to all following popups)
+
+<img src="http://farm3.static.flickr.com/2487/4076375394_f6be953255_o.jpg" width="1023" height="792" alt="pro4" />
+
+  * when prompted to restart eclipse, agree to it
 
 ===To create your first Proclipsing Project:===
 
