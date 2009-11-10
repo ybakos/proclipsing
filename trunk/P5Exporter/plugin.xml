@@ -26,7 +26,7 @@
           menubarPath="project/build.ext"
           toolbarPath="Normal/additions"
           icon="icons/proc16.png"
-          tooltip="Processing Exporter"
+          tooltip="Export via Processing"
           class="dch.eclipse.p5Export.P5ExportAction">
         </action>
       </actionSet>
