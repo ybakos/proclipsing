@@ -43,8 +43,6 @@ public class P5ExportUtils
   {
     workspace = ResourcesPlugin.getWorkspace().getRoot();
     javaModel = JavaCore.create(workspace);
-//    m_sWorkspacePath = rootWorkspace.getLocation().toOSString();
-    
   }
   
   /**
@@ -327,13 +325,11 @@ if(P5ExportBuilder.DBUG)System.out.println("Creating file: "+f);
   
   public static void openMacURL(String url) {
     if (!url.startsWith("http://")) {
-      // prepend file:// on this guy since it's a file
       url = "file://" + url;
 
-      // replace spaces with %20 for the file url
-      // otherwise the mac doesn't like to open it
-      // can't just use URLEncoder, since that makes slashes into
-      // %2F characters, which is no good. some might say "useless"
+      // replace spaces with %20 for the url
+      // can't just use URLEncoder, since that 
+      // makes slashes into %2F characters, which is no good. 
       if (url.indexOf(' ') != -1) {
         StringBuffer sb = new StringBuffer();
         char c[] = url.toCharArray();
