@@ -4,6 +4,16 @@ import java.io.*;
 import java.util.*;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import processing.app.*;
 import processing.core.PApplet;
@@ -140,11 +150,15 @@ public class P5ApplicationExport extends P5ExportType
       }
         
       if (!builder.hasMain) {
-        String message = "  A main() method is required for application " 
-          + " exports:\n\n  public static void main(String args[])\n  {\n"
+          String message = "  A main() method is required for application  exports: ";
+          String breaks = "\n\n";
+          String code = "  public static void main(String args[])\n  {\n"
           + "    PApplet.main(new String[] { \"" + mainClass + "\" });\n  }";
-        P5ExportUtils.errorDialog(builder.shell, message, null);
-        return false;
+          
+          //P5ExportUtils.errorDialog(builder.shell, message + breaks + code, null);
+          // this next call replaces line above to give selectable code.
+          P5ExportUtils.messageWithCode(builder.shell, message, code);
+          return false;
       }          
       else // ok, we have a main 
       {
