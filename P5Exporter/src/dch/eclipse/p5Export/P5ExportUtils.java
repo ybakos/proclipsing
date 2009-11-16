@@ -163,10 +163,16 @@ public class P5ExportUtils
     });
   }
   
+  /**
+   * Displays  a message window w/ an area for code that can be selected & copied.
+   * 
+   * @param shell
+   * @param heading
+   * @param code
+   */
   public static void messageWithCode(final Shell shell, final String heading, final String code)
   {
       shell.getDisplay().asyncExec(new Runnable() {
-
           @Override
           public void run() {
               new MessageDialog(shell, P5ExportPlugin.NAME+" Error", 
@@ -174,7 +180,6 @@ public class P5ExportUtils
                   
                   @Override
                   protected Control createMessageArea(Composite composite) {
-                      
                       Label label = new Label(composite, SWT.NONE);              
                       label.setText(heading);
                       GridDataFactory
@@ -182,8 +187,7 @@ public class P5ExportUtils
                           .align(SWT.FILL, SWT.BEGINNING)
                           .grab(true, false).span(2, 1)
                           .applyTo(label);
-                      
-                      Text multiText = new Text(composite, SWT.MULTI);
+                      Text multiText = new Text(composite, SWT.MULTI | SWT.READ_ONLY);
                       multiText.setBackground(label.getBackground());
                       multiText.setText(code);
                       GridDataFactory
@@ -191,7 +195,6 @@ public class P5ExportUtils
                           .align(SWT.FILL, SWT.BEGINNING)
                           .grab(true, false)
                           .applyTo(multiText);
-                      
                       return composite;
                   }
               }.open();
