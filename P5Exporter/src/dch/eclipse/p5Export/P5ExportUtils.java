@@ -17,7 +17,16 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.*;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import processing.app.Base;
 import processing.app.Preferences;
@@ -152,6 +161,44 @@ public class P5ExportUtils
         P5ExportPlugin.toConsole(msg, e);
       }
     });
+  }
+  
+  public static void messageWithCode(final Shell shell, final String heading, final String code)
+  {
+      shell.getDisplay().asyncExec(new Runnable() {
+
+          @Override
+          public void run() {
+              new MessageDialog(shell, P5ExportPlugin.NAME+" Error", 
+                      null, "", MessageDialog.NONE, new String[]{"OK"}, 0) {
+                  
+                  @Override
+                  protected Control createMessageArea(Composite composite) {
+                      
+                      Label label = new Label(composite, SWT.NONE);              
+                      label.setText(heading);
+                      GridDataFactory
+                          .fillDefaults()
+                          .align(SWT.FILL, SWT.BEGINNING)
+                          .grab(true, false).span(2, 1)
+                          .applyTo(label);
+                      
+                      Text multiText = new Text(composite, SWT.MULTI);
+                      multiText.setBackground(label.getBackground());
+                      multiText.setText(code);
+                      GridDataFactory
+                          .fillDefaults()
+                          .align(SWT.FILL, SWT.BEGINNING)
+                          .grab(true, false)
+                          .applyTo(multiText);
+                      
+                      return composite;
+                  }
+              }.open();
+              P5ExportPlugin.toConsole(heading+code, null);
+          }
+          
+      });
   }
   
   /**
