@@ -173,7 +173,6 @@ public class P5ExportUtils
   public static void messageWithCode(final Shell shell, final String heading, final String code)
   {
       shell.getDisplay().asyncExec(new Runnable() {
-          @Override
           public void run() {
               new MessageDialog(shell, P5ExportPlugin.NAME+" Error", 
                       null, "", MessageDialog.NONE, new String[]{"OK"}, 0) {
@@ -184,6 +183,7 @@ public class P5ExportUtils
                       label.setText(heading);
                       GridDataFactory
                           .fillDefaults()
+                          .minSize(600, 600) 
                           .align(SWT.FILL, SWT.BEGINNING)
                           .grab(true, false).span(2, 1)
                           .applyTo(label);
@@ -192,6 +192,7 @@ public class P5ExportUtils
                       multiText.setText(code);
                       GridDataFactory
                           .fillDefaults()
+                          .minSize(600, 600)
                           .align(SWT.FILL, SWT.BEGINNING)
                           .grab(true, false)
                           .applyTo(multiText);

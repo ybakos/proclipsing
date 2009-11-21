@@ -32,7 +32,7 @@ public abstract class P5ExportType
     "jogl-natives-windows-amd64.jar", "jogl-natives-windows-i586.jar",
   };
   
-  protected boolean isApplet, forceMultipleJars, presentMode, addStopButton, rewriteMainClass;
+  protected boolean isApplet, forceMultipleJars, presentMode, addStopButton;
   protected Vector jarListVector = new Vector();  
   protected File libGl, libDir;
   protected String mainClass;
