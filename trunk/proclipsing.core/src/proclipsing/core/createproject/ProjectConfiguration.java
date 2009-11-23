@@ -2,7 +2,10 @@ package proclipsing.core.createproject;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -19,13 +22,24 @@ import proclipsing.util.LogHelper;
  */
 public class ProjectConfiguration {
 
-    private static final String PROCESSING_APP_PATH_KEY = "PROCESSING_APP_PATH";
-    private static final String PROCESSING_SKETCH_PATH_KEY = "PROCESSING_SKETCH_PATH";
+    public static final String PROJECT_PREFS_NODE           = "PROJECT_PREFS_NODE";
+    public static final String PROCESSING_APP_PATH_KEY      = "PROCESSING_APP_PATH";
+    public static final String PROCESSING_SKETCH_PATH_KEY   = "PROCESSING_SKETCH_PATH";
+    
     private ArrayList<String> selected_libraries;
     private String project_name;
-    private boolean isApp = false;
+    private String app_path     = null;
+    private String sketch_path  = null;
     
-    public ProjectConfiguration() {}
+    private boolean isApp = false;
+    private IProject project;
+    
+    public ProjectConfiguration() {
+    }
+    
+    public ProjectConfiguration(IProject project) {
+        this.project = project;
+    }
     
     public ProjectConfiguration(
             String projectName, ArrayList<String> selectedLibraries) {
@@ -51,18 +65,29 @@ public class ProjectConfiguration {
     }
     
     public String getProcessingAppPath() {
-        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-        return preferences.get(PROCESSING_APP_PATH_KEY, getDefaultProcessingAppPath());
+        if (app_path != null)
+            return app_path;
+        else if (projectExists())
+            return getProjectPreferencesNode().get(
+                    PROCESSING_APP_PATH_KEY, getDefaultProcessingAppPath());
+        else
+            return getDefaultProcessingAppPath();
     }
     
     public void setProcessingAppPath(String path) {
         path = path.trim();
         if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
         	path +=  OSHelperManager.getHelper().getFileSeparator();
-        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-
-        preferences.put(PROCESSING_APP_PATH_KEY, path);
-
+        app_path = path;
+    }
+     
+    private void saveProcessingAppPath() throws IllegalStateException {
+        if (project == null) 
+            throw new IllegalStateException("Cannot save processing path " +
+            		"because target project has not been set");
+        
+        Preferences preferences = getProjectPreferencesNode();
+        preferences.put(PROCESSING_APP_PATH_KEY, app_path);
         try {
             preferences.flush();
         } catch (BackingStoreException e) {
@@ -71,23 +96,40 @@ public class ProjectConfiguration {
     }
     
     public String getProcessingSketchPath() {
-        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-        return preferences.get(PROCESSING_SKETCH_PATH_KEY, getDefaultProcessingSketchPath());
+        if (sketch_path != null)
+            return sketch_path;
+        else if (projectExists())
+            return getProjectPreferencesNode().get(
+                    PROCESSING_SKETCH_PATH_KEY, getDefaultProcessingSketchPath());
+        else
+            return getDefaultProcessingSketchPath();
     }
     
     public void setProcessingSketchPath(String path) {
         path = path.trim();
         if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
         	path +=  OSHelperManager.getHelper().getFileSeparator();
-        Preferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-
-        preferences.put(PROCESSING_SKETCH_PATH_KEY, path);
-
+        sketch_path = path;
+    }
+    
+    private void saveProcessingSketchPath() {
+        if (project == null) 
+            throw new IllegalStateException("Cannot save sketch path " +
+                    "because target project has not been set");
+        
+        Preferences preferences = getProjectPreferencesNode();
+        preferences.put(PROCESSING_SKETCH_PATH_KEY, sketch_path);
         try {
             preferences.flush();
         } catch (BackingStoreException e) {
            LogHelper.LogError(e);
         }
+    }
+    
+    public void savePreferences(IProject project) {
+        this.project = project;
+        saveProcessingAppPath();
+        saveProcessingSketchPath();
     }
     
     public boolean isApp() {
@@ -98,11 +140,27 @@ public class ProjectConfiguration {
 		this.isApp = isApp;
 	}
 	
+	public boolean projectExists() {
+	    return project != null;
+	}
+	
+	/**
+	 *  this gets the configuration in this project scope for the project's prefs
+	 *  
+	 * @return
+	 */
+	private IEclipsePreferences getProjectPreferencesNode() {
+	    return new ProjectScope(project).getNode(PROJECT_PREFS_NODE);
+	}
+	
 	private String getDefaultProcessingAppPath() {
-		return OSHelperManager.getHelper().getDefaultAppPath();
+        return  new ConfigurationScope().getNode(Activator.PLUGIN_ID).get(
+                PROCESSING_APP_PATH_KEY,  OSHelperManager.getHelper().getDefaultAppPath());
 	}
 	
 	private String getDefaultProcessingSketchPath() {
-		return OSHelperManager.getHelper().getDefaultSketchPath();
+        return  new ConfigurationScope().getNode(Activator.PLUGIN_ID).get(
+                PROCESSING_SKETCH_PATH_KEY,  OSHelperManager.getHelper().getDefaultSketchPath());
+
 	}
 }

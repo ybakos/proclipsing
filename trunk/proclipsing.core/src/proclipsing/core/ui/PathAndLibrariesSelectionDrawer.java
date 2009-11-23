@@ -18,112 +18,57 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 
 import proclipsing.core.createproject.ProjectConfiguration;
 import proclipsing.os.OSHelperManager;
 
 public class PathAndLibrariesSelectionDrawer {
 
+    private static String IMPORT_LIBRARIES_LABEL    = "Select Libraries to Import";    
 
-	private static String PROCESSING_APP_PATH_LABEL     = "Processing Path";
-    private static String PROCESSING_SKETCH_PATH_LABEL     = "Processing Sketch Path";
-    private static String DIR_SEARCH_BUTTON_LABEL   = "Browse...";    
-    private static String IMPORT_LIBRARIES_LABEL    = "Select Libraries to Import";
-    private static int    PATH_TEXT_WIDTH_HINT      = 350;    
-    
-    private Text processing_app_path_text;
-    private Text processing_sketch_path_text;
     private ProjectConfiguration project_configuration;
     private IValidateListener validate_listener;
-    private CheckboxTableViewer libraries_viewer;    
+    private CheckboxTableViewer libraries_viewer;   
+    ProcessingPathDrawer drawer;
     
     
     public PathAndLibrariesSelectionDrawer(
             ProjectConfiguration projectConfiguration, IValidateListener validateListener) {
         project_configuration = projectConfiguration;
         validate_listener = validateListener;
+        drawer = new ProcessingPathDrawer();
     }
-    
-    public void drawProcessingAppFinder(Composite parent) {
+ 
+
+    public void drawPaths(Composite parent) {
+        Composite composite = drawer.draw(parent);
         
-        Label processingPathLabel = new Label(parent, SWT.NONE);
-        processingPathLabel.setText(PROCESSING_APP_PATH_LABEL);
-        
-        final Composite composite = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        composite.setLayout(layout);
-        
-        processing_app_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.widthHint = PATH_TEXT_WIDTH_HINT;
-        processing_app_path_text.setLayoutData(gd);
-        processing_app_path_text.setText(project_configuration.getProcessingAppPath());
-        processing_app_path_text.addModifyListener(new ModifyListener() {
+        drawer.getProcessingPathTextWidget().setText(project_configuration.getProcessingAppPath());
+        drawer.getProcessingPathTextWidget().addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
-            	validate_listener.validate();
+                validate_listener.validate();
                 showDiscoveredLibraries();
                 setSelectedLibraries();     
             }
         });
-        Button button = new Button(composite, SWT.PUSH);
-        button.setText(DIR_SEARCH_BUTTON_LABEL);
-        button.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event) {
-            Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
-            
-            if(dialog instanceof FileDialog)
-                processing_app_path_text.setText(((FileDialog)dialog).open());
-            else if(dialog instanceof DirectoryDialog)
-                processing_app_path_text.setText(((DirectoryDialog)dialog).open());
-                
-            }
-        });        
-    }
-    
-	public void drawProcessingSketchFinder(Composite parent) {
         
-        Label processingPathLabel = new Label(parent, SWT.NONE);
-        processingPathLabel.setText(PROCESSING_SKETCH_PATH_LABEL);
-        
-        final Composite composite = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        composite.setLayout(layout);
-        
-        processing_sketch_path_text = new Text(composite, SWT.NONE | SWT.BORDER );
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.widthHint = PATH_TEXT_WIDTH_HINT;
-        processing_sketch_path_text.setLayoutData(gd);
-        processing_sketch_path_text.setText(project_configuration.getProcessingSketchPath());
-        processing_sketch_path_text.addModifyListener(new ModifyListener() {
-		    public void modifyText(ModifyEvent e) {
-		    	validate_listener.validate();
-		        showDiscoveredLibraries();
-		        setSelectedLibraries();
-            }
-		});
-        Button button = new Button(composite, SWT.PUSH);
-        button.setText(DIR_SEARCH_BUTTON_LABEL);
-        button.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event) {
-            	DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
-            	
-            	processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
-            	
+        drawer.getSketchPathTextWidget().setText(project_configuration.getProcessingSketchPath());
+        drawer.getSketchPathTextWidget().addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                System.out.println("ooooh");
+                validate_listener.validate();
+                showDiscoveredLibraries();
+                setSelectedLibraries();
             }
         });
-    }
+        
+        GridData gd = new GridData(SWT.FILL);
+        composite.setLayoutData(gd);
+    } 
     
     public void drawLibrarySelector(Composite parent) {
         // group surrounds the box w/ a thin line
@@ -163,29 +108,28 @@ public class PathAndLibrariesSelectionDrawer {
     }
     
     public String getProcessingPathText() {
-        return processing_app_path_text.getText();
+        return drawer.getProcessingPath();
     }
     
     public boolean validatePathExists() {
-        return new File(processing_app_path_text.getText()).exists();
+        return new File(drawer.getProcessingPath()).exists();
     }
     
     public boolean validatePathIsProcessing() {
         // final check for core.jar
-        return new File(processing_app_path_text.getText(),
+        return new File(drawer.getProcessingPath(),
                 OSHelperManager.getHelper().getCorePath() + "core.jar").exists();
         
     }
     
     public void saveConfiguration() {
         project_configuration.setSelectedLibraries(getSelectedLibraries());
-        project_configuration.setProcessingAppPath(processing_app_path_text.getText());
-        project_configuration.setProcessingSketchPath(processing_sketch_path_text.getText());
+        project_configuration.setProcessingAppPath(drawer.getProcessingPath());
+        project_configuration.setProcessingSketchPath(drawer.getSketchPath());
     }    
     
     
     private void showDiscoveredLibraries() {
-    	
         File librariesDir = new File(project_configuration.getProcessingAppPath(),
                 OSHelperManager.getHelper().getLibraryPath());
         List<String> libraries = new ArrayList<String>();
@@ -254,6 +198,7 @@ public class PathAndLibrariesSelectionDrawer {
         public Image getColumnImage(Object element, int columnIndex) {
             return null;
         }
-    }     
+    }
+ 
     
 }

@@ -25,6 +25,9 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 	private static String PAGE_TITLE                = "Processing";
 	private static String PROJECT_NAME_LABEL        = "Project Name";
 	private static int    PROJECT_NAME_MAXSIZE      = 150;
+	private static int    LABEL_WIDTH_HINT          = 150;
+	private static int    TEXT_WIDTH_HINT           = 350;
+	
 	
 	private Text project_name_text;
 	private Button appButton;
@@ -36,14 +39,22 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 
 	public void createControl(Composite parent) { 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		 
-		Label label = new Label(composite, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		
+		Composite titlearea = new Composite(composite, SWT.NONE);
+		titlearea.setLayout(new GridLayout(3, false));
+		titlearea.setLayoutData(new GridData(SWT.FILL));
+		
+		Label label = new Label(titlearea, SWT.NONE);
 		label.setText(PROJECT_NAME_LABEL);
-		label.setLayoutData(new GridData());
+		GridData gd = new GridData(SWT.FILL);
+		gd.widthHint = LABEL_WIDTH_HINT;
+		label.setLayoutData(gd);
 		 
-		project_name_text = new Text(composite, SWT.NONE | SWT.BORDER);
-		project_name_text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		project_name_text = new Text(titlearea, SWT.FILL | SWT.BORDER);
+		GridData gd2 = new GridData(SWT.FILL);
+		gd2.widthHint = TEXT_WIDTH_HINT;
+		project_name_text.setLayoutData(gd2);
 		project_name_text.addModifyListener(new ModifyListener() {
 		    public void modifyText(ModifyEvent e) {
 		        // calling this forces isPageComplete() to get called
@@ -52,9 +63,10 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 		});
 
         path_and_libraries_drawer = 
-            new PathAndLibrariesSelectionDrawer(getProjectConfiguration(), this);		
-		path_and_libraries_drawer.drawProcessingAppFinder(composite);		
-		path_and_libraries_drawer.drawProcessingSketchFinder(composite);
+            new PathAndLibrariesSelectionDrawer(getProjectConfiguration(), this);
+        
+        path_and_libraries_drawer.drawPaths(composite);
+        
 		drawAppOption(composite);
 		path_and_libraries_drawer.drawLibrarySelector(composite);
 		setControl(composite);
@@ -156,9 +168,9 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
     }
 
     private void saveConfiguration() {
+        getProjectConfiguration().setProjectName(project_name_text.getText());
+        getProjectConfiguration().setApp(appButton.getSelection());        
         path_and_libraries_drawer.saveConfiguration();
-    	getProjectConfiguration().setProjectName(project_name_text.getText());
-    	getProjectConfiguration().setApp(appButton.getSelection());
     }
     
     private ProjectConfiguration getProjectConfiguration() {
