@@ -44,6 +44,35 @@
          </enablement>
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="proclipsing.core.preferences.ProclipsingPreferencePage"
+            id="proclipsing.core.preferences.ProclipsingPreferencePage"
+            name="Proclipsing">
+      </page>
+   </extension>
+    
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="proclipsing.core.actions.SetProclipsingPrefsAction"
+            objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true">
+         <action
+               class="proclipsing.core.actions.SetProclipsingPrefsAction"
+               id="proclipsing.core.SetProclipsingPrefsAction"
+               icon="icons/processing_icon.jpg"
+               label="Proclipsing Project Prefs"
+               menubarPath="proclipsing.core">
+         </action>
+         <visibility>
+            <objectState
+                  name="projectNature"
+                  value="proclipsing.core.ProcessingProjectNature"/>
+         </visibility>
+      </objectContribution>
+   </extension>
 
 
 </plugin>

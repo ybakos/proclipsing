@@ -60,6 +60,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 			InvocationTargetException, InterruptedException {
 		
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
+		
 		IProject project = wsroot.getProject(configuration.getProjectName());
 		
 		package_name = Util.projNametoPackage(configuration.getProjectName());
@@ -77,6 +78,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		addMyAppletSkeleton(project, monitor);
 		setProjectClassPath(project, monitor);
 		
+		configuration.savePreferences(project);
 	}
 
 	private void addMyAppletSkeleton(IProject project, IProgressMonitor monitor) throws CoreException {
