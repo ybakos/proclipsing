@@ -28,7 +28,7 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 	private static int    LABEL_WIDTH_HINT          = 150;
 	private static int    TEXT_WIDTH_HINT           = 350;
 	
-	
+	private boolean is_drawn = false;
 	private Text project_name_text;
 	private Button appButton;
 	private PathAndLibrariesSelectionDrawer path_and_libraries_drawer;
@@ -63,13 +63,17 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 		});
 
         path_and_libraries_drawer = 
-            new PathAndLibrariesSelectionDrawer(getProjectConfiguration(), this);
+            new PathAndLibrariesSelectionDrawer(this);
         
-        path_and_libraries_drawer.drawPaths(composite);
+        path_and_libraries_drawer.drawPaths(composite, 
+                getProjectConfiguration().getProcessingAppPath(), 
+                getProjectConfiguration().getProcessingAppPath(),
+                getProjectConfiguration().getSelectedLibraries());
         
 		drawAppOption(composite);
 		path_and_libraries_drawer.drawLibrarySelector(composite);
 		setControl(composite);
+		is_drawn = true;
 	}
 	
     private void drawAppOption(Composite parent){
@@ -117,6 +121,7 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
     public boolean isPageComplete() {
     	
         setErrorMessage(null);     
+        if (!is_drawn) return false;
         
         String projName = project_name_text.getText();
         char[] cs = projName.toCharArray();
@@ -151,13 +156,13 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
         
         if (!path_and_libraries_drawer.validatePathExists()) {
             setErrorMessage("Processing path (" + 
-                    path_and_libraries_drawer.getProcessingPathText() + ") does not exist.");
+                    path_and_libraries_drawer.getProcessingPath() + ") does not exist.");
             return false;           
         }
         
         if (!path_and_libraries_drawer.validatePathIsProcessing()) {
             setErrorMessage(
-                    path_and_libraries_drawer.getProcessingPathText() 
+                    path_and_libraries_drawer.getProcessingPath() 
                     + " does not contain the processing libs.");
             return false;           
         }
@@ -170,7 +175,9 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
     private void saveConfiguration() {
         getProjectConfiguration().setProjectName(project_name_text.getText());
         getProjectConfiguration().setApp(appButton.getSelection());        
-        path_and_libraries_drawer.saveConfiguration();
+        getProjectConfiguration().setSelectedLibraries(path_and_libraries_drawer.getSelectedLibraries());
+        getProjectConfiguration().setProcessingAppPath(path_and_libraries_drawer.getProcessingPath());
+        getProjectConfiguration().setProcessingSketchPath(path_and_libraries_drawer.getSketchPath());
     }
     
     private ProjectConfiguration getProjectConfiguration() {
