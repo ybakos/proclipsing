@@ -92,9 +92,12 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
     		composite.setLayout(new GridLayout());
     	    
     		content_drawer = 
-    	    	new PathAndLibrariesSelectionDrawer(project_configuration, this);
+    	    	new PathAndLibrariesSelectionDrawer(this);
     	    
-        	content_drawer.drawPaths(composite);
+        	content_drawer.drawPaths(composite,
+        	        project_configuration.getProcessingAppPath(),
+        	        project_configuration.getProcessingSketchPath(),
+        	        project_configuration.getSelectedLibraries());
     		content_drawer.drawLibrarySelector(composite);
     		
             return composite;
