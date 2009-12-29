@@ -1,6 +1,14 @@
 package proclipsing.core.actions;
 
+import java.awt.Window;
+import java.net.URL;
+
+import javax.swing.WindowConstants;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -19,6 +27,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import proclipsing.core.createproject.ProjectConfiguration;
 import proclipsing.core.ui.IValidateListener;
 import proclipsing.core.ui.PathAndLibrariesSelectionDrawer;
+import proclipsing.processingprovider.ProcessingLibrary;
+import proclipsing.processingprovider.ProcessingProvider;
+import proclipsing.util.LogHelper;
 
 public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 
@@ -54,6 +65,7 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 	            "Update the preferences for your processing project.", 
 	            MessageDialog.NONE, new String[] {IDialogConstants.OK_LABEL,
                         IDialogConstants.CANCEL_LABEL}, 1).open();
+	   
 	    
 	    /*
 		MessageDialog.openInformation(
@@ -63,6 +75,7 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 			*/
 	}
 
+	
 	/**
 	 * @see IActionDelegate#selectionChanged(IAction, ISelection)
 	 */
@@ -98,19 +111,35 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
         	        project_configuration.getProcessingAppPath(),
         	        project_configuration.getProcessingSketchPath(),
         	        project_configuration.getSelectedLibraries());
-    		content_drawer.drawLibrarySelector(composite);
+    		content_drawer.drawLibrarySelector(composite,
+    		        project_configuration.getSelectedLibraries());
     		
             return composite;
         }		
 		
 		public void validate() {
-			getButton(IDialogConstants.OK_ID).setEnabled(false);
+		    //saveConfiguration();
+		}
+		
+
+		protected void buttonPressed(int buttonId) {
+		   saveConfiguration();
+		   super.buttonPressed(buttonId);
 		}
 		
 		protected void createButtonsForButtonBar(Composite parent) {
 			super.createButtonsForButtonBar(parent);
 			validate();
-		}	
+		}
+
+	    protected void saveConfiguration() {
+	        project_configuration.setSelectedLibraries(content_drawer.getSelectedLibraries());
+	        project_configuration.setProcessingAppPath(content_drawer.getProcessingPath());
+	        project_configuration.setProcessingSketchPath(content_drawer.getSketchPath());
+	        project_configuration.savePaths();
+	        project_configuration.saveLibs();
+	    }
+	    
 	}
 	
 }
