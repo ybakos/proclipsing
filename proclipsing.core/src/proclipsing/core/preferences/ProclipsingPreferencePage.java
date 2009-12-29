@@ -50,6 +50,11 @@ public class ProclipsingPreferencePage extends PreferencePage implements
         super(title, image);
     }
 
+    
+    public void init(IWorkbench workbench) {
+        preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
+    }
+
     protected Control createContents(Composite parent) {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(2, false));
@@ -125,10 +130,6 @@ public class ProclipsingPreferencePage extends PreferencePage implements
         });
     }        
     
-    public void init(IWorkbench workbench) {
-        preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
-    }
-
     protected void performDefaults() {       
         processing_app_path_text.setText(
                 OSHelperManager.getHelper().getDefaultAppPath());

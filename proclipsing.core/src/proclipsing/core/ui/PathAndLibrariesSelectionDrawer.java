@@ -66,7 +66,7 @@ public class PathAndLibrariesSelectionDrawer {
         composite.setLayoutData(gd);
     } 
     
-    public void drawLibrarySelector(Composite parent) {
+    public void drawLibrarySelector(Composite parent, ArrayList<String> selectedLibs) {
         // group surrounds the box w/ a thin line
         Group projectsGroup = new Group(parent, SWT.NONE);
         projectsGroup.setText(IMPORT_LIBRARIES_LABEL);
@@ -102,6 +102,7 @@ public class PathAndLibrariesSelectionDrawer {
                 //saveConfiguration();
             }
         });
+        libraries_viewer.setCheckedElements(selectedLibs.toArray());
     }
     
     public String getProcessingPath() {

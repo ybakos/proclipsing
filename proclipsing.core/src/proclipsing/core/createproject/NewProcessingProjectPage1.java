@@ -71,7 +71,8 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
                 getProjectConfiguration().getSelectedLibraries());
         
 		drawAppOption(composite);
-		path_and_libraries_drawer.drawLibrarySelector(composite);
+		path_and_libraries_drawer.drawLibrarySelector(composite,
+		        getProjectConfiguration().getSelectedLibraries());
 		setControl(composite);
 		is_drawn = true;
 	}
