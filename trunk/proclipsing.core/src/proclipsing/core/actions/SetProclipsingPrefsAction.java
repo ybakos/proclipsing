@@ -1,14 +1,6 @@
 package proclipsing.core.actions;
 
-import java.awt.Window;
-import java.net.URL;
-
-import javax.swing.WindowConstants;
-
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -24,17 +16,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import proclipsing.core.createproject.ProjectConfiguration;
+import proclipsing.core.preferences.PreferenceController;
+import proclipsing.core.preferences.ProjectPreferences;
 import proclipsing.core.ui.IValidateListener;
 import proclipsing.core.ui.PathAndLibrariesSelectionDrawer;
-import proclipsing.processingprovider.ProcessingLibrary;
-import proclipsing.processingprovider.ProcessingProvider;
-import proclipsing.util.LogHelper;
 
 public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 
 	private Shell shell;
-	private ProjectConfiguration project_configuration = null;
+	private IProject project = null;
 	private PathAndLibrariesSelectionDrawer content_drawer = null;
 	
 	/**
@@ -55,24 +45,15 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 	 * @see IActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
-	    if (project_configuration == null) {
+	    if (project == null) {
 	    	ErrorDialog.openError(shell, "No Project", "A Project was not selected.", null);
 	    	return;
 	    }
 	   
-	    
 	    new ProjectPrefsDialog(shell, "Processing Processing Preferences", null,
 	            "Update the preferences for your processing project.", 
 	            MessageDialog.NONE, new String[] {IDialogConstants.OK_LABEL,
                         IDialogConstants.CANCEL_LABEL}, 1).open();
-	   
-	    
-	    /*
-		MessageDialog.openInformation(
-			shell,
-			"Proclipsing Plug-in",
-			"Proclipsing Project Prefs was executed.\n" + msg);
-			*/
 	}
 
 	
@@ -83,7 +64,7 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
         if (selection instanceof IStructuredSelection) {
             Object element = ((IStructuredSelection) selection).getFirstElement();
             if (element instanceof IProject) {
-                project_configuration = new ProjectConfiguration((IProject) element);
+                project = (IProject) element;
             }
         }
 	}
@@ -107,12 +88,10 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
     		content_drawer = 
     	    	new PathAndLibrariesSelectionDrawer(this);
     	    
-        	content_drawer.drawPaths(composite,
-        	        project_configuration.getProcessingAppPath(),
-        	        project_configuration.getProcessingSketchPath(),
-        	        project_configuration.getSelectedLibraries());
-    		content_drawer.drawLibrarySelector(composite,
-    		        project_configuration.getSelectedLibraries());
+    		
+    		ProjectPreferences prefs = PreferenceController.loadFromProject(project);
+        	content_drawer.drawPaths(composite, prefs);
+    		content_drawer.drawLibrarySelector(composite, prefs);
     		
             return composite;
         }		
@@ -133,11 +112,9 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 		}
 
 	    protected void saveConfiguration() {
-	        project_configuration.setSelectedLibraries(content_drawer.getSelectedLibraries());
-	        project_configuration.setProcessingAppPath(content_drawer.getProcessingPath());
-	        project_configuration.setProcessingSketchPath(content_drawer.getSketchPath());
-	        project_configuration.savePaths();
-	        project_configuration.saveLibs();
+	    	PreferenceController.saveToProject(project, 
+	    			new ProjectPreferences(project.getName(), content_drawer.getProcessingPath(), 
+	    					content_drawer.getSketchPath(), content_drawer.getSelectedLibraries()));
 	    }
 	    
 	}

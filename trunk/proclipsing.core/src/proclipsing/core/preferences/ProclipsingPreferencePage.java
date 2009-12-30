@@ -22,8 +22,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import proclipsing.core.Activator;
-import proclipsing.core.createproject.ProjectConfiguration;
-import proclipsing.os.OSHelperManager;
+import proclipsing.os.OS;
 import proclipsing.util.LogHelper;
 
 public class ProclipsingPreferencePage extends PreferencePage implements
@@ -67,11 +66,11 @@ public class ProclipsingPreferencePage extends PreferencePage implements
 
     private void prefill() {
         processing_app_path_text.setText(
-                preferences.get(ProjectConfiguration.PROCESSING_APP_PATH_KEY,
-                        OSHelperManager.getHelper().getDefaultAppPath()));
+                preferences.get(ProjectPreferences.APP_PATH_KEY,
+                        OS.helper().getDefaultAppPath()));
        processing_sketch_path_text.setText(
-                preferences.get(ProjectConfiguration.PROCESSING_SKETCH_PATH_KEY,
-                        OSHelperManager.getHelper().getDefaultSketchPath())); 
+                preferences.get(ProjectPreferences.SKETCH_PATH_KEY,
+                        OS.helper().getDefaultSketchPath())); 
     }
 
     public void drawProcessingAppFinder(final Composite composite) {
@@ -94,7 +93,7 @@ public class ProclipsingPreferencePage extends PreferencePage implements
         button.setText(DIR_SEARCH_BUTTON_LABEL);
         button.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
-            Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
+            Dialog dialog = OS.helper().getDialog(composite.getShell());
             
             if(dialog instanceof FileDialog)
                 processing_app_path_text.setText(((FileDialog)dialog).open());
@@ -132,9 +131,9 @@ public class ProclipsingPreferencePage extends PreferencePage implements
     
     protected void performDefaults() {       
         processing_app_path_text.setText(
-                OSHelperManager.getHelper().getDefaultAppPath());
+                OS.helper().getDefaultAppPath());
         processing_sketch_path_text.setText(
-                OSHelperManager.getHelper().getDefaultSketchPath());
+                OS.helper().getDefaultSketchPath());
 
         super.performDefaults();
     }
@@ -145,14 +144,14 @@ public class ProclipsingPreferencePage extends PreferencePage implements
         if (preferences == null) return false;
         
         String path = processing_app_path_text.getText().trim();
-        if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
-            path +=  OSHelperManager.getHelper().getFileSeparator();
-        preferences.put(ProjectConfiguration.PROCESSING_APP_PATH_KEY, path);
+        if (!path.endsWith(OS.helper().getFileSeparator())) 
+            path +=  OS.helper().getFileSeparator();
+        preferences.put(ProjectPreferences.APP_PATH_KEY, path);
 
         path = processing_sketch_path_text.getText().trim();
-        if (!path.endsWith(OSHelperManager.getHelper().getFileSeparator())) 
-            path +=  OSHelperManager.getHelper().getFileSeparator();
-        preferences.put(ProjectConfiguration.PROCESSING_SKETCH_PATH_KEY, path);
+        if (!path.endsWith(OS.helper().getFileSeparator())) 
+            path +=  OS.helper().getFileSeparator();
+        preferences.put(ProjectPreferences.SKETCH_PATH_KEY, path);
         
         try {
             preferences.flush();

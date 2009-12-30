@@ -1,6 +1,6 @@
 package proclipsing.os;
 
-public class OSHelperManager {
+public class OS {
 	
 	private static OSHelper helper;
 	
@@ -10,7 +10,7 @@ public class OSHelperManager {
 	 * 
 	 * @return
 	 */
-	public static synchronized OSHelper getHelper() {
+	public static synchronized OSHelper helper() {
 		if (helper == null) {
 			synchronized (OSHelper.class) {
 				if (helper == null)

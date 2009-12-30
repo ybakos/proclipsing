@@ -1,22 +1,26 @@
 package proclipsing.core.createproject;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import proclipsing.core.preferences.ProjectPreferences;
 import proclipsing.util.LogHelper;
 
 
 public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 
     private NewProcessingProjectPage1 page1;
-    private ProjectConfiguration configuration;
+    private ProjectPreferences preferences;
+    private boolean isApp;
     
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress job = new CreateProcessingProjectJob(configuration);
+		IRunnableWithProgress job = new CreateProcessingProjectJob(preferences, isApp);
 		try {
 			getContainer().run(false, false, job);
 		} catch (Exception e) {
@@ -28,7 +32,9 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// configuration values are set in the pages
-	    configuration = new ProjectConfiguration();	
+	    //configuration = new ProjectConfiguration();
+		preferences = new ProjectPreferences();
+		isApp = false;
 	}
 
 	@Override
@@ -37,9 +43,12 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 		addPage(page1);
 		super.addPages();
 	}
-	
-	public ProjectConfiguration getProjectConfiguration() {
-		return configuration;
+
+	public void setConfiguration(String name, String appPath,
+			String sketchPath, ArrayList<String> libraries, boolean isApp) {
+		preferences = new ProjectPreferences(name, appPath, sketchPath, libraries);
+		this.isApp = isApp;
 	}
+	
 
 }
