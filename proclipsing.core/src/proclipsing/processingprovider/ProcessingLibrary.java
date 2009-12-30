@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import proclipsing.os.OSHelperManager;
+import proclipsing.os.OS;
 import proclipsing.util.LogHelper;
 
 public class ProcessingLibrary {
@@ -64,9 +64,9 @@ public class ProcessingLibrary {
      */
     private String getResourcePath() {
         if (isCore())
-            return processing_path + OSHelperManager.getHelper().getCorePath();
+            return processing_path + OS.helper().getCorePath();
         else 
-            return processing_path + OSHelperManager.getHelper().getPathToLibrary(identifier);
+            return processing_path + OS.helper().getPathToLibrary(identifier);
     }
     
     /**

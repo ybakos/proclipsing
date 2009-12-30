@@ -31,7 +31,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import proclipsing.os.OSHelperManager;
+import proclipsing.core.preferences.ProjectPreferences;
+import proclipsing.os.OS;
 
 public class PathAndLibrariesSelectionDrawer {
 
@@ -51,8 +52,19 @@ public class PathAndLibrariesSelectionDrawer {
     public PathAndLibrariesSelectionDrawer(IValidateListener validateListener) {
         validate_listener = validateListener;
     }
- 
 
+	public void drawPaths(Composite parent, ProjectPreferences prefs) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(3, false));
+        
+        drawProcessingAppFinder(composite, prefs.getAppPath(), prefs.getLibraries());
+        drawSketchPathFinder(composite, prefs.getSketchPath(), prefs.getLibraries());
+        
+        GridData gd = new GridData(SWT.FILL);
+        composite.setLayoutData(gd);
+    } 
+ 
+/*
     public void drawPaths(Composite parent, final String processingPath, 
             final String sketchPath, final List<String> selectedLibs) {
         
@@ -65,8 +77,9 @@ public class PathAndLibrariesSelectionDrawer {
         GridData gd = new GridData(SWT.FILL);
         composite.setLayoutData(gd);
     } 
-    
-    public void drawLibrarySelector(Composite parent, ArrayList<String> selectedLibs) {
+    */
+	
+    public void drawLibrarySelector(Composite parent, ProjectPreferences prefs) {
         // group surrounds the box w/ a thin line
         Group projectsGroup = new Group(parent, SWT.NONE);
         projectsGroup.setText(IMPORT_LIBRARIES_LABEL);
@@ -102,7 +115,7 @@ public class PathAndLibrariesSelectionDrawer {
                 //saveConfiguration();
             }
         });
-        libraries_viewer.setCheckedElements(selectedLibs.toArray());
+        libraries_viewer.setCheckedElements(prefs.getLibraries().toArray());
     }
     
     public String getProcessingPath() {
@@ -123,7 +136,7 @@ public class PathAndLibrariesSelectionDrawer {
     public boolean validatePathIsProcessing() {
         // final check for core.jar
         return new File(processing_app_path_text.getText(),
-                OSHelperManager.getHelper().getCorePath() + "core.jar").exists();
+                OS.helper().getCorePath() + "core.jar").exists();
         
     }   
     
@@ -162,7 +175,7 @@ public class PathAndLibrariesSelectionDrawer {
 
         Listener buttonListener = new Listener() {
             public void handleEvent(Event event) {
-                Dialog dialog = OSHelperManager.getHelper().getDialog(composite.getShell());
+                Dialog dialog = OS.helper().getDialog(composite.getShell());
                 
                 if(dialog instanceof FileDialog)
                     processing_app_path_text.setText(((FileDialog)dialog).open());
@@ -197,7 +210,7 @@ public class PathAndLibrariesSelectionDrawer {
         
         if (processing_app_path_text == null) return;
         File librariesDir = new File(processing_app_path_text.getText(),
-                OSHelperManager.getHelper().getLibraryPath());
+                OS.helper().getLibraryPath());
         List<String> libraries = new ArrayList<String>();
         if (librariesDir.exists()) { 
             String[] files = librariesDir.list();
@@ -265,6 +278,6 @@ public class PathAndLibrariesSelectionDrawer {
             return null;
         }
     }
- 
+
     
 }

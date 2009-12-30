@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import proclipsing.core.preferences.ProjectPreferences;
 import proclipsing.core.ui.PathAndLibrariesSelectionDrawer;
 import proclipsing.core.ui.IValidateListener;
 
@@ -65,14 +66,10 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
         path_and_libraries_drawer = 
             new PathAndLibrariesSelectionDrawer(this);
         
-        path_and_libraries_drawer.drawPaths(composite, 
-                getProjectConfiguration().getProcessingAppPath(), 
-                getProjectConfiguration().getProcessingAppPath(),
-                getProjectConfiguration().getSelectedLibraries());
-        
+        ProjectPreferences prefs = new ProjectPreferences();
+        path_and_libraries_drawer.drawPaths(composite, prefs);
 		drawAppOption(composite);
-		path_and_libraries_drawer.drawLibrarySelector(composite,
-		        getProjectConfiguration().getSelectedLibraries());
+		path_and_libraries_drawer.drawLibrarySelector(composite, prefs);
 		setControl(composite);
 		is_drawn = true;
 	}
@@ -174,15 +171,11 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
     }
 
     private void saveConfiguration() {
-        getProjectConfiguration().setProjectName(project_name_text.getText());
-        getProjectConfiguration().setApp(appButton.getSelection());        
-        getProjectConfiguration().setSelectedLibraries(path_and_libraries_drawer.getSelectedLibraries());
-        getProjectConfiguration().setProcessingAppPath(path_and_libraries_drawer.getProcessingPath());
-        getProjectConfiguration().setProcessingSketchPath(path_and_libraries_drawer.getSketchPath());
+    	 ((NewProcessingProjectWizard) getWizard()).setConfiguration(
+    			 project_name_text.getText(), path_and_libraries_drawer.getProcessingPath(),
+    			 path_and_libraries_drawer.getSketchPath(), path_and_libraries_drawer.getSelectedLibraries(),
+    			 appButton.getSelection());
     }
     
-    private ProjectConfiguration getProjectConfiguration() {
-        return ((NewProcessingProjectWizard) getWizard()).getProjectConfiguration();
-    }	
 
 }
