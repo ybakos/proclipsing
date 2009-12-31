@@ -33,14 +33,30 @@ public class PreferenceController {
 	public static void saveToProject(IProject project,
 			ProjectPreferences projectPreferences) {
 		
+		saveToProject(project, 
+				projectPreferences, new Vector<IClasspathEntry>());	
+	}
+	
+	public static void saveToProject(IProject project,
+			ProjectPreferences projectPreferences, Vector<IClasspathEntry> classpathEntries) {
+		
 		IEclipsePreferences savePrefs = 
 			new ProjectScope(project).getNode(ProjectPreferences.PROJECT_PREFS_NODE);
 		
 		saveAppPath(savePrefs, projectPreferences);
 		saveSketchPath(savePrefs, projectPreferences);
 		saveLibraries(project, projectPreferences);
+		
+		classpathEntries.addAll(
+				saveLibraries(project, projectPreferences));
+		
+        try {
+            setProjectClassPath(project, classpathEntries);
+        } catch (JavaModelException e) {
+            LogHelper.LogError(e);
+        }	
 	}
-	
+		
 
 	public static ProjectPreferences loadFromProject(IProject project) {
 		IEclipsePreferences preferences = 
@@ -52,7 +68,7 @@ public class PreferenceController {
 						preferences.get(ProjectPreferences.SKETCH_PATH_KEY, defaults.getSketchPath()),
 						getLibraries(project));
 	}
-
+	
 	private static void saveAppPath(
 			IEclipsePreferences target, ProjectPreferences prefsToSave) {
 		
@@ -82,7 +98,7 @@ public class PreferenceController {
 	}		
 	
 	
-	private static void saveLibraries(IProject project, 
+	private static Vector<IClasspathEntry> saveLibraries(IProject project, 
 					ProjectPreferences projectPreferences) {
         
         IProgressMonitor progMonitor = new NullProgressMonitor();
@@ -124,12 +140,7 @@ public class PreferenceController {
             if (urls == null) continue;
             classpathEntries.addAll(addProcessingLibs(libFolder, urls, progMonitor));
         }
-        
-        try {
-            setProjectClassPath(project, progMonitor, classpathEntries);
-        } catch (JavaModelException e) {
-            LogHelper.LogError(e);
-        }
+        return classpathEntries;
     }
 	
     private static ArrayList<String> getLibraries(IProject project) {
@@ -149,7 +160,7 @@ public class PreferenceController {
         return libs;
     }	
 
-    private static void setProjectClassPath(IProject proj, IProgressMonitor monitor, 
+    private static void setProjectClassPath(IProject proj,
             Vector<IClasspathEntry> classpathEntries) throws JavaModelException {
         
         IPath path  = JavaRuntime.newDefaultJREContainerPath();

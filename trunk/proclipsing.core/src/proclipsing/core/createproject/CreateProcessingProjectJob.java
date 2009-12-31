@@ -66,7 +66,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		createLibFolder(project, monitor);
 		
 		addMyAppletSkeleton(project, monitor);
-		PreferenceController.saveToProject(project, preferences);
+		PreferenceController.saveToProject(project, preferences, classpath_entries);
 		
 	}
 
