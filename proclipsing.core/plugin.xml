@@ -62,7 +62,7 @@
          <action
                class="proclipsing.core.actions.SetProclipsingPrefsAction"
                id="proclipsing.core.SetProclipsingPrefsAction"
-               icon="icons/processing_icon.jpg"
+               icon="icons/project_decorator.png"
                label="Proclipsing Project Prefs"
                menubarPath="proclipsing.core">
          </action>
