@@ -43,12 +43,12 @@ public class NewProcessingProjectWizard extends Wizard implements INewWizard {
 		addPage(page1);
 		super.addPages();
 	}
-
-	public void setConfiguration(String name, String appPath,
-			String sketchPath, ArrayList<String> libraries, boolean isApp) {
-		preferences = new ProjectPreferences(name, appPath, sketchPath, libraries);
-		this.isApp = isApp;
-	}
+	
+	//public void setConfiguration(String name, String appPath,
+	//		String sketchPath, ArrayList<String> libraries, boolean isApp) {
+	//	preferences = new ProjectPreferences(name, appPath, sketchPath, libraries);
+	//	this.isApp = isApp;
+	//}
 	
 
 }

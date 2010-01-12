@@ -15,33 +15,44 @@ public class ProjectPreferences {
     public static final String SKETCH_PATH_KEY   			= "PROCESSING_SKETCH_PATH";
     public static final String BIN_DIR                  	= "bin";
     public static final String SRC_DIR                  	= "src";
-    public static final String LIB_DIR                  	= "lib";    
+    public static final String BASELIB_DIR                  = "lib/base";  
+    public static final String USERLIB_DIR                  = "lib/user";                 
 	
-    private List<String> libraries;
+    //private List<String> libraries;
+    private List<String> baselibs;
+    private List<String> userlibs;
     private String name;
     private String app_path;
     private String sketch_path;
 
     
     public ProjectPreferences() {
-    	this(null, getDefaultAppPath(), getDefaultSketchPath(), new ArrayList<String>());
+    	this(null, getDefaultAppPath(), getDefaultSketchPath(), 
+    	        new ArrayList<String>(), new ArrayList<String>());
     }
     
     public ProjectPreferences(ProjectPreferences prefs) {
-    	this(prefs.getName(), prefs.getAppPath(), 
-    			prefs.getSketchPath(), new ArrayList<String>(prefs.getLibraries()));
+    	this(prefs.getName(), prefs.getAppPath(), prefs.getSketchPath(), 
+    	        new ArrayList<String>(prefs.getBaselibs()),  
+    	        new ArrayList<String>(prefs.getUserlibs()));
     }
     
     public ProjectPreferences(String name, 
-    		String appPath, String sketchPath, List<String> libraries) {
+    		String appPath, String sketchPath, 
+    		List<String> baseibs, List<String> useribs) {
     	this.name = name;
     	this.app_path = appPath;
     	this.sketch_path = sketchPath;
-    	this.libraries = libraries;
+    	this.baselibs = baselibs;
+    	this.userlibs = userlibs;
     }
 
-    public List<String> getLibraries() {
-    	return libraries;
+    public List<String> getBaselibs() {
+        return baselibs;
+    }    
+    
+    public List<String> getUserlibs() {
+    	return userlibs;
     }
     
     public String getName() {

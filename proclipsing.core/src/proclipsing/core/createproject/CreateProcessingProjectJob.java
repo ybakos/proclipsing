@@ -63,7 +63,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		createBinFolder(project, monitor);
 		createSrcFolder(project, monitor);
 		createProjFolder(project, monitor);
-		createLibFolder(project, monitor);
+		createLibFolders(project, monitor);
 		
 		addMyAppletSkeleton(project, monitor);
 		PreferenceController.saveToProject(project, preferences, classpath_entries);
@@ -122,9 +122,16 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         return projSrcDir;
     }
 	
-	private IFolder createLibFolder(IProject project, IProgressMonitor monitor) throws CoreException {
-		IFolder libDir = project.getFolder(ProjectPreferences.LIB_DIR);
+	private IFolder createLibFolders(IProject project, IProgressMonitor monitor) throws CoreException {
+		IFolder libDir = project.getFolder("lib");
 		libDir.create(true, true, monitor);
+		
+		IFolder baselibDir = project.getFolder(ProjectPreferences.BASELIB_DIR);
+		baselibDir.create(true, true, monitor);
+		
+        IFolder userlibDir = project.getFolder(ProjectPreferences.BASELIB_DIR);
+        userlibDir.create(true, true, monitor);		
+		
 		return libDir;
 	}
 
