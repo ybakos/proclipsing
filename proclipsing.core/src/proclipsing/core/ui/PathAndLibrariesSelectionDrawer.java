@@ -54,45 +54,34 @@ public class PathAndLibrariesSelectionDrawer {
     public PathAndLibrariesSelectionDrawer(IValidateListener validateListener) {
         validate_listener = validateListener;
     }
-
-    /*
-	public void drawPaths(Composite parent, ProjectPreferences prefs) {
-        Composite composite = new Composite(parent, SWT.NONE);
-        composite.setLayout(new GridLayout(3, false));
+    
+    public void drawEverything(Composite parent, ProjectPreferences prefs) {
+        Composite c1 = new Composite(parent, SWT.NONE);
+        c1.setLayout(new GridLayout(3, false));
+        drawProcessingAppFinder(c1, prefs.getAppPath(), prefs.getBaselibs());
+        GridData gd3 = new GridData(SWT.FILL);
+        c1.setLayoutData(gd3);
+        drawBaseLibrarySelector(parent, prefs);
         
-        drawProcessingAppFinder(composite, prefs.getAppPath(), prefs.getBaselibs());
-        drawSketchPathFinder(composite, prefs.getSketchPath(), prefs.getUserlibs());
-        
-        GridData gd = new GridData(SWT.FILL);
-        composite.setLayoutData(gd);
+        Composite c2 = new Composite(parent, SWT.NONE);
+        c2.setLayout(new GridLayout(3, false));
+        drawSketchPathFinder(c2, prefs.getSketchPath(), prefs.getBaselibs());
+        c2.setLayoutData(gd3);
+        drawUserLibrarySelector(parent, prefs); 	
     }
-    */
- 
-/*
-    public void drawPaths(Composite parent, final String processingPath, 
-            final String sketchPath, final List<String> selectedLibs) {
-        
-        Composite composite = new Composite(parent, SWT.NONE);
-        composite.setLayout(new GridLayout(3, false));
-        
-        drawProcessingAppFinder(composite, processingPath, selectedLibs);
-        drawSketchPathFinder(composite, sketchPath, selectedLibs);
-        
-        GridData gd = new GridData(SWT.FILL);
-        composite.setLayoutData(gd);
-    } 
-    */
     
     public void drawBaseLibrarySelector(Composite parent, ProjectPreferences prefs) {
         baselibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
-        baselibs_viewer.setCheckedElements(prefs.getUserlibs().toArray());
+        baselibs_viewer.setCheckedElements(prefs.getBaselibs().toArray());
         showDiscoveredLibraries(processing_app_path_text, baselibs_viewer);
+        setSelectedLibs(baselibs_viewer, prefs.getBaselibs());
     }   
     
     public void drawUserLibrarySelector(Composite parent, ProjectPreferences prefs) {
         userlibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
         userlibs_viewer.setCheckedElements(prefs.getUserlibs().toArray());
         showDiscoveredLibraries(processing_sketch_path_text, userlibs_viewer);
+        setSelectedLibs(userlibs_viewer, prefs.getUserlibs());
     }
 
     private CheckboxTableViewer drawLibrarySelector(Composite parent, 
@@ -157,11 +146,10 @@ public class PathAndLibrariesSelectionDrawer {
         
     }   
     
-    private Text drawDirFinder(final Composite composite, 
-            final String label, String path, 
-            final List<String> selectedLibs, 
-            final Listener buttonListener,
-            final CheckboxTableViewer libViewer) {
+    private Text drawDirFinder(Composite composite, 
+            String label, String path,
+            Listener buttonListener,
+            ModifyListener textModifyListener) {
         
         Label processingPathLabel = new Label(composite, SWT.NONE);
         processingPathLabel.setText(label);
@@ -170,15 +158,9 @@ public class PathAndLibrariesSelectionDrawer {
         processingPathLabel.setLayoutData(gd1);
         
         
-        final Text text = new Text(composite, SWT.NONE | SWT.BORDER );
+        Text text = new Text(composite, SWT.NONE | SWT.BORDER );
         text.setText(path);
-        text.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
-                validate_listener.validate();
-                showDiscoveredLibraries(text, libViewer);
-                setSelectedLibs(libViewer, selectedLibs);
-            }
-        });           
+        text.addModifyListener(textModifyListener);          
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.widthHint = PATH_TEXT_WIDTH_HINT;
         text.setLayoutData(gd);
@@ -190,7 +172,7 @@ public class PathAndLibrariesSelectionDrawer {
     }
     
     
-    private void drawProcessingAppFinder(final Composite composite, 
+    public void drawProcessingAppFinder(final Composite composite, 
             final String processingPath, final List<String> selectedLibs ) {
 
         Listener buttonListener = new Listener() {
@@ -205,12 +187,20 @@ public class PathAndLibrariesSelectionDrawer {
             }
         };
      
-        processing_app_path_text = drawDirFinder(composite, PROCESSING_APP_PATH_LABEL, 
-                processingPath, selectedLibs, buttonListener, baselibs_viewer);
+        ModifyListener textModifyListener = new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                validate_listener.validate();
+                showDiscoveredLibraries((Text)e.getSource(), baselibs_viewer);
+                setSelectedLibs(baselibs_viewer, selectedLibs);
+            }
+        };
+        
+        processing_app_path_text = drawDirFinder(composite, 
+        		PROCESSING_APP_PATH_LABEL, processingPath, buttonListener, textModifyListener);
     }
 
     
-    private void drawSketchPathFinder(final Composite composite, 
+    public void drawSketchPathFinder(final Composite composite, 
             final String sketchPath, final List<String> selectedLibs ) {
 
         Listener buttonListener = new Listener() {
@@ -220,8 +210,16 @@ public class PathAndLibrariesSelectionDrawer {
             }
         };
         
-        processing_sketch_path_text = drawDirFinder(composite, PROCESSING_SKETCH_PATH_LABEL, 
-                sketchPath, selectedLibs, buttonListener, userlibs_viewer);
+        ModifyListener textModifyListener = new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                validate_listener.validate();
+                showDiscoveredLibraries((Text)e.getSource(), userlibs_viewer);
+                setSelectedLibs(userlibs_viewer, selectedLibs);
+            }
+        };        
+        
+        processing_sketch_path_text = drawDirFinder(composite, 
+        		PROCESSING_SKETCH_PATH_LABEL, sketchPath, buttonListener, textModifyListener);
     }
 
     
@@ -239,39 +237,6 @@ public class PathAndLibrariesSelectionDrawer {
         }
         libViewer.setInput(libraries.toArray(new String[libraries.size()]));
     }
-    
-    /*
-    private void showDiscoveredLibraries() {
-        
-        if (processing_app_path_text == null) return;
-        File librariesDir = new File(processing_app_path_text.getText(),
-                OS.helper().getLibraryPath());
-        List<String> libraries = new ArrayList<String>();
-        if (librariesDir.exists()) { 
-            String[] files = librariesDir.list();
-            for (String file : files) {
-                if ((new File(librariesDir, file)).isDirectory())
-                    libraries.add(file);
-            }
-        }
-        
-        if (processing_sketch_path_text == null) return;
-        librariesDir = new File(processing_sketch_path_text.getText());
-        if (librariesDir.exists()) { 
-            String[] files = librariesDir.list();
-            for (String file : files) {
-                if ((new File(librariesDir, file)).isDirectory()){
-                    libraries.add(file);
-                }
-            }
-        }        
-        setLibrariesViewerInput(
-                libraries.toArray(new String[libraries.size()]));
-    }    
- */
-    //private void setLibrariesViewerInput(String[] allLibraryIdentifiers) {
-    //    libraries_viewer.setInput(allLibraryIdentifiers);
-    //}
     
     public ArrayList<String> getSelectedBaseLibs() {
         ArrayList<String> libs = new ArrayList<String>();

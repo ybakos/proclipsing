@@ -126,6 +126,10 @@ public class PreferenceController {
             }
         };
         
+        // lil' hack to make sure core is in there
+        if (targetDir.contains("base") && !libraryList.contains(ProcessingProvider.CORE))
+        	libraryList.add(ProcessingProvider.CORE);
+        
         ProcessingLibrary[] libraries = ProcessingProvider.getLibraries(
                libSourcePath, libraryList.toArray(new String[libraryList.size()]));
         

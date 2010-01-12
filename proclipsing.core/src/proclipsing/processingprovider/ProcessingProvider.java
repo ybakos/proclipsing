@@ -17,8 +17,8 @@ public class ProcessingProvider {
         ArrayList<ProcessingLibrary> libs = new ArrayList<ProcessingLibrary>();
         
         //lil' hack
-        if (processingPath.contains("base"))
-            libs.add(new ProcessingLibrary(processingPath, CORE));
+       // if (!processingPath.contains("sketchbook"))
+        //    libs.add(new ProcessingLibrary(processingPath, CORE));
         
         // go team go
         for(String libStr : libNames) {

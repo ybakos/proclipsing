@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import proclipsing.core.preferences.ProjectPreferences;
 import proclipsing.core.ui.PathAndLibrariesSelectionDrawer;
 import proclipsing.core.ui.IValidateListener;
+import proclipsing.os.OS;
 
 public class NewProcessingProjectPage1 extends WizardPage implements IValidateListener {
 
@@ -62,24 +63,28 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
 		        setPageComplete(true);
             }
 		});
-
+        
+        drawAppOption(composite);
+        
         path_and_libraries_drawer = 
             new PathAndLibrariesSelectionDrawer(this);
         
         ProjectPreferences prefs = new ProjectPreferences();
-        path_and_libraries_drawer.drawPaths(composite, prefs);
-		drawAppOption(composite);
-		path_and_libraries_drawer.drawLibrarySelector(composite, prefs);
+
+        path_and_libraries_drawer.drawEverything(composite, prefs);
 		setControl(composite);
+		
+		// This is because setComplete gets called before it's
+		// finished drawing for some reason, dunno why
 		is_drawn = true;
 	}
 	
     private void drawAppOption(Composite parent){
 	    Composite appOption = new Composite(parent, SWT.NONE);
-	    RowLayout rowLayout = new RowLayout(SWT.VERTICAL);
+	    RowLayout rowLayout = new RowLayout(SWT.HORIZONTAL);
 	    appOption.setLayout(rowLayout);
 	    appOption.setLayoutData(
-	            new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+	            new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 	    
 		Button appletButton = new Button(appOption, SWT.RADIO);
 		appButton = new Button(appOption, SWT.RADIO);
@@ -171,9 +176,17 @@ public class NewProcessingProjectPage1 extends WizardPage implements IValidateLi
     }
 
     private void saveConfiguration() {
-    	 ((NewProcessingProjectWizard) getWizard()).setConfiguration(
-    			 project_name_text.getText(), path_and_libraries_drawer.getProcessingPath(),
-    			 path_and_libraries_drawer.getSketchPath(), path_and_libraries_drawer.getSelectedLibraries(),
+    	String appPath = path_and_libraries_drawer.getProcessingPath();
+    	String sketchPath = path_and_libraries_drawer.getSketchPath();
+    	
+    	if (!appPath.endsWith(OS.helper().getFileSeparator()))
+    		appPath += OS.helper().getFileSeparator();
+    	if (!sketchPath.endsWith(OS.helper().getFileSeparator()))
+    		sketchPath += OS.helper().getFileSeparator();
+    	
+    	((NewProcessingProjectWizard) getWizard()).setConfiguration(
+    			 project_name_text.getText(), appPath, sketchPath, path_and_libraries_drawer.getSelectedBaseLibs(),
+    			 path_and_libraries_drawer.getSelectedUserLibs(),
     			 appButton.getSelection());
     }
     
