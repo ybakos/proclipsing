@@ -42,6 +42,7 @@ public class PathAndLibrariesSelectionDrawer {
     private static String DIR_SEARCH_BUTTON_LABEL           = "Browse...";    
     private static int    PATH_TEXT_WIDTH_HINT              = 350;
     private static int    LABEL_WIDTH_HINT                  = 150;
+    private static int	  VIEWER_HEIGHT_HINT				= 150;
 
     //private ProjectConfiguration project_configuration;
     private IValidateListener validate_listener;
@@ -97,6 +98,7 @@ public class PathAndLibrariesSelectionDrawer {
         // main table to hold the library entries
         Table librariesTable = new Table(projectsGroup ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
         librariesTable.setHeaderVisible(false);
+        
 
         TableColumn col1 = new TableColumn(librariesTable, SWT.NONE);
         col1.setWidth(200);
@@ -107,7 +109,7 @@ public class PathAndLibrariesSelectionDrawer {
 
         GridData viewerData = new GridData(GridData.FILL_BOTH);
         viewerData.horizontalSpan = 2;
-        viewerData.heightHint = 200;
+        viewerData.heightHint = VIEWER_HEIGHT_HINT;
 
         // jface component to deal w/ data in table and checkboxes
         CheckboxTableViewer viewer = new CheckboxTableViewer(librariesTable);
