@@ -45,7 +45,9 @@ public class PathAndLibrariesSelectionDrawer {
 
     //private ProjectConfiguration project_configuration;
     private IValidateListener validate_listener;
-    private CheckboxTableViewer libraries_viewer; 
+    //private CheckboxTableViewer libraries_viewer; 
+    private CheckboxTableViewer baselibs_viewer;
+    private CheckboxTableViewer userlibs_viewer;
     private Text processing_app_path_text;
     private Text processing_sketch_path_text;
     
@@ -53,16 +55,18 @@ public class PathAndLibrariesSelectionDrawer {
         validate_listener = validateListener;
     }
 
+    /*
 	public void drawPaths(Composite parent, ProjectPreferences prefs) {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(3, false));
         
-        drawProcessingAppFinder(composite, prefs.getAppPath(), prefs.getLibraries());
-        drawSketchPathFinder(composite, prefs.getSketchPath(), prefs.getLibraries());
+        drawProcessingAppFinder(composite, prefs.getAppPath(), prefs.getBaselibs());
+        drawSketchPathFinder(composite, prefs.getSketchPath(), prefs.getUserlibs());
         
         GridData gd = new GridData(SWT.FILL);
         composite.setLayoutData(gd);
-    } 
+    }
+    */
  
 /*
     public void drawPaths(Composite parent, final String processingPath, 
@@ -78,11 +82,24 @@ public class PathAndLibrariesSelectionDrawer {
         composite.setLayoutData(gd);
     } 
     */
-	
-    public void drawLibrarySelector(Composite parent, ProjectPreferences prefs) {
+    
+    public void drawBaseLibrarySelector(Composite parent, ProjectPreferences prefs) {
+        baselibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
+        baselibs_viewer.setCheckedElements(prefs.getUserlibs().toArray());
+        showDiscoveredLibraries(processing_app_path_text, baselibs_viewer);
+    }   
+    
+    public void drawUserLibrarySelector(Composite parent, ProjectPreferences prefs) {
+        userlibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
+        userlibs_viewer.setCheckedElements(prefs.getUserlibs().toArray());
+        showDiscoveredLibraries(processing_sketch_path_text, userlibs_viewer);
+    }
+
+    private CheckboxTableViewer drawLibrarySelector(Composite parent, 
+                ProjectPreferences prefs, String label) {
         // group surrounds the box w/ a thin line
         Group projectsGroup = new Group(parent, SWT.NONE);
-        projectsGroup.setText(IMPORT_LIBRARIES_LABEL);
+        projectsGroup.setText(label);
         GridData gdProjects = new GridData(GridData.FILL_BOTH);
         //gdProjects.horizontalSpan = 2;
         projectsGroup.setLayoutData(gdProjects);
@@ -104,18 +121,18 @@ public class PathAndLibrariesSelectionDrawer {
         viewerData.heightHint = 200;
 
         // jface component to deal w/ data in table and checkboxes
-        libraries_viewer = new CheckboxTableViewer(librariesTable);
-        libraries_viewer.getControl().setLayoutData(viewerData);
-        libraries_viewer.setContentProvider(new SelectedLibrariesContentProvider());
-        libraries_viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
-        showDiscoveredLibraries();
-        libraries_viewer.addCheckStateListener(new ICheckStateListener() {
+        CheckboxTableViewer viewer = new CheckboxTableViewer(librariesTable);
+        viewer.getControl().setLayoutData(viewerData);
+        viewer.setContentProvider(new SelectedLibrariesContentProvider());
+        viewer.setLabelProvider(new SelectedLibrariesLabelProvider());
+        //showDiscoveredLibraries();
+        viewer.addCheckStateListener(new ICheckStateListener() {
             public void checkStateChanged(CheckStateChangedEvent event) {
                 validate_listener.validate();
                 //saveConfiguration();
             }
         });
-        libraries_viewer.setCheckedElements(prefs.getLibraries().toArray());
+        return viewer;
     }
     
     public String getProcessingPath() {
@@ -141,7 +158,10 @@ public class PathAndLibrariesSelectionDrawer {
     }   
     
     private Text drawDirFinder(final Composite composite, 
-            final String label, String path, final List<String> selectedLibs, final Listener buttonListener) {
+            final String label, String path, 
+            final List<String> selectedLibs, 
+            final Listener buttonListener,
+            final CheckboxTableViewer libViewer) {
         
         Label processingPathLabel = new Label(composite, SWT.NONE);
         processingPathLabel.setText(label);
@@ -150,13 +170,13 @@ public class PathAndLibrariesSelectionDrawer {
         processingPathLabel.setLayoutData(gd1);
         
         
-        Text text = new Text(composite, SWT.NONE | SWT.BORDER );
+        final Text text = new Text(composite, SWT.NONE | SWT.BORDER );
         text.setText(path);
         text.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 validate_listener.validate();
-                showDiscoveredLibraries();
-                setSelectedLibraries(selectedLibs);     
+                showDiscoveredLibraries(text, libViewer);
+                setSelectedLibs(libViewer, selectedLibs);
             }
         });           
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -185,9 +205,8 @@ public class PathAndLibrariesSelectionDrawer {
             }
         };
      
-        
         processing_app_path_text = drawDirFinder(composite, PROCESSING_APP_PATH_LABEL, 
-                processingPath, selectedLibs, buttonListener);
+                processingPath, selectedLibs, buttonListener, baselibs_viewer);
     }
 
     
@@ -202,10 +221,26 @@ public class PathAndLibrariesSelectionDrawer {
         };
         
         processing_sketch_path_text = drawDirFinder(composite, PROCESSING_SKETCH_PATH_LABEL, 
-                sketchPath, selectedLibs, buttonListener);
+                sketchPath, selectedLibs, buttonListener, userlibs_viewer);
     }
 
     
+    private void showDiscoveredLibraries(Text pathText, CheckboxTableViewer libViewer) {
+        if (pathText == null) return;
+        File librariesDir = new File(pathText.getText(),
+                OS.helper().getLibraryPath());
+        List<String> libraries = new ArrayList<String>();
+        if (librariesDir.exists()) { 
+            String[] files = librariesDir.list();
+            for (String file : files) {
+                if ((new File(librariesDir, file)).isDirectory())
+                    libraries.add(file);
+            }
+        }
+        libViewer.setInput(libraries.toArray(new String[libraries.size()]));
+    }
+    
+    /*
     private void showDiscoveredLibraries() {
         
         if (processing_app_path_text == null) return;
@@ -233,23 +268,31 @@ public class PathAndLibrariesSelectionDrawer {
         setLibrariesViewerInput(
                 libraries.toArray(new String[libraries.size()]));
     }    
- 
-    private void setLibrariesViewerInput(String[] allLibraryIdentifiers) {
-        libraries_viewer.setInput(allLibraryIdentifiers);
-    }
+ */
+    //private void setLibrariesViewerInput(String[] allLibraryIdentifiers) {
+    //    libraries_viewer.setInput(allLibraryIdentifiers);
+    //}
     
-    public ArrayList<String> getSelectedLibraries() {
+    public ArrayList<String> getSelectedBaseLibs() {
         ArrayList<String> libs = new ArrayList<String>();
-        for (Object element : libraries_viewer.getCheckedElements()) {
+        for (Object element : baselibs_viewer.getCheckedElements()) {
+           libs.add((String) element);
+        }
+        return libs;
+    }     
+    
+    public ArrayList<String> getSelectedUserLibs() {
+        ArrayList<String> libs = new ArrayList<String>();
+        for (Object element : userlibs_viewer.getCheckedElements()) {
            libs.add((String) element);
         }
         return libs;
     }    
     
-    private void setSelectedLibraries(List<String> selectedLibs) {
+    private void setSelectedLibs(CheckboxTableViewer libViewer, List<String> selectedLibs) {
         if (selectedLibs != null)
-            libraries_viewer.setCheckedElements(selectedLibs.toArray());
-        libraries_viewer.refresh();
+            libViewer.setCheckedElements(selectedLibs.toArray());
+        libViewer.refresh();
     }
     
     /* INNER CLASSES */

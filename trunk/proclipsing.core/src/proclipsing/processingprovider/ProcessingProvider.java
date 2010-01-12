@@ -15,11 +15,16 @@ public class ProcessingProvider {
      */
     public static ProcessingLibrary[] getLibraries(String processingPath, String[] libNames) {
         ArrayList<ProcessingLibrary> libs = new ArrayList<ProcessingLibrary>();
-        // always add core
-        libs.add(new ProcessingLibrary(processingPath, CORE));
+        
+        //lil' hack
+        if (processingPath.contains("base"))
+            libs.add(new ProcessingLibrary(processingPath, CORE));
+        
+        // go team go
         for(String libStr : libNames) {
             libs.add(new ProcessingLibrary(processingPath, libStr));
         }
+        
         return libs.toArray(new ProcessingLibrary[libs.size()]);        
     }
     

@@ -3,6 +3,7 @@ package proclipsing.core.preferences;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
@@ -45,10 +46,17 @@ public class PreferenceController {
 		
 		saveAppPath(savePrefs, projectPreferences);
 		saveSketchPath(savePrefs, projectPreferences);
-		saveLibraries(project, projectPreferences);
+		//saveLibraries(project, projectPreferences);
 		
+		// save base libs 
 		classpathEntries.addAll(
-				saveLibraries(project, projectPreferences));
+				saveLibraries(project, projectPreferences.getAppPath(),
+				        ProjectPreferences.BASELIB_DIR, projectPreferences.getBaselibs()));
+		
+		// save user or "contributed" libs
+		classpathEntries.addAll(
+                saveLibraries(project, projectPreferences.getSketchPath(),
+                        ProjectPreferences.USERLIB_DIR, projectPreferences.getUserlibs()));		        
 		
         try {
             setProjectClassPath(project, classpathEntries);
@@ -66,7 +74,8 @@ public class PreferenceController {
 						project.getName(), 
 						preferences.get(ProjectPreferences.APP_PATH_KEY, defaults.getAppPath()), 
 						preferences.get(ProjectPreferences.SKETCH_PATH_KEY, defaults.getSketchPath()),
-						getLibraries(project));
+						getLibraries(project, ProjectPreferences.BASELIB_DIR),
+						getLibraries(project, ProjectPreferences.USERLIB_DIR));
 	}
 	
 	private static void saveAppPath(
@@ -99,16 +108,16 @@ public class PreferenceController {
 	
 	
 	private static Vector<IClasspathEntry> saveLibraries(IProject project, 
-					ProjectPreferences projectPreferences) {
+					String libSourcePath, String targetDir, List<String> libraryList) {
         
         IProgressMonitor progMonitor = new NullProgressMonitor();
-        IFolder folder = project.getFolder(ProjectPreferences.LIB_DIR);
-        ArrayList<String> libs = getLibraries(project);
+        IFolder folder = project.getFolder(targetDir);
+        ArrayList<String> libs = getLibraries(project, targetDir);
         for (String l : libs) {
-            if (!projectPreferences.getLibraries().contains(l) 
+            if (!libraryList.contains(l) 
                     && !l.equals(ProcessingProvider.CORE)) {
-                IFolder deleteFolder = project.getFolder(ProjectPreferences.LIB_DIR + 
-                        OS.helper().getFileSeparator() + l);
+                IFolder deleteFolder = project.getFolder(targetDir + 
+                            OS.helper().getFileSeparator() + l);
                 try {
                     deleteFolder.delete(true, progMonitor);
                 } catch (CoreException e) {
@@ -118,9 +127,7 @@ public class PreferenceController {
         };
         
         ProcessingLibrary[] libraries = ProcessingProvider.getLibraries(
-                projectPreferences.getAppPath(),
-                projectPreferences.getLibraries().toArray(
-                        new String[projectPreferences.getLibraries().size()]));
+               libSourcePath, libraryList.toArray(new String[libraryList.size()]));
         
         Vector<IClasspathEntry> classpathEntries = new Vector<IClasspathEntry>();
         for(ProcessingLibrary library : libraries) {
@@ -143,10 +150,10 @@ public class PreferenceController {
         return classpathEntries;
     }
 	
-    private static ArrayList<String> getLibraries(IProject project) {
+    private static ArrayList<String> getLibraries(IProject project, String libDir) {
         ArrayList<String> libs = new ArrayList<String>();
         if (project == null) return libs;
-        IFolder folder = project.getFolder((ProjectPreferences.LIB_DIR));
+        IFolder folder = project.getFolder((libDir));
         try {
             IResource[] members = folder.members();
             for (IResource member : members) {
