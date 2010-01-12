@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -88,11 +89,8 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
     		content_drawer = 
     	    	new PathAndLibrariesSelectionDrawer(this);
     	    
-    		
     		ProjectPreferences prefs = PreferenceController.loadFromProject(project);
-        	content_drawer.drawPaths(composite, prefs);
-    		content_drawer.drawLibrarySelector(composite, prefs);
-    		
+    		content_drawer.drawEverything(composite, prefs);
             return composite;
         }		
 		
@@ -113,8 +111,9 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 
 	    protected void saveConfiguration() {
 	    	PreferenceController.saveToProject(project, 
-	    			new ProjectPreferences(project.getName(), content_drawer.getProcessingPath(), 
-	    					content_drawer.getSketchPath(), content_drawer.getSelectedLibraries()));
+	    			new ProjectPreferences(project.getName(), 
+	    					content_drawer.getProcessingPath(), content_drawer.getSketchPath(), 
+	    					content_drawer.getSelectedBaseLibs(), content_drawer.getSelectedUserLibs()));
 	    }
 	    
 	}

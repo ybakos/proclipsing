@@ -129,7 +129,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		IFolder baselibDir = project.getFolder(ProjectPreferences.BASELIB_DIR);
 		baselibDir.create(true, true, monitor);
 		
-        IFolder userlibDir = project.getFolder(ProjectPreferences.BASELIB_DIR);
+        IFolder userlibDir = project.getFolder(ProjectPreferences.USERLIB_DIR);
         userlibDir.create(true, true, monitor);		
 		
 		return libDir;

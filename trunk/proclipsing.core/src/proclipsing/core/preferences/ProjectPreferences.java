@@ -39,7 +39,7 @@ public class ProjectPreferences {
     
     public ProjectPreferences(String name, 
     		String appPath, String sketchPath, 
-    		List<String> baseibs, List<String> useribs) {
+    		List<String> baselibs, List<String> userlibs) {
     	this.name = name;
     	this.app_path = appPath;
     	this.sketch_path = sketchPath;
