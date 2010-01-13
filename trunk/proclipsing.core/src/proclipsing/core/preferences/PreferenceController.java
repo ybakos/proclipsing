@@ -51,12 +51,12 @@ public class PreferenceController {
 		// save base libs 
 		classpathEntries.addAll(
 				saveLibraries(project, projectPreferences.getAppPath(),
-				        ProjectPreferences.BASELIB_DIR, projectPreferences.getBaselibs()));
+				        ProjectPreferences.BASELIB_DIR, projectPreferences.getBaselibs(), false));
 		
 		// save user or "contributed" libs
 		classpathEntries.addAll(
                 saveLibraries(project, projectPreferences.getSketchPath(),
-                        ProjectPreferences.USERLIB_DIR, projectPreferences.getUserlibs()));		        
+                        ProjectPreferences.USERLIB_DIR, projectPreferences.getUserlibs(), true));		        
 		
         try {
             setProjectClassPath(project, classpathEntries);
@@ -108,7 +108,7 @@ public class PreferenceController {
 	
 	
 	private static Vector<IClasspathEntry> saveLibraries(IProject project, 
-					String libSourcePath, String targetDir, List<String> libraryList) {
+					String libSourcePath, String targetDir, List<String> libraryList, boolean isContributed) {
         
         IProgressMonitor progMonitor = new NullProgressMonitor();
         IFolder folder = project.getFolder(targetDir);
@@ -147,7 +147,7 @@ public class PreferenceController {
             }
 
             // get urls to all jar, zip, + native lib files
-            URL[] urls = library.getUrls();
+            URL[] urls = library.getUrls(isContributed);
             if (urls == null) continue;
             classpathEntries.addAll(addProcessingLibs(libFolder, urls, progMonitor));
         }

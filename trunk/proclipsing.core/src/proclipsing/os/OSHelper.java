@@ -22,6 +22,10 @@ public abstract class OSHelper {
 	public String getPathToLibrary(String library) {
 		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
 	}
+	
+	public String getSketchPathToLibrary(String library) {
+		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
+	}
 
 	public String getCorePath() {
 		return CORE_PATH;
