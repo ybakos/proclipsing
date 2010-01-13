@@ -105,8 +105,9 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 		protected void buttonPressed(int buttonId) {
 			if (buttonId == Window.OK) {
 				saveConfiguration();
-				super.buttonPressed(buttonId);
 			}
+			super.buttonPressed(buttonId);
+			
 		}
 		
 		protected void createButtonsForButtonBar(Composite parent) {
