@@ -1,5 +1,7 @@
 package proclipsing.core.actions;
 
+import javax.swing.WindowConstants;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -7,6 +9,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -100,8 +103,10 @@ public class SetProclipsingPrefsAction implements IObjectActionDelegate {
 		
 
 		protected void buttonPressed(int buttonId) {
-		   saveConfiguration();
-		   super.buttonPressed(buttonId);
+			if (buttonId == Window.OK) {
+				saveConfiguration();
+				super.buttonPressed(buttonId);
+			}
 		}
 		
 		protected void createButtonsForButtonBar(Composite parent) {
