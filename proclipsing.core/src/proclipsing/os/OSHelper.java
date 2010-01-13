@@ -31,6 +31,10 @@ public abstract class OSHelper {
         return LIBRARY_PATH;
     }
 
+    public String getSketchPath() {
+        return LIBRARY_PATH;
+    }
+
     public Dialog getDialog(Shell shell) {
         return new DirectoryDialog(shell);
     }
