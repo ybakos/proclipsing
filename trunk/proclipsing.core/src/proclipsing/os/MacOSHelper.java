@@ -32,7 +32,7 @@ public class MacOSHelper extends OSHelper {
     }
     
     public String getDefaultSketchPath(){
-    	return System.getProperty("user.home") + "/Documents/Processing/libraries/";
+    	return System.getProperty("user.home") + "/Documents/Processing/";
     }
     
     public boolean isExlcuded(String jarName){
