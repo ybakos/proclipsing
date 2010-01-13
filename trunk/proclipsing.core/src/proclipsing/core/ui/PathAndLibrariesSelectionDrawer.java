@@ -74,14 +74,14 @@ public class PathAndLibrariesSelectionDrawer {
     public void drawBaseLibrarySelector(Composite parent, ProjectPreferences prefs) {
         baselibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
         baselibs_viewer.setCheckedElements(prefs.getBaselibs().toArray());
-        showDiscoveredLibraries(processing_app_path_text, baselibs_viewer);
+        showDiscoveredLibraries(processing_app_path_text, baselibs_viewer, true);
         setSelectedLibs(baselibs_viewer, prefs.getBaselibs());
     }   
     
     public void drawUserLibrarySelector(Composite parent, ProjectPreferences prefs) {
         userlibs_viewer = drawLibrarySelector(parent, prefs, IMPORT_LIBRARIES_LABEL);
         userlibs_viewer.setCheckedElements(prefs.getUserlibs().toArray());
-        showDiscoveredLibraries(processing_sketch_path_text, userlibs_viewer);
+        showDiscoveredLibraries(processing_sketch_path_text, userlibs_viewer, false);
         setSelectedLibs(userlibs_viewer, prefs.getUserlibs());
     }
 
@@ -192,7 +192,7 @@ public class PathAndLibrariesSelectionDrawer {
         ModifyListener textModifyListener = new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 validate_listener.validate();
-                showDiscoveredLibraries((Text)e.getSource(), baselibs_viewer);
+                showDiscoveredLibraries((Text)e.getSource(), baselibs_viewer, true);
                 setSelectedLibs(baselibs_viewer, selectedLibs);
             }
         };
@@ -204,18 +204,23 @@ public class PathAndLibrariesSelectionDrawer {
     
     public void drawSketchPathFinder(final Composite composite, 
             final String sketchPath, final List<String> selectedLibs ) {
-
+        
         Listener buttonListener = new Listener() {
             public void handleEvent(Event event) {
-                DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
-                processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
+                Dialog dialog = OS.helper().getDialog(composite.getShell());
+                
+                if(dialog instanceof FileDialog)
+                	processing_sketch_path_text.setText(((FileDialog)dialog).open());
+                else if(dialog instanceof DirectoryDialog)
+                	processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
+                    
             }
         };
         
         ModifyListener textModifyListener = new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 validate_listener.validate();
-                showDiscoveredLibraries((Text)e.getSource(), userlibs_viewer);
+                showDiscoveredLibraries((Text)e.getSource(), userlibs_viewer, false);
                 setSelectedLibs(userlibs_viewer, selectedLibs);
             }
         };        
@@ -225,10 +230,19 @@ public class PathAndLibrariesSelectionDrawer {
     }
 
     
-    private void showDiscoveredLibraries(Text pathText, CheckboxTableViewer libViewer) {
+    private void showDiscoveredLibraries(Text pathText, CheckboxTableViewer libViewer, boolean isCore) {
         if (pathText == null) return;
+        
+        String test = pathText.getText();
+        
         File librariesDir = new File(pathText.getText(),
                 OS.helper().getLibraryPath());
+        
+        if(!isCore){
+        	librariesDir = new File(pathText.getText(),
+                    OS.helper().getSketchPath());
+        }
+        
         List<String> libraries = new ArrayList<String>();
         if (librariesDir.exists()) { 
             String[] files = librariesDir.list();
