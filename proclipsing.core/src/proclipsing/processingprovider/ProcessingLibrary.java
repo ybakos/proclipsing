@@ -27,9 +27,9 @@ public class ProcessingLibrary {
      * 
      * @return
      */
-    public URL[] getUrls() {
+    public URL[] getUrls(boolean isContributed) {
 
-        File realPath = new File(getResourcePath());
+        File realPath = new File(getResourcePath(isContributed));
         if (!realPath.exists()) return null;
 
         URL[] urls = getUrls(realPath.listFiles());        
@@ -62,10 +62,12 @@ public class ProcessingLibrary {
      * @return
      *  the path to the current library.
      */
-    private String getResourcePath() {
+    private String getResourcePath(boolean isContributed) {
         if (isCore())
             return processing_path + OS.helper().getCorePath();
-        else 
+        else if(isContributed)
+            return processing_path + OS.helper().getSketchPathToLibrary(identifier);
+        else
             return processing_path + OS.helper().getPathToLibrary(identifier);
     }
     
