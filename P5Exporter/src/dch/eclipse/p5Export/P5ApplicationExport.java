@@ -5,6 +5,8 @@ import java.util.*;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
 
+import com.sun.org.apache.xml.internal.serialize.LineSeparator;
+
 import processing.app.Base;
 import processing.app.Preferences;
 import processing.core.PApplet;
@@ -327,13 +329,14 @@ public class P5ApplicationExport extends P5ExportType
     // System.err.println("CLASSPATH="+cp);
     String PLIST_TEMPLATE = "template.plist";
     File plistTemplate = new File(sketchFolder, PLIST_TEMPLATE);
-    if (!plistTemplate.exists())
-    {
+    if (!plistTemplate.exists()) {      
       plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
     }
+
     File contentsDir = new File(appFolder, "Contents");
     if (!contentsDir.exists())
       contentsDir.mkdirs();
+    
     File plistFile = new File(contentsDir, "Info.plist");
     PrintStream ps = new PrintStream(new FileOutputStream(plistFile));
 
@@ -351,9 +354,13 @@ public class P5ApplicationExport extends P5ExportType
         vmArgs += builder.vmArgs;
     }
     String[] lines = PApplet.loadStrings(plistTemplate);
+/*    System.out.println("pwd: "+System.getProperty("user.dir"));
+    System.out.println("plistTemplate: "+plistTemplate);
+    */
     for (int i = 0; i < lines.length; i++)
     {
-      // System.out.println(i+")"+lines[i]);
+      String orig = lines[i];
+      //System.out.println(i+")"+lines[i]);
       if (lines[i].indexOf("@@") != -1)
       {
         StringBuffer sb = new StringBuffer(lines[i]);
@@ -387,6 +394,12 @@ public class P5ApplicationExport extends P5ExportType
         }
         lines[i] = sb.toString();
       }
+      
+      if (!lines[i].equals(orig))
+        System.out.println(i+")"+lines[i]);
+      else
+        System.out.println(i+"***)"+lines[i]);
+      
       // explicit newlines to avoid Windows CRLF
       ps.print(lines[i] + "\n");
     }
