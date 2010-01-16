@@ -173,7 +173,7 @@ if(DBUG)System.out.println("writing file..."+verFile);
 
   private void loadPrefsData(InputStream input) throws IOException {
     BufferedReader reader =
-      new BufferedReader(new InputStreamReader(input));
+      new BufferedReader(new InputStreamReader(input, "UTF-8"));
 
     //table = new Hashtable();
     String line = null;
