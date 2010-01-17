@@ -8,7 +8,7 @@ public class WindowsOSHelper extends OSHelper {
     }
     
     public String getDefaultSketchPath(){
-    	return System.getProperty("user.home") + "\\My Documents\\Processing\\libraries\\";
+    	return System.getProperty("user.home") + "\\My Documents\\Processing\\";
     }
     
     public boolean isExlcuded(String jarName){
