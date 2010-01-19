@@ -2,6 +2,7 @@ package proclipsing.os;
 
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public abstract class OSHelper {
@@ -40,6 +41,8 @@ public abstract class OSHelper {
     }
 
     public Dialog getDialog(Shell shell) {
+    	System.out.println("OS FILE DIALOG");
+//        return new FileDialog(shell);
         return new DirectoryDialog(shell);
     }
     

@@ -207,13 +207,8 @@ public class PathAndLibrariesSelectionDrawer {
         
         Listener buttonListener = new Listener() {
             public void handleEvent(Event event) {
-                Dialog dialog = OS.helper().getDialog(composite.getShell());
-                
-                if(dialog instanceof FileDialog)
-                	processing_sketch_path_text.setText(((FileDialog)dialog).open());
-                else if(dialog instanceof DirectoryDialog)
-                	processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
-                    
+                DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
+                processing_sketch_path_text.setText(((DirectoryDialog)dialog).open());
             }
         };
         
