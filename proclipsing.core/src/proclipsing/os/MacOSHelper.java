@@ -23,9 +23,9 @@ public class MacOSHelper extends OSHelper {
 		return PATH_TO_JAVA + getFileSeparator() + super.getLibraryPath();
 	}
 
-//    public Dialog getDialog(Shell shell) {
-//        return new FileDialog(shell);
-//    }
+    public Dialog getDialog(Shell shell) {
+        return new FileDialog(shell);
+    }
     
     public String getDefaultAppPath(){
     	return "/Applications/Processing.app";
