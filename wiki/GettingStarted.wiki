@@ -50,6 +50,7 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
 <img src="http://farm3.static.flickr.com/2487/4076375394_f6be953255_o.jpg" width="1023" height="792" alt="pro4" />
 
   * when prompted to restart eclipse, agree to it
+  * if the "Welcome" tab is open, close that tab
 
 ===To set up Global Proclipsing Preferences:===
 
