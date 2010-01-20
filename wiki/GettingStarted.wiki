@@ -55,7 +55,7 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
 
 <img src="http://farm5.static.flickr.com/4008/4289513888_8f27a9bef1_o.png" width="667" height="535" alt="Picture 6" />
 
-  * Select Eclipse preferences (On a MacOSX, select Eclipse>Prefences
+  * Select Eclipse preferences (On a MacOSX, select Eclipse>Prefences)
   * Select Proclipsing
   * Enter the path to your Processing App (default on MacOSX is /Applications/Processing.app/)
   * Enter the path to your Processing Sketch Folder (default on MacOSX is /Users/matthewparker/Documents/Processing/)
