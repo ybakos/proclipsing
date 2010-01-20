@@ -59,7 +59,7 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
   * Open the "*Processing*" folder
   * Select "*Processing Project*" and click next
 
-<img src="http://farm3.static.flickr.com/2547/4076414882_9219330384_o.png" width="609" height="575" alt="Picture 4" />
+<img src="http://farm5.static.flickr.com/4006/4289513908_c3227c0d0f_o.png" width="609" height="575" alt="Picture 4" />
 
   * Enter a name for your project in the "*Project Name*" field
   * Click the "*Browse*" button next to the "*Processing Path*" field (this is the folder that the Processing app is in on *Windows* or *Linux*.  For Processing 1.0+ on *MacOsX*, this the bundled Processing Application).
