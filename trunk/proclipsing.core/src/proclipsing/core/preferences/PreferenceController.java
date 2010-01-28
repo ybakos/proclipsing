@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.osgi.baseadaptor.loader.ClasspathEntry;
 import org.osgi.service.prefs.BackingStoreException;
 
 import proclipsing.os.OS;
@@ -58,13 +59,19 @@ public class PreferenceController {
                 saveLibraries(project, projectPreferences.getSketchPath(),
                         ProjectPreferences.USERLIB_DIR, projectPreferences.getUserlibs(), true));		        
 		
+		IClasspathEntry ce = classpathEntries.elementAt(0);
+		
+		if (IClasspathEntry.CPE_SOURCE != ce.getEntryKind()) {
+			IFolder srcDir = project.getFolder(ProjectPreferences.SRC_DIR);
+			classpathEntries.add(JavaCore.newSourceEntry(srcDir.getFullPath()));
+		}
+		
         try {
             setProjectClassPath(project, classpathEntries);
         } catch (JavaModelException e) {
             LogHelper.LogError(e);
         }	
 	}
-		
 
 	public static ProjectPreferences loadFromProject(IProject project) {
 		IEclipsePreferences preferences = 
