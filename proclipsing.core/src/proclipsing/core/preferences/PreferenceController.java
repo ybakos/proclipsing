@@ -35,6 +35,13 @@ public class PreferenceController {
 	public static void saveToProject(IProject project,
 			ProjectPreferences projectPreferences) {
 		
+		
+		Vector<IClasspathEntry> classpathEntries = new Vector<IClasspathEntry>();
+		
+		classpathEntries.add(
+				JavaCore.newSourceEntry(
+						project.getFolder(ProjectPreferences.SRC_DIR).getFullPath()));		
+		
 		saveToProject(project, 
 				projectPreferences, new Vector<IClasspathEntry>());	
 	}
