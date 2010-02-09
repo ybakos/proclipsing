@@ -2,7 +2,7 @@
 <feature
       id="proclipsingFeature"
       label="Proclipsing Feature"
-      version="1.0.3"
+      version="1.0.4"
       plugin="proclipsing.core"
       os="linux,macosx,win32">
 
@@ -52,7 +52,7 @@ THE SOFTWARE.
          id="proclipsing.core"
          download-size="0"
          install-size="0"
-         version="0.2.1"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
