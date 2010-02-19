@@ -77,10 +77,9 @@ public class P5AppletExport extends P5ExportType
 
     
     // determine whether to use one jar file or several  (GL or user-specified)
-    boolean separateJarsForGL = renderer.equals("OPENGL") || forceMultipleJars; 
+    boolean separateJarsForGL = renderer.equals(OPENGL) || renderer.equals(GLGRAPHICS) || forceMultipleJars; 
     
-    //System.err.println("SEPARATE-JAR="+separateJarsForGL+" forced="+forceMultipleJars);      
-    System.err.println("RENDERER: "+renderer);
+    //System.err.println("SEPARATE-JAR="+separateJarsForGL+" forced="+forceMultipleJars+" RENDERER: "+renderer);      
     
     StringBuffer dbuffer = new StringBuffer();
     String lines[] = PApplet.split(builder.mainProgram, '\n');

@@ -15,6 +15,9 @@ public abstract class P5ExportType
 {
   private static final String JAVA_RES_DIR_OSX = "Contents/Resources/Java";
   
+  protected static final String GLGRAPHICS = "codeanticode.glgraphics.GLGraphics";
+  protected static final String OPENGL = "OPENGL";
+  
   protected static final int[] PLATFORMS = {  PConstants.LINUX, PConstants.WINDOWS, PConstants.MACOSX, };
   
   protected static final String[][] GL_NATIVE_LIBS = { 
@@ -227,49 +230,6 @@ public abstract class P5ExportType
     "determined from your code. Use only numeric values " +
     "(not variables) for the size() command. See the size() "+
     "reference for an explanation.";
-  
-/*  protected static  TMP  String[] parseSizeArgsOld(String program)
-  {
-    PatternMatcher matcher = new Perl5Matcher();
-    PatternCompiler compiler = new Perl5Compiler();
-
-    String sizing = "[\\s\\;]size\\s*\\(\\s*(\\S+)\\s*,\\s*(\\d+),?\\s*([^ \\)]*)\\s*\\)";
-      // match just the width and height
-      //"[\\s\\;]size\\s*\\(\\s*(\\S+)\\s*,\\s*(\\d+)(.*)\\)";
-
-    Pattern pattern = null;
-    try
-    {
-      pattern = compiler.compile(sizing);
-    } 
-    catch (MalformedPatternException e1)
-    {
-      throw new RuntimeException(e1);
-    }
-    
-    PatternMatcherInput input = new PatternMatcherInput(" " + Sketch.scrubComments(program));
-    
-    if (matcher.contains(input, pattern)) {
-      MatchResult result = matcher.getMatch();
-      try {
-        String wide = result.group(1).toString();
-        Integer.parseInt(wide);  // yuk
-        String high = result.group(2).toString();
-        Integer.parseInt(high);  // yuk
-        String renderer = result.group(3).toString(); //.trim();
-        return new String[] {wide, high, renderer };
-      } 
-      catch (NumberFormatException e) {
-        // found a reference to size, but it didn't seem to contain numbers
-        final String message =
-          "The size of this applet could not automatically be\n" +
-          "determined from your code. You'll have to edit the\n" +
-          "HTML file to set the size of the applet.";
-        Base.showWarning("Could not find applet size", message, null);
-      }
-    } 
-    return null;
-  }*/
   
   protected void writeMain(File javaFile, String className)
   {
