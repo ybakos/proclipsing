@@ -12,6 +12,11 @@ import org.osgi.framework.BundleContext;
 
 /* TODO:
  * 
+ * PreferenceController.loadFromProject:
+   
+   IEclipsePreferences preferences = 
+      new ProjectScope(project).getNode(ProjectPreferences.PROJECT_PREFS_NODE);
+      
  *   Default to current project, last run-config
  *   
  *   Setup an (error) log for all info/error msgs
@@ -24,7 +29,7 @@ public class P5ExportPlugin extends AbstractUIPlugin
 {
   public static final String ID = "dch.eclipse.EclipseP5Exporter";
   public static final String NAME = "EclipseP5Exporter";
-  public static final String VERSION = "0.2.4";
+  public static final String VERSION = "0.2.5";
   public static ImageDescriptor LARGE_ICON;
   
   private static MessageConsoleStream stream; 

@@ -97,9 +97,11 @@ public class P5ApplicationExport extends P5ExportType
         return showMissingMainWarning(builder);
 
       // determine whether to use one jar file or several
-      boolean separateJar = renderer.equals("OPENGL");      
-      if (Preferences.getBoolean("export.applet.separate_jar_files"))
+      boolean separateJar = renderer.equals(OPENGL) || renderer.equals(GLGRAPHICS);     
+      if (Preferences.getBoolean("export.applet.separate_jar_files")) {
+        //System.out.println("Fors");
         separateJar = true;      
+      }
 
       // Write main zip (copy jars to lib if necessary) & return the classpath
       Vector classpathList = null;
