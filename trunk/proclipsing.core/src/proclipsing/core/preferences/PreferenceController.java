@@ -1,5 +1,6 @@
 package proclipsing.core.preferences;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -200,32 +202,82 @@ public class PreferenceController {
      * Given urls to the libraries, move them to the right spot
      * then add the jars and zip files to the classpath
      * 
-     * @param libFolder
-     * @param libUrls
+     * 
+     * Example urls in libUrls 
+		file:/home/brian/bin/processing-1.0.5/libraries/net/library/export.txt
+		file:/home/brian/bin/processing-1.0.5/libraries/net/library/net.jar
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/rxtxSerial.dll
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/export.txt
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/librxtxSerial.jnilib
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/serial.jar
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/RXTXcomm.jar
+		file:/home/brian/bin/processing-1.0.5/libraries/serial/library/librxtxSerial.so
+		file:/home/brian/bin/processing-1.0.5/lib/keywords.txt
+		file:/home/brian/bin/processing-1.0.5/lib/preferences.txt
+		file:/home/brian/bin/processing-1.0.5/lib/pde.jar
+		file:/home/brian/bin/processing-1.0.5/lib/jna.jar
+		file:/home/brian/bin/processing-1.0.5/lib/version.txt
+		file:/home/brian/bin/processing-1.0.5/lib/about.jpg
+		file:/home/brian/bin/processing-1.0.5/lib/ecj.jar
+		file:/home/brian/bin/processing-1.0.5/lib/antlr.jar
+		file:/home/brian/bin/processing-1.0.5/lib/core.jar
+		file:/home/brian/sketchbook/libraries/OpenCV/library/OpenCV.jar
+		file:/home/brian/sketchbook/libraries/OpenCV/library/libOpenCV.so
+		file:/home/brian/sketchbook/libraries/OpenCV/library/OpenCV.dll
+		file:/home/brian/sketchbook/libraries/OpenCV/library/libOpenCV.jnilib
+		file:/home/brian/sketchbook/libraries/gifAnimation/library/gifAnimation.jar
+     * 
+     * 
+     * 
+     * @param destLibFolder
+     * @param sourceLibUrls
      * @param monitor
      */
     private static Vector<IClasspathEntry> addProcessingLibs(
-            IFolder libFolder, URL[] libUrls, IProgressMonitor monitor){
+            IFolder destLibFolder, URL[] sourceLibUrls, IProgressMonitor monitor){
         //vars used in url loop
         String filename; IFile libFile; 
         Vector<IClasspathEntry> classpathEntries = new Vector<IClasspathEntry>();
+        
         // go through urls, moving files into project and adding jars and zips to classpath
-        for (URL url : libUrls) {
-//            filename = url.getPath().substring(url.getPath().lastIndexOf(OSHelperManager.getHelper().getFileSeparator()) + 1);
-//          apprently, Java uses "/" instead of the OS file seperator, even on windows.
-            filename = url.getPath().substring(url.getPath().lastIndexOf('/') + 1);
+        for (URL sourceUrl : sourceLibUrls) {
+        	filename = sourceUrl.getPath().substring(sourceUrl.getPath().lastIndexOf('/') + 1);
+            
             try {
-                libFile = libFolder.getFile(filename);
-                // extra check to prevent error
+                libFile = destLibFolder.getFile(filename);
+                
                 if (!libFile.exists() && !OS.helper().isExlcuded(filename))
-                    libFile.create(url.openStream(), true, monitor);
-                if ((filename.endsWith(".jar") || filename.endsWith(".zip")) && !OS.helper().isExlcuded(filename)){
-                    classpathEntries.add(
-                            JavaCore.newLibraryEntry(libFile.getFullPath(), null, null, new IAccessRule[0], 
-                                    new IClasspathAttribute[]{
-                                            JavaCore.newClasspathAttribute(
-                                                    JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, 
-                                                    libFolder.getFullPath().toPortableString().substring(1))}, false));
+                    libFile.create(sourceUrl.openStream(), true, monitor);
+                
+                // System.out.println("::" + url.toExternalForm());
+                if ((filename.endsWith(".jar") || filename.endsWith(".zip")) 
+                		&& !OS.helper().isExlcuded(filename)){
+                	
+                    // gets paths to the src and documentation of the
+                    // library if it can find it.  This helps eclipse tooling
+                    IPath[] paths = getSrcAndDocs(sourceUrl);
+                    
+                    List<IClasspathAttribute> attrs = new ArrayList<IClasspathAttribute>();
+                    // Add Library Path Entry, which points to the new file created in the project
+                    attrs.add(JavaCore.newClasspathAttribute(
+                            JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, 
+                            destLibFolder.getFullPath().toPortableString().substring(1)));
+                    
+                    // add documentation location if it exists
+                    // this points to the location where the lib came from in the filesystem
+                    // (doesn't get copied over like the jar)
+                    if (paths[1] != null)
+                        attrs.add(JavaCore.newClasspathAttribute(
+                                IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME,
+                                paths[1].toFile().toURL().toExternalForm()));
+                    
+                    // This path is also to the location in the filesystem
+                    // it gets set in a different spot than the above path (see newLibraryEntry call below)
+                    IPath srcLocation = paths[0];
+                    
+                	classpathEntries.add(
+                            JavaCore.newLibraryEntry(libFile.getFullPath(), srcLocation, 
+                                    null, new IAccessRule[0], attrs.toArray(new IClasspathAttribute[]{}) , false));
                 }
             } catch (CoreException e) {
                 LogHelper.LogError(e);
@@ -235,6 +287,40 @@ public class PreferenceController {
         }
         return classpathEntries;
     }
+
+    /**
+     * 
+     * 
+     * @param destLibFolder
+     * @param sourceUrl
+     *  looks like: file:/home/brian/sketchbook/libraries/OpenCV/library/OpenCV.jar
+     * @return
+     */
+	private static IPath[] getSrcAndDocs(URL sourceUrl) {
+	    
+	    IPath[] paths = new IPath[] {null, null};
+	    
+	    String librariesPath = null;
+	    // given file:/home/brian/sketchbook/libraries/OpenCV/library/OpenCV.jar
+	    // librariesPath gets set to file:/home/brian/sketchbook/libraries/OpenCV/
+	    if (sourceUrl.getPath().contains("/library/"))
+	        librariesPath = sourceUrl.getPath().substring(0,
+	                sourceUrl.getPath().lastIndexOf("/library/") + 1);
+	    
+	    if (librariesPath != null) {
+	        //check src
+	        if (new File(librariesPath + "src").exists())
+	            paths[0] = new Path(librariesPath + "src");
+	        
+	        // check reference or docs
+	        if (new File(librariesPath + "reference").exists()) 
+	            paths[1] = new Path(librariesPath + "reference");
+	        
+	        else if (new File(librariesPath + "docs").exists()) 
+                paths[1] = new Path(librariesPath + "docs");
+	    }
+	    return paths;
+	}
 
 
 }
