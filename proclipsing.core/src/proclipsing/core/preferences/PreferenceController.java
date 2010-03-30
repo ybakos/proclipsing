@@ -298,6 +298,7 @@ public class PreferenceController {
      */
 	private static IPath[] getSrcAndDocs(URL sourceUrl) {
 	    
+	    //paths[0] gets src, paths[1] gets javadoc
 	    IPath[] paths = new IPath[] {null, null};
 	    
 	    String librariesPath = null;
@@ -316,8 +317,8 @@ public class PreferenceController {
 	        if (new File(librariesPath + "reference").exists()) 
 	            paths[1] = new Path(librariesPath + "reference");
 	        
-	        else if (new File(librariesPath + "docs").exists()) 
-                paths[1] = new Path(librariesPath + "docs");
+	        else if (new File(librariesPath + "doc").exists()) 
+                paths[1] = new Path(librariesPath + "doc");
 	    }
 	    return paths;
 	}
