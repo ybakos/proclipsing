@@ -15,6 +15,7 @@ public class ProjectPreferences {
     public static final String SKETCH_PATH_KEY   			= "PROCESSING_SKETCH_PATH";
     public static final String BIN_DIR                  	= "bin";
     public static final String SRC_DIR                  	= "src";
+    public static final String DATA_DIR                  	= "data";
     public static final String BASELIB_DIR                  = "lib/base";  
     public static final String USERLIB_DIR                  = "lib/user";                 
 	
