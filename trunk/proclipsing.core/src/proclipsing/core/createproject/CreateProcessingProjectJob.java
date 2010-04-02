@@ -62,6 +62,7 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
 		
 		createBinFolder(project, monitor);
 		createSrcFolder(project, monitor);
+		createDataFolder(project, monitor);
 		createProjFolder(project, monitor);
 		createLibFolders(project, monitor);
 		
@@ -114,6 +115,13 @@ public class CreateProcessingProjectJob extends WorkspaceModifyOperation {
         srcDir.create(true, true, monitor);
         classpath_entries.add(JavaCore.newSourceEntry(srcDir.getFullPath()));
         return srcDir;
+    }
+	
+	
+    private IFolder createDataFolder(IProject project, IProgressMonitor monitor) throws CoreException {
+        IFolder dataDir = project.getFolder(ProjectPreferences.SRC_DIR + "/" + ProjectPreferences.DATA_DIR);
+        dataDir.create(true, true, monitor);
+        return dataDir;
     }
 	
     private IFolder createProjFolder(IProject project, IProgressMonitor monitor) throws CoreException {

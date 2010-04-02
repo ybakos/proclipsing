@@ -23,7 +23,7 @@ public class Util {
 		
 		for(int x = 0; x < chars.length; x++){
 			char c = chars[x];
-			if(((c >='a') && (c <= 'z'))|| ((c >='A') && (c <= 'Z'))){
+			if(((c >='a') && (c <= 'z'))|| ((c >='A') && (c <= 'Z')) ||  ((c >='0') && (c <= '9'))){
 				
 				if(capThis){
 					result += new String(c + "").toUpperCase();
