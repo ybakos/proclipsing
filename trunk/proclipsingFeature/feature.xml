@@ -2,7 +2,7 @@
 <feature
       id="proclipsingFeature"
       label="Proclipsing Feature"
-      version="1.0.4"
+      version="1.0.5"
       plugin="proclipsing.core"
       os="linux,macosx,win32">
 
@@ -50,6 +50,13 @@ THE SOFTWARE.
 
    <plugin
          id="proclipsing.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="dch.eclipse.EclipseP5Exporter"
          download-size="0"
          install-size="0"
          version="0.0.0"
