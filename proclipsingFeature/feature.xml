@@ -2,7 +2,7 @@
 <feature
       id="proclipsingFeature"
       label="Proclipsing Feature"
-      version="1.0.5"
+      version="1.0.6"
       plugin="proclipsing.core"
       os="linux,macosx,win32">
 
