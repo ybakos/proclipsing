@@ -2,14 +2,15 @@ package proclipsing.os;
 
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public abstract class OSHelper {
     private final String CORE_PATH 		    = "lib" + getFileSeparator();
     protected final String LIBRARY_PATH     = "libraries" + getFileSeparator();
+    protected final String NEW_LIBRARY_PATH = "modes" + getFileSeparator() + "java" + getFileSeparator() + LIBRARY_PATH;
     protected final String LIB_MATCH_STRING	= "%LIBRARY_IDENTIFIER%";
     protected final String END_PATH_TO_LIB  =  LIBRARY_PATH + LIB_MATCH_STRING + getFileSeparator() + "library" + getFileSeparator();
+    protected final String NEW_END_PATH_TO_LIB  = NEW_LIBRARY_PATH + LIB_MATCH_STRING + getFileSeparator() + "library" + getFileSeparator();
     
     protected static String[] ignoreJars = {"antlr.jar","ecj.jar","jna.jar", "pde.jar", "quaqua.jar"};
 	
@@ -24,6 +25,10 @@ public abstract class OSHelper {
 		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
 	}
 	
+	public String getNewPathToLibrary(String library) {
+		return NEW_END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
+	}
+	
 	public String getSketchPathToLibrary(String library) {
 		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
 	}
@@ -34,6 +39,10 @@ public abstract class OSHelper {
 
     public String getLibraryPath() {
         return LIBRARY_PATH;
+    }
+    
+    public String getNewLibraryPath() {
+        return NEW_LIBRARY_PATH;
     }
 
     public String getSketchPath() {

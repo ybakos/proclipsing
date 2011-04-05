@@ -30,6 +30,11 @@ public class ProcessingLibrary {
     public URL[] getUrls(boolean isContributed) {
 
         File realPath = new File(getResourcePath(isContributed));
+        
+        if (!isContributed && !isCore() && !realPath.exists()) {
+        	realPath = new File(processing_path + OS.helper().getNewPathToLibrary(identifier));
+        }
+        
         if (!realPath.exists()) return null;
 
         URL[] urls = getUrls(realPath.listFiles());        

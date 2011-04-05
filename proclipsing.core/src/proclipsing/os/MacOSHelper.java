@@ -17,10 +17,20 @@ public class MacOSHelper extends OSHelper {
 	public String getPathToLibrary(String library) {
 		return PATH_TO_JAVA + super.getPathToLibrary(library);
 	}
+	
+	@Override
+	public String getNewPathToLibrary(String library) {
+		return PATH_TO_JAVA + super.getNewPathToLibrary(library);
+	}
 
 	@Override
 	public String getLibraryPath() {
 		return PATH_TO_JAVA + getFileSeparator() + super.getLibraryPath();
+	}
+	
+	@Override
+	public String getNewLibraryPath() {
+		return PATH_TO_JAVA + getFileSeparator() + super.getNewLibraryPath();
 	}
 
     public Dialog getDialog(Shell shell) {
