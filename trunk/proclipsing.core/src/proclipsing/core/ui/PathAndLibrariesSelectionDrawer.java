@@ -233,6 +233,11 @@ public class PathAndLibrariesSelectionDrawer {
         File librariesDir = new File(pathText.getText(),
                 OS.helper().getLibraryPath());
         
+        if (!librariesDir.exists()) {
+        	librariesDir = new File(pathText.getText(),
+                OS.helper().getNewLibraryPath());
+        }
+        
         if(!isCore){
         	librariesDir = new File(pathText.getText(),
                     OS.helper().getSketchPath());
