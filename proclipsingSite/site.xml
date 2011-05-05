@@ -6,6 +6,9 @@
    <feature url="features/proclipsingFeature_1.0.8.jar" id="proclipsingFeature" version="1.0.8" os="linux,macosx,win32">
       <category name="processing"/>
    </feature>
+   <feature url="features/P5ExporterFeature_1.0.5.jar" id="P5ExporterFeature" version="1.0.5">
+      <category name="export"/>
+   </feature>
    <category-def name="export" label="export">
       <description>
          Export Processing Projects
