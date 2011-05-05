@@ -347,7 +347,7 @@ public class P5ApplicationExport extends P5ExportType
     Preferences.setBoolean("export.application.stop", addStopButton);
 
     // MEMORY SETTINGS (from builder.vmArgs)?
-    String vmArgs = " -Xms64m -Xmx384m";
+    String vmArgs = "-Xms64m -Xmx384m";
     if (builder.vmArgs.length() > 0)
     {
       if (builder.vmArgs.contains("-Xmx"))
@@ -355,6 +355,8 @@ public class P5ApplicationExport extends P5ExportType
       else
         vmArgs += builder.vmArgs;
     }
+    vmArgs += " -d32 ";
+    
     String[] lines = PApplet.loadStrings(plistTemplate);
 /*    System.out.println("pwd: "+System.getProperty("user.dir"));
     System.out.println("plistTemplate: "+plistTemplate);
