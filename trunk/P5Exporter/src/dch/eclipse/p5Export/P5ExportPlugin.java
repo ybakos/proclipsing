@@ -29,7 +29,7 @@ public class P5ExportPlugin extends AbstractUIPlugin
 {
   public static final String ID = "dch.eclipse.EclipseP5Exporter";
   public static final String NAME = "EclipseP5Exporter";
-  public static final String VERSION = "0.2.5";
+  public static final String VERSION = "0.2.6";
   public static ImageDescriptor LARGE_ICON;
   
   private static MessageConsoleStream stream; 
