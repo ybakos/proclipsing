@@ -73,7 +73,7 @@ These steps might vary slightly based on what version of Eclipse you have.  The 
 
   * Enter a name for your project in the "*Project Name*" field
   * Click the "*Browse*" button next to the "*Processing Path*" field (this is the folder that the Processing app is in on *Windows* or *Linux*.  For Processing 1.0+ on *MacOsX*, this the bundled Processing Application).
-  * Click the "*Browse*" button next to the "*Processing Sketch Path*" and navigate to your sketch folder, then select the libraries inside (if you don't have one, you might want to create one).
+  * Click the "*Browse*" button next to the "*Processing Sketch Path*" and navigate to your sketch folder, then select the libraries inside (if you don't have a folder named "libraries" in your sketch folder, you might want to create one).
   * Select whether you want the project to be an *Application* or an *Applet* (Applet for the web, Application for local).
   * Select the libraries you want to use in this project with in the libraries windows.
   * Select *Finish*
