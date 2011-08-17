@@ -1,6 +1,7 @@
 package dch.eclipse.p5Export;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -176,15 +177,19 @@ public class P5AppletExport extends P5ExportType
 
     InputStream is = null;
     // if there is an applet.html file in the sketch folder, use that
-    File customHtml = new File(appletFolder.getParentFile(), "applet.html");
+    File customHtml = new File(appletFolder.getParentFile(), "template.html");
     if (customHtml.exists()) {
       is = new FileInputStream(customHtml);
     }
     if (is == null) {
       if (renderer.equals("OPENGL") || forceMultipleJars) {
-        is = Base.getLibStream("export/applet-opengl.html");
+          URL url = P5ExportPlugin.plugin.getBundle().getResource(
+            "template/template-opengl.html");
+        is = url.openStream();
       } else {
-        is = Base.getLibStream("export/applet.html");
+          URL url = P5ExportPlugin.plugin.getBundle().getResource(
+          "template/template.html");
+        is = url.openStream();
       }
     }    
     
