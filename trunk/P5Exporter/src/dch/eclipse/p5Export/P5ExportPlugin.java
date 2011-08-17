@@ -36,7 +36,7 @@ public class P5ExportPlugin extends AbstractUIPlugin
   private static MessageConsole console;
   
   // The shared instance.
-  private static P5ExportPlugin plugin;
+  static P5ExportPlugin plugin;
 
   // Resource bundle.
   private ResourceBundle resourceBundle;
