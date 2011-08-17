@@ -1,6 +1,7 @@
 package dch.eclipse.p5Export;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -328,12 +329,28 @@ public class P5ApplicationExport extends P5ExportType
       }
     }
 
+    
     // System.err.println("CLASSPATH="+cp);
     String PLIST_TEMPLATE = "template.plist";
-    File plistTemplate = new File(sketchFolder, PLIST_TEMPLATE);
-    if (!plistTemplate.exists()) {      
-      plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
+
+    URL url = P5ExportPlugin.plugin.getBundle().getResource(
+      "template/template.plist");
+    
+    String templateStr = "";
+    
+    try{
+      templateStr = Util.convertStreamToString(url.openStream());
+    } catch (Exception e) {
+      LogHelper.LogError(e);
     }
+    
+    String[] lines = templateStr.split("\\n");
+    
+//    File plistTemplate = new File(sketchFolder, PLIST_TEMPLATE);
+//    if (!plistTemplate.exists()) {
+//      plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
+//      System.out.println(plistTemplate.getAbsolutePath());
+//    }
 
     File contentsDir = new File(appFolder, "Contents");
     if (!contentsDir.exists())
@@ -355,9 +372,9 @@ public class P5ApplicationExport extends P5ExportType
       else
         vmArgs += builder.vmArgs;
     }
-    vmArgs += " -d32 ";
+//    vmArgs += " -d32 ";
     
-    String[] lines = PApplet.loadStrings(plistTemplate);
+//    String[] lines = PApplet.loadStrings(plistTemplate);
 /*    System.out.println("pwd: "+System.getProperty("user.dir"));
     System.out.println("plistTemplate: "+plistTemplate);
     */
