@@ -1,7 +1,6 @@
 package dch.eclipse.p5Export;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -253,7 +252,7 @@ public class P5ApplicationExport extends P5ExportType
     ps.print("APPDIR=$(dirname \"$0\")\n");
     if (!separateJar) cp = "lib/" + cp;
     ps.print("java " + builder.vmArgs + " -Djava.library.path="
-    		+ "\"$APPDIR\" -cp \"" + cp + "\"" + mainClass + "\n");
+        + "\"$APPDIR\" -cp \"" + cp + "\"" + mainClass + "\n");
     ps.flush();
     ps.close();
 
@@ -329,28 +328,12 @@ public class P5ApplicationExport extends P5ExportType
       }
     }
 
-    
     // System.err.println("CLASSPATH="+cp);
     String PLIST_TEMPLATE = "template.plist";
-
-    URL url = P5ExportPlugin.plugin.getBundle().getResource(
-      "template/template.plist");
-    
-    String templateStr = "";
-    
-    try{
-      templateStr = Util.convertStreamToString(url.openStream());
-    } catch (Exception e) {
-      LogHelper.LogError(e);
+    File plistTemplate = new File(sketchFolder, PLIST_TEMPLATE);
+    if (!plistTemplate.exists()) {      
+      plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
     }
-    
-    String[] lines = templateStr.split("\\n");
-    
-//    File plistTemplate = new File(sketchFolder, PLIST_TEMPLATE);
-//    if (!plistTemplate.exists()) {
-//      plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
-//      System.out.println(plistTemplate.getAbsolutePath());
-//    }
 
     File contentsDir = new File(appFolder, "Contents");
     if (!contentsDir.exists())
@@ -364,7 +347,7 @@ public class P5ApplicationExport extends P5ExportType
     Preferences.setBoolean("export.application.stop", addStopButton);
 
     // MEMORY SETTINGS (from builder.vmArgs)?
-    String vmArgs = "-Xms64m -Xmx384m";
+    String vmArgs = " -Xms64m -Xmx384m";
     if (builder.vmArgs.length() > 0)
     {
       if (builder.vmArgs.contains("-Xmx"))
@@ -372,9 +355,7 @@ public class P5ApplicationExport extends P5ExportType
       else
         vmArgs += builder.vmArgs;
     }
-//    vmArgs += " -d32 ";
-    
-//    String[] lines = PApplet.loadStrings(plistTemplate);
+    String[] lines = PApplet.loadStrings(plistTemplate);
 /*    System.out.println("pwd: "+System.getProperty("user.dir"));
     System.out.println("plistTemplate: "+plistTemplate);
     */
