@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public abstract class OSHelper {
-    private final String CORE_PATH 		    = "lib" + getFileSeparator();
+    private String CORE_PATH 		    = "lib" + getFileSeparator();
     protected final String LIBRARY_PATH     = "libraries" + getFileSeparator();
     protected final String NEW_LIBRARY_PATH = "modes" + getFileSeparator() + "java" + getFileSeparator() + LIBRARY_PATH;
     protected final String LIB_MATCH_STRING	= "%LIBRARY_IDENTIFIER%";
@@ -31,6 +31,10 @@ public abstract class OSHelper {
 	
 	public String getSketchPathToLibrary(String library) {
 		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
+	}
+	
+	public void tryProcessing2_0bpath(){
+		CORE_PATH = "core" + getFileSeparator() + "library" + getFileSeparator();
 	}
 
 	public String getCorePath() {
