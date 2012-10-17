@@ -5,9 +5,15 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public class MacOSHelper extends OSHelper {
+
+	private static String PATH_TO_JAVA = "Contents/Resources/Java/";
+	private static final String ALT_PATH_TO_JAVA = "Contents/Resources/Java/core/library";
+
 	
-	private static final String PATH_TO_JAVA = "Contents/Resources/Java/";
-	
+	public void tryProcessing2_0bpath(){
+		PATH_TO_JAVA = "ALT_PATH_TO_JAVA";
+	}
+
 	@Override
 	public String getCorePath() {
         return PATH_TO_JAVA;

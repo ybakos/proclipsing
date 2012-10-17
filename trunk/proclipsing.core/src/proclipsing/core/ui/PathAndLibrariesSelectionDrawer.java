@@ -143,6 +143,12 @@ public class PathAndLibrariesSelectionDrawer {
     
     public boolean validatePathIsProcessing() {
         // final check for core.jar
+    	
+    	if(!new File(processing_app_path_text.getText(),
+                OS.helper().getCorePath() + "core.jar").exists()){
+    		OS.helper().tryProcessing2_0bpath();
+    	}
+    	
         return new File(processing_app_path_text.getText(),
                 OS.helper().getCorePath() + "core.jar").exists();
         
