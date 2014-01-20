@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: dch.eclipse.EclipseP5Exporter;singleton:=true
-Bundle-Version: 0.2.6
+Bundle-Version: 0.4.1.6
 Bundle-Activator: dch.eclipse.p5Export.P5ExportPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core,
  org.eclipse.ui.console
 Eclipse-AutoStart: true
-Bundle-Vendor: Daniel C. Howe
+Bundle-Vendor: Daniel C. Howe, Matt Parker
 Bundle-ClassPath: lib/core.jar,
  lib/pde.jar,
  lib/antlr.jar,

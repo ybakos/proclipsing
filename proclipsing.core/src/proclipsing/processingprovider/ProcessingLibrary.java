@@ -32,7 +32,7 @@ public class ProcessingLibrary {
         File realPath = new File(getResourcePath(isContributed));
         
         if (!isContributed && !isCore() && !realPath.exists()) {
-        	realPath = new File(processing_path + OS.helper().getNewPathToLibrary(identifier));
+        	realPath = new File(processing_path + OS.helper().getPathToP2Library(identifier));
         }
         
         if (!realPath.exists()) return null;
@@ -52,10 +52,12 @@ public class ProcessingLibrary {
     private static final String[] newNativeLibDirs = new String[]{
     	"linux32",
     	"linux64",
-    	"macosx",
+    	"macosx64",
     	"opengl.jar",
     	"windows32",
     	"windows64"};
+    
+    public static final String pluginsDir = "plugins";
     
     private URL[] getUrls(File[] files) {
         ArrayList<URL> urls = new ArrayList<URL>();
@@ -70,6 +72,14 @@ public class ProcessingLibrary {
             	if(isNativeLib){
             		for(File nativeLib: file.listFiles()){
             			try{
+            				if(nativeLib.isDirectory()  && nativeLib.getAbsolutePath().contains(pluginsDir)){
+            					for(File plugin: nativeLib.listFiles()){
+            						System.out.println(plugin.getAbsolutePath());
+            						nativeLibs.add(plugin.toURI().toURL());
+            					}
+            					
+            					nativeLibs.add(nativeLib.toURI().toURL());
+            				}
             				nativeLibs.add(nativeLib.toURI().toURL());	
             			} catch (MalformedURLException e) {
                             LogHelper.LogError(e);

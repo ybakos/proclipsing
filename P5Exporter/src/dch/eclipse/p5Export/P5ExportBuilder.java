@@ -30,6 +30,7 @@ public class P5ExportBuilder
   File workDir;
   P5ExportType exportType;
 
+  public static String PROJECT_LOCATION;
   String projectLocation;
   String projectClassPath;
   String mainClass;
@@ -40,6 +41,7 @@ public class P5ExportBuilder
   String fullPathToJava;
   String sketchName;
   String mainProgram;
+  public static List<String> nativeLibDirs;
 
   boolean hasMain;
 
@@ -52,9 +54,21 @@ public class P5ExportBuilder
     this.exportType = type;
     SLASH = File.separator;
     this.projectLocation = pProject.getProject().getLocation().toOSString();
+    PROJECT_LOCATION = projectLocation.substring(0, projectLocation.lastIndexOf('/') + 1);
+    
     P5ClasspathBuilder cpb = new P5ClasspathBuilder(File.pathSeparator, pProject);
     this.projectClassPath = cpb.buildClasspath(null, null);
     this.workDir = new File(projectLocation);
+    
+
+    if (DBUG){
+      System.out.println("Collected Native Lib Dirs:");
+      for (String s : nativeLibDirs)
+      {
+        System.out.println(s);
+        
+      }
+    }
 
     if (DBUG)
       System.out.println("Checking lib dir ----------------------------------------");

@@ -11,8 +11,9 @@ public abstract class OSHelper {
     protected final String LIB_MATCH_STRING	= "%LIBRARY_IDENTIFIER%";
     protected final String END_PATH_TO_LIB  =  LIBRARY_PATH + LIB_MATCH_STRING + getFileSeparator() + "library" + getFileSeparator();
     protected final String NEW_END_PATH_TO_LIB  = NEW_LIBRARY_PATH + LIB_MATCH_STRING + getFileSeparator() + "library" + getFileSeparator();
-    
-    protected static String[] ignoreJars = {"antlr.jar","ecj.jar","jna.jar", "pde.jar", "quaqua.jar"};
+	private static boolean isProcessing2Path = false;
+	
+    protected static String[] ignoreJars = {"antlr.jar","ecj.jar", "pde.jar", "quaqua.jar"}; //"jna.jar"
 	
 	public String getFileSeparator() {
 	    String separator =  System.getProperty("file.separator");
@@ -25,7 +26,7 @@ public abstract class OSHelper {
 		return END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
 	}
 	
-	public String getNewPathToLibrary(String library) {
+	public String getPathToP2Library(String library) {
 		return NEW_END_PATH_TO_LIB.replaceAll(LIB_MATCH_STRING, library);
 	}
 	
@@ -34,7 +35,13 @@ public abstract class OSHelper {
 	}
 	
 	public void tryProcessing2_0bpath(){
-		CORE_PATH = "core" + getFileSeparator() + "library" + getFileSeparator();
+		isProcessing2Path = !isProcessing2Path;
+		
+		if(isProcessing2Path){
+			CORE_PATH = "core" + getFileSeparator() + "library" + getFileSeparator();
+		} else {
+			CORE_PATH = "lib" + getFileSeparator();
+		}
 	}
 
 	public String getCorePath() {

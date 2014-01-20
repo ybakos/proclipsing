@@ -2,7 +2,7 @@
 <feature
       id="proclipsingFeature"
       label="Proclipsing Feature"
-      version="1.0.8"
+      version="1.3.2"
       plugin="proclipsing.core"
       os="linux,macosx,win32">
 
@@ -47,13 +47,6 @@ THE SOFTWARE.
       <import plugin="org.eclipse.jdt.launching"/>
       <import plugin="org.eclipse.swt"/>
    </requires>
-
-   <plugin
-         id="dch.eclipse.EclipseP5Exporter"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="proclipsing.core"

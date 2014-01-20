@@ -16,6 +16,7 @@ public class P5ApplicationExport extends P5ExportType
 {
   private static final String CORE_JAR = "core.jar";
   private static final String JAVAROOT = "$JAVAROOT/";
+  private static final String BAT_STRING = "@echo off\njava -Djava.ext.dirs=lib -Djava.library.path=lib ";
 
   public P5ApplicationExport()
   {
@@ -85,10 +86,33 @@ public class P5ApplicationExport extends P5ExportType
 
       if (exportPlatform == PConstants.WINDOWS)
       {
-        File exe = new File(appFolder, sketchName + ".exe");
-        Base.copyFile(new File("lib/export/application.exe"), exe);
-        if (!exe.exists())
-          P5ExportUtils.errorDialog(builder.shell, "Could not make windows .exe", null);
+//        File exe = new File(appFolder, sketchName + ".exe");
+//        Base.copyFile(new File("lib/export/application.exe"), exe);
+//        if (!exe.exists())
+//          P5ExportUtils.errorDialog(builder.shell, "Could not make windows .exe", null);
+        
+        try
+        {
+          String data = BAT_STRING + "";
+          
+          data += builder.mainClass;
+
+          File bat = new File(appFolder, sketchName + ".bat");
+
+          // if file doesnt exists, then create it
+          if (!bat.exists())
+          {
+            bat.createNewFile();
+          }
+
+          PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(bat.getAbsolutePath(), true)));
+          out.println(data);
+          out.close();
+        }
+        catch (IOException e)
+        {
+          e.printStackTrace();
+        }
       }
 
       if (builder.hasMain)
@@ -97,7 +121,10 @@ public class P5ApplicationExport extends P5ExportType
         return showMissingMainWarning(builder);
 
       // determine whether to use one jar file or several
-      boolean separateJar = renderer.equals(OPENGL) || renderer.equals(GLGRAPHICS);     
+      boolean separateJar = renderer.equals(OPENGL) || renderer.equals(GLGRAPHICS);    
+      
+      separateJar = true;
+      
       if (Preferences.getBoolean("export.applet.separate_jar_files")) {
         //System.out.println("Fors");
         separateJar = true;      
@@ -252,7 +279,11 @@ public class P5ApplicationExport extends P5ExportType
     ps.print("APPDIR=$(dirname \"$0\")\n");
     if (!separateJar) cp = "lib/" + cp;
     ps.print("java " + builder.vmArgs + " -Djava.library.path="
-        + "\"$APPDIR\" -cp \"" + cp + "\"" + mainClass + "\n");
+        + "\"$APPDIR\" -cp \"" + cp + "\" " + mainClass + "\n");
+    
+    System.out.println("java " + builder.vmArgs + " -Djava.library.path="
+        + "\"$APPDIR\" -cp \"" + cp + "\" " + mainClass + "\n");
+    
     ps.flush();
     ps.close();
 
@@ -334,6 +365,9 @@ public class P5ApplicationExport extends P5ExportType
     if (!plistTemplate.exists()) {      
       plistTemplate = new File("lib/export/" + PLIST_TEMPLATE);
     }
+    
+
+    System.out.println(plistTemplate.getAbsolutePath());
 
     File contentsDir = new File(appFolder, "Contents");
     if (!contentsDir.exists())
@@ -346,8 +380,11 @@ public class P5ApplicationExport extends P5ExportType
     Preferences.setBoolean("export.application.fullscreen", presentMode);
     Preferences.setBoolean("export.application.stop", addStopButton);
 
+    // ARCH SETTINGS
+    String arch = "<string>x86_64</string>";
+    
     // MEMORY SETTINGS (from builder.vmArgs)?
-    String vmArgs = " -Xms64m -Xmx384m";
+    String vmArgs = "-Xms64m -Xmx1000m";
     if (builder.vmArgs.length() > 0)
     {
       if (builder.vmArgs.contains("-Xmx"))
@@ -355,10 +392,11 @@ public class P5ApplicationExport extends P5ExportType
       else
         vmArgs += builder.vmArgs;
     }
+    
     String[] lines = PApplet.loadStrings(plistTemplate);
-/*    System.out.println("pwd: "+System.getProperty("user.dir"));
+    System.out.println("pwd: "+System.getProperty("user.dir"));
     System.out.println("plistTemplate: "+plistTemplate);
-    */
+    
     for (int i = 0; i < lines.length; i++)
     {
       String orig = lines[i];
@@ -386,6 +424,10 @@ public class P5ApplicationExport extends P5ExportType
         while ((index = sb.indexOf("@@classpath@@")) != -1)
         {
           sb.replace(index, index + "@@classpath@@".length(), cp);
+        }
+        while ((index = sb.indexOf("@@lsarchitecturepriority@@")) != -1)
+        {
+          sb.replace(index, index + "@@lsarchitecturepriority@@".length(), arch);
         }
         while ((index = sb.indexOf("@@lsuipresentationmode@@")) != -1)
         {

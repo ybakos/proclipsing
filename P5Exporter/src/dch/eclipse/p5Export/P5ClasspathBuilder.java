@@ -1,5 +1,7 @@
 package dch.eclipse.p5Export;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.*;
@@ -8,6 +10,8 @@ public class P5ClasspathBuilder
 {
   private String separator;
   private IJavaProject project;
+  
+  private final static String CLASSPATH_ATTR_LIBRARY_PATH_ENTRY = "org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY";
   
   public P5ClasspathBuilder(String pSeparator, IJavaProject pProject)
   {
@@ -21,6 +25,8 @@ public class P5ClasspathBuilder
    */
   public String buildClasspath(IClasspathEntry[] entries, StringBuilder sClasspath) throws JavaModelException 
   {
+    P5ExportBuilder.nativeLibDirs = new ArrayList<String>();
+    
     IPath pTransformedPath = null;
     P5ExportUtils sUtil = P5ExportUtils.getInstance();
     if (sClasspath == null)
@@ -61,6 +67,17 @@ public class P5ClasspathBuilder
           break;
         }
       }
+      
+      //MATT Get dirs for all Native Libs
+      if(pTransformedPath.getFileExtension() != null && pTransformedPath.getFileExtension().toLowerCase().endsWith("jar")){
+        IClasspathAttribute[] attrs = i.getExtraAttributes();
+        for(IClasspathAttribute attr: attrs){
+          if(attr.getName().equals(CLASSPATH_ATTR_LIBRARY_PATH_ENTRY) && !P5ExportBuilder.nativeLibDirs.contains(P5ExportBuilder.PROJECT_LOCATION + attr.getValue())){
+            P5ExportBuilder.nativeLibDirs.add(P5ExportBuilder.PROJECT_LOCATION + attr.getValue());
+          }
+        }
+      }
+      
       pTransformedPath = makeAbsolutePath(pTransformedPath);
       sClasspath.append(pTransformedPath.toOSString());
       sClasspath.append(separator);      

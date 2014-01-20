@@ -101,11 +101,43 @@ public abstract class P5ExportType
         else
         {
           cp += codeList[i] + File.separatorChar;
-          packClassPathIntoZipFile(cp, zos, classpathList, exportPlatform, appFolder);
+//          packClassPathIntoZipFile(cp, zos, classpathList, exportPlatform, appFolder);
+
+          addExternalProjectsToZipFile(classpath, zos, classpathList, exportPlatform, appFolder);
         }
       }
+      
+      for(String nativeLibPath: P5ExportBuilder.nativeLibDirs){
+        //        File toLib = new File(jarFolder, exportFilename);
+
+        File nativeDir = new File(nativeLibPath);
+        if(nativeDir.exists() && nativeDir.isDirectory()){
+          for(File f: nativeDir.listFiles()){
+            if(f.isDirectory()){
+
+              String exportDir = f.getName();
+              File toDir = new File(jarFolder, exportDir);
+              if(!toDir.exists()){
+                toDir.mkdir();
+              }
+              
+              for(File f1: f.listFiles()){
+                String exportFilename = f.getName() + "/" + f1.getName();
+                File toLib = new File(jarFolder, exportFilename);
+                copyFile(f1, toLib);
+              }
+            } else if(!f.getName().toLowerCase().endsWith(".jar")){
+              String exportFilename = f.getName();
+              File toLib = new File(jarFolder, exportFilename);
+              copyFile(f, toLib);
+            }
+          }
+        }
+      }
+      
       if (isApplication) {
-        addGLNatives(appFolder, zos, exportPlatform);   
+        //MATT: REMOVED WHEN UPDATED PROCESSING 2
+        //addGLNatives(appFolder, zos, exportPlatform);   
         
       }
     } 
@@ -297,25 +329,25 @@ public abstract class P5ExportType
       // is it a jar file or directory?
       if (pieces[i].toLowerCase().endsWith(".jar") || pieces[i].toLowerCase().endsWith(".zip")) 
       {     
-        addToClasspath(classpathList, pieces[i]);
-        
-        try {
-          ZipFile file = new ZipFile(pieces[i]);
-          Enumeration entries = file.entries();
-          while (entries.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry) entries.nextElement();
-            if (entry.isDirectory()) {             
-              //actually 'continue's for all dir entries
-            } 
-            else {
-              addToZip(zos, zipFileContents, entry.getName(), getBytes(file, entry));
-            }
-          }
-        } 
-        catch (IOException e) {
-          System.err.println("Error in file " + pieces[i]);
-          e.printStackTrace();
-        }
+//        addToClasspath(classpathList, pieces[i]);
+//        
+//        try {
+//          ZipFile file = new ZipFile(pieces[i]);
+//          Enumeration entries = file.entries();
+//          while (entries.hasMoreElements()) {
+//            ZipEntry entry = (ZipEntry) entries.nextElement();
+//            if (entry.isDirectory()) {             
+//              //actually 'continue's for all dir entries
+//            } 
+//            else {
+//              addToZip(zos, zipFileContents, entry.getName(), getBytes(file, entry));
+//            }
+//          }
+//        } 
+//        catch (IOException e) {
+//          System.err.println("Error in file " + pieces[i]);
+//          e.printStackTrace();
+//        }
       } 
       else 
       { 
@@ -327,6 +359,53 @@ public abstract class P5ExportType
     }
   }
 
+  public void addExternalProjectsToZipFile(String classpath, ZipOutputStream zos, 
+      Vector classpathList, int exportPlatform, File appFolder) throws P5ExportException 
+    {  
+      Set zipFileContents = new HashSet();
+      
+      String pieces[] = PApplet.split(classpath, File.pathSeparatorChar);
+
+      for (int i = 0; i < pieces.length; i++)
+      {
+        
+        if (pieces[i] == null || pieces[i].length() == 0)  
+          continue;
+        
+        if (pieces[i].startsWith("org.eclipse"))
+          continue;
+
+        // not sure about all this ===================================
+        if (pieces[i].startsWith("/System/Library/Frameworks/JavaVM"))
+          continue;
+        
+        if (pieces[i].startsWith("/System/Library/Java/"))
+          continue;
+        
+        if (pieces[i].contains("/Library/Java/Extensions/"))
+          continue;
+        
+  //System.out.println("  Using "+pieces[i]);
+        // ===========================================================
+
+        // is it a jar file or directory?
+        if (pieces[i].toLowerCase().endsWith(".jar") || pieces[i].toLowerCase().endsWith(".zip")) 
+        {     
+        } 
+        else 
+        { 
+          try{
+          // not a .jar or .zip, prob. a directory
+          File dir = new File(pieces[i]);
+          if (dir.exists()) 
+            packClassPathIntoZipFileRecursive(dir, null, zos, exportPlatform, appFolder, zipFileContents);
+          } catch (Exception e) {
+            // TODO: handle exception
+          }
+        }
+      }
+    }
+  
   private boolean addToZip
     (ZipOutputStream zos, Set zipFileContents, String entryName, byte[] bytes) 
   throws IOException
@@ -387,6 +466,7 @@ public abstract class P5ExportType
     {
       // ignore . .. and .DS_Store
       if (files[i].charAt(0) == '.') continue;
+//      if (files[i].equals("data")) continue; 
 
       File sub = new File(dir, files[i]);
       String nowfar = (sofar == null) ? files[i] : (sofar + "/" + files[i]);

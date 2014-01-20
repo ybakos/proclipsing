@@ -197,6 +197,7 @@ public class PreferenceController {
         JavaCore.create(proj).setRawClasspath(classpathEntries.toArray(
                         new IClasspathEntry[classpathEntries.size()]), null);
     }
+   
     
     /**
      * Given urls to the libraries, move them to the right spot
@@ -234,58 +235,87 @@ public class PreferenceController {
      * @param monitor
      */
     private static Vector<IClasspathEntry> addProcessingLibs(
-            IFolder destLibFolder, URL[] sourceLibUrls, IProgressMonitor monitor){
-        //vars used in url loop
-        String filename; IFile libFile; 
-        Vector<IClasspathEntry> classpathEntries = new Vector<IClasspathEntry>();
-        
-        // go through urls, moving files into project and adding jars and zips to classpath
-        for (URL sourceUrl : sourceLibUrls) {
-        	filename = sourceUrl.getPath().substring(sourceUrl.getPath().lastIndexOf('/') + 1);
-            
-            try {
-                libFile = destLibFolder.getFile(filename);
-                
-                if (!libFile.exists() && !OS.helper().isExlcuded(filename))
-                    libFile.create(sourceUrl.openStream(), true, monitor);
-                
-                // System.out.println("::" + url.toExternalForm());
-                if ((filename.endsWith(".jar") || filename.endsWith(".zip")) 
-                		&& !OS.helper().isExlcuded(filename)){
-                	
-                    // gets paths to the src and documentation of the
-                    // library if it can find it.  This helps eclipse tooling
-                    IPath[] paths = getSrcAndDocs(sourceUrl);
-                    
-                    List<IClasspathAttribute> attrs = new ArrayList<IClasspathAttribute>();
-                    // Add Library Path Entry, which points to the new file created in the project
-                    attrs.add(JavaCore.newClasspathAttribute(
-                            JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, 
-                            destLibFolder.getFullPath().toPortableString().substring(1)));
-                    
-                    // add documentation location if it exists
-                    // this points to the location where the lib came from in the filesystem
-                    // (doesn't get copied over like the jar)
-                    if (paths[1] != null)
-                        attrs.add(JavaCore.newClasspathAttribute(
-                                IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME,
-                                paths[1].toFile().toURL().toExternalForm()));
-                    
-                    // This path is also to the location in the filesystem
-                    // it gets set in a different spot than the above path (see newLibraryEntry call below)
-                    IPath srcLocation = paths[0];
-                    
-                	classpathEntries.add(
-                            JavaCore.newLibraryEntry(libFile.getFullPath(), srcLocation, 
-                                    null, new IAccessRule[0], attrs.toArray(new IClasspathAttribute[]{}) , false));
-                }
-            } catch (CoreException e) {
-                LogHelper.LogError(e);
-            } catch (IOException e) {
-                LogHelper.LogError(e);
-            }
-        }
-        return classpathEntries;
+    		IFolder destLibFolder, URL[] sourceLibUrls, IProgressMonitor monitor){
+    	//vars used in url loop
+    	String filename; IFile libFile; 
+    	Vector<IClasspathEntry> classpathEntries = new Vector<IClasspathEntry>();
+
+    	// go through urls, moving files into project and adding jars and zips to classpath
+    	for (URL sourceUrl : sourceLibUrls) {
+
+    		if(sourceUrl.getPath().indexOf("plugins") > 0){
+//    			filename = sourceUrl.getPath().substring(0, sourceUrl.getPath().length() - 1);
+    			filename = sourceUrl.getPath().substring(sourceUrl.getPath().lastIndexOf('/') + 1);
+    			
+				libFile = destLibFolder.getFile("plugins");
+				
+				IFile tempFile = destLibFolder.getFile("plugins/" + filename);
+				IFolder tempFolder = (IFolder) tempFile.getParent();
+				
+				try {
+					if (!tempFolder.exists()) {
+						tempFolder.create(false, false, null);
+					}
+					
+					tempFile.create(sourceUrl.openStream(), true, monitor);
+				
+//					tempFolder.cre
+//					libFile.create(sourceUrl.openStream(), true, monitor);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+    		} else {
+
+    			filename = sourceUrl.getPath().substring(sourceUrl.getPath().lastIndexOf('/') + 1);
+
+    			try {
+    				libFile = destLibFolder.getFile(filename);
+
+    				if (!libFile.exists() && !OS.helper().isExlcuded(filename))
+    					libFile.create(sourceUrl.openStream(), true, monitor);
+
+
+
+    				// System.out.println("::" + url.toExternalForm());
+    				if ((filename.endsWith(".jar") || filename.endsWith(".zip")) 
+    						&& !OS.helper().isExlcuded(filename)){
+
+    					// gets paths to the src and documentation of the
+    					// library if it can find it.  This helps eclipse tooling
+    					IPath[] paths = getSrcAndDocs(sourceUrl);
+
+    					List<IClasspathAttribute> attrs = new ArrayList<IClasspathAttribute>();
+    					// Add Library Path Entry, which points to the new file created in the project
+    					attrs.add(JavaCore.newClasspathAttribute(
+    							JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, 
+    							destLibFolder.getFullPath().toPortableString().substring(1)));
+
+    					// add documentation location if it exists
+    					// this points to the location where the lib came from in the filesystem
+    					// (doesn't get copied over like the jar)
+    					if (paths[1] != null)
+    						attrs.add(JavaCore.newClasspathAttribute(
+    								IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME,
+    								paths[1].toFile().toURL().toExternalForm()));
+
+    					// This path is also to the location in the filesystem
+    					// it gets set in a different spot than the above path (see newLibraryEntry call below)
+    					IPath srcLocation = paths[0];
+
+    					classpathEntries.add(
+    							JavaCore.newLibraryEntry(libFile.getFullPath(), srcLocation, 
+    									null, new IAccessRule[0], attrs.toArray(new IClasspathAttribute[]{}) , false));
+    				}
+    			} catch (CoreException e) {
+    				LogHelper.LogError(e);
+    			} catch (IOException e) {
+    				LogHelper.LogError(e);
+    			}
+    		}
+    	}
+    	return classpathEntries;
     }
 
     /**

@@ -6,17 +6,22 @@ import org.eclipse.swt.widgets.Shell;
 
 public class MacOSHelper extends OSHelper {
 
+	private static boolean isProcessing2Path = false;
 	private static String PATH_TO_JAVA = "Contents/Resources/Java/";
-	private static final String ALT_PATH_TO_JAVA = "Contents/Resources/Java/core/library";
+	private static final String ALT_PATH_TO_JAVA = "core/library/";
 
 	
 	public void tryProcessing2_0bpath(){
-		PATH_TO_JAVA = "ALT_PATH_TO_JAVA";
+		isProcessing2Path = !isProcessing2Path;
 	}
 
 	@Override
 	public String getCorePath() {
-        return PATH_TO_JAVA;
+		if(!isProcessing2Path){
+			return PATH_TO_JAVA;
+		}
+		
+        return PATH_TO_JAVA + ALT_PATH_TO_JAVA;
 	}
 
 	@Override
@@ -25,8 +30,8 @@ public class MacOSHelper extends OSHelper {
 	}
 	
 	@Override
-	public String getNewPathToLibrary(String library) {
-		return PATH_TO_JAVA + super.getNewPathToLibrary(library);
+	public String getPathToP2Library(String library) {
+		return PATH_TO_JAVA + super.getPathToP2Library(library);
 	}
 
 	@Override
