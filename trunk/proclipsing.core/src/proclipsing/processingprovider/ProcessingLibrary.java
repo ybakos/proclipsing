@@ -54,7 +54,7 @@ public class ProcessingLibrary {
     	"linux64",
     	"macosx64",
     	"opengl.jar",
-    	"windows32",
+//    	"windows32",
     	"windows64"};
     
     public static final String pluginsDir = "plugins";

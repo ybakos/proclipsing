@@ -2,7 +2,7 @@
 <feature
       id="P5ExporterFeature"
       label="P5Exporter Feature"
-      version="1.3.2"
+      version="1.3.3"
       provider-name="Daniel C. Howe">
 
    <description>
