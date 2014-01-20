@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://proclipsing.googlecode.com/svn/trunk/proclipsingSite/">
+      The purpose of Proclipsing is to lower the difficulty of using Processing in Eclipse.
+   </description>
+   <feature url="features/P5ExporterFeature_1.3.2.jar" id="P5ExporterFeature" version="1.3.2">
+      <category name="export"/>
+   </feature>
+   <feature url="features/proclipsingFeature_1.3.3.jar" id="proclipsingFeature" version="1.3.3" os="linux,macosx,win32">
+      <category name="core"/>
+   </feature>
+   <category-def name="export" label="export"/>
+   <category-def name="core" label="core"/>
+</site>
