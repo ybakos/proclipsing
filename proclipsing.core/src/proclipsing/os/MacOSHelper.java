@@ -6,22 +6,42 @@ import org.eclipse.swt.widgets.Shell;
 
 public class MacOSHelper extends OSHelper {
 
-	private static boolean isProcessing2Path = false;
-	private static String PATH_TO_JAVA = "Contents/Resources/Java/";
-	private static final String ALT_PATH_TO_JAVA = "core/library/";
-
+	private static final int VERSION_PROCESSING_1_5_MINUS = 0;
+	private static final int VERSION_PROCESSING_2_0_BETA = 1;
+	private static final int VERSION_PROCESSING_2_1_PLUS = 2;
 	
+	private int processingVersion = VERSION_PROCESSING_1_5_MINUS;
+	
+	//private static boolean isProcessing2Path = false;
+	private static final String DEFAULT_JAVA = "Contents/Resources/Java/";
+	private static final String ALT_PATH_TO_JAVA = "core/library/";
+	private static final String PROCESSING_2_1_PLUS_PATH = "Contents/Java/";
+	
+
+	private static String PATH_TO_JAVA = DEFAULT_JAVA;
+	
+	public void resetProcessingPath(){
+		processingVersion = 0;
+		getCorePath();
+	}
+
 	public void tryProcessing2_0bpath(){
-		isProcessing2Path = !isProcessing2Path;
+		processingVersion++;
+		getCorePath();
 	}
 
 	@Override
 	public String getCorePath() {
-		if(!isProcessing2Path){
+		if(processingVersion == VERSION_PROCESSING_1_5_MINUS){
+			PATH_TO_JAVA = DEFAULT_JAVA;
 			return PATH_TO_JAVA;
+		} else if (processingVersion == VERSION_PROCESSING_2_0_BETA){
+	        return PATH_TO_JAVA + ALT_PATH_TO_JAVA;
+		} else {
+			PATH_TO_JAVA = PROCESSING_2_1_PLUS_PATH;
+	        return PATH_TO_JAVA + ALT_PATH_TO_JAVA;
 		}
 		
-        return PATH_TO_JAVA + ALT_PATH_TO_JAVA;
 	}
 
 	@Override
