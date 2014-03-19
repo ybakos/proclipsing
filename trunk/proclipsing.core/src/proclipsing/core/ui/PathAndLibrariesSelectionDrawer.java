@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import proclipsing.core.preferences.ProjectPreferences;
+import proclipsing.os.MacOSHelper;
 import proclipsing.os.OS;
 
 public class PathAndLibrariesSelectionDrawer {
@@ -144,9 +145,19 @@ public class PathAndLibrariesSelectionDrawer {
     public boolean validatePathIsProcessing() {
         // final check for core.jar
     	
+    	if(OS.helper() instanceof MacOSHelper){
+    		((MacOSHelper)OS.helper()).resetProcessingPath();
+    	}
+    	
+    	
     	if(!new File(processing_app_path_text.getText(),
                 OS.helper().getCorePath() + "core.jar").exists()){
-    		OS.helper().tryProcessing2_0bpath();
+    			OS.helper().tryProcessing2_0bpath();
+    		if(!new File(processing_app_path_text.getText(),
+                    OS.helper().getCorePath() + "core.jar").exists()){
+        		OS.helper().tryProcessing2_0bpath();
+        		
+        	}
     	}
     	
         return new File(processing_app_path_text.getText(),
@@ -234,7 +245,13 @@ public class PathAndLibrariesSelectionDrawer {
     private void showDiscoveredLibraries(Text pathText, CheckboxTableViewer libViewer, boolean isCore) {
         if (pathText == null) return;
         
+        System.out.println("OS.helper().getNewLibraryPath(): " + OS.helper().getNewLibraryPath());
+        
         String test = pathText.getText();
+        
+        if(OS.helper() instanceof MacOSHelper){
+        	((MacOSHelper)OS.helper()).resetProcessingPath();
+        }
         
         File librariesDir = new File(pathText.getText(),
                 OS.helper().getLibraryPath());
@@ -242,6 +259,11 @@ public class PathAndLibrariesSelectionDrawer {
         if (!librariesDir.exists()) {
         	librariesDir = new File(pathText.getText(),
                 OS.helper().getNewLibraryPath());
+            if (!librariesDir.exists() && OS.helper() instanceof MacOSHelper) {
+    			OS.helper().tryProcessing2_0bpath();
+    			OS.helper().tryProcessing2_0bpath();
+    			librariesDir = new File(pathText.getText(), OS.helper().getNewLibraryPath());
+            }
         }
         
         if(!isCore){
