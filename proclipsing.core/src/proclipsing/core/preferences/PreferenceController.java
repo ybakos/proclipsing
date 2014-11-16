@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.osgi.baseadaptor.loader.ClasspathEntry;
+
 import org.osgi.service.prefs.BackingStoreException;
 
 import proclipsing.os.OS;
